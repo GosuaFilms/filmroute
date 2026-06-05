@@ -1,7 +1,11 @@
 import { Film, LogOut, User } from 'lucide-react';
 import { useAuth } from '../../contexts/AuthContext';
 
-export function Header() {
+interface HeaderProps {
+  onLogoClick?: () => void;
+}
+
+export function Header({ onLogoClick }: HeaderProps = {}) {
   const { user, signOut } = useAuth();
 
   const displayName = user?.user_metadata?.full_name
@@ -11,10 +15,13 @@ export function Header() {
   return (
     <header className="border-b border-cinema-border bg-cinema-dark/80 backdrop-blur-sm sticky top-0 z-40">
       <div className="max-w-6xl mx-auto px-4 py-4 flex items-center gap-3">
-        <div className="flex items-center gap-2 text-cinema-gold">
+        <button
+          onClick={onLogoClick}
+          className="flex items-center gap-2 text-cinema-gold hover:opacity-80 transition-opacity"
+        >
           <Film size={28} strokeWidth={1.5} />
           <span className="text-xl font-display font-bold tracking-wide">FilmRoute</span>
-        </div>
+        </button>
         <div className="h-5 w-px bg-cinema-border mx-2" />
         <p className="text-sm text-cinema-text-dim hidden sm:block">
           Estrategia de Distribución Cinematográfica Independiente

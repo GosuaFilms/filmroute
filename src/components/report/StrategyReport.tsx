@@ -6,6 +6,7 @@ interface Props {
   report: StrategyReport;
   onBack: () => void;
   onExport: () => void;
+  isExporting?: boolean;
 }
 
 interface CardProps {
@@ -45,7 +46,7 @@ function StatusBadge({ status }: { status: string }) {
   );
 }
 
-export function StrategyReportView({ report, onBack, onExport }: Props) {
+export function StrategyReportView({ report, onBack, onExport, isExporting = false }: Props) {
   return (
     <div className="space-y-6" id="strategy-report">
       {/* Header del informe */}
@@ -301,10 +302,11 @@ export function StrategyReportView({ report, onBack, onExport }: Props) {
       <div className="flex flex-col sm:flex-row gap-3 pb-8">
         <button
           onClick={onExport}
-          className="flex items-center justify-center gap-2 bg-gradient-gold text-cinema-black font-bold px-6 py-3 rounded-xl hover:opacity-90 transition-all shadow-lg shadow-cinema-gold/20"
+          disabled={isExporting}
+          className="flex items-center justify-center gap-2 bg-gradient-gold text-cinema-black font-bold px-6 py-3 rounded-xl hover:opacity-90 transition-all shadow-lg shadow-cinema-gold/20 disabled:opacity-60"
         >
           <Download size={18} />
-          Exportar informe (PDF)
+          {isExporting ? 'Exportando...' : 'Exportar informe (PDF)'}
         </button>
         <button
           onClick={onBack}

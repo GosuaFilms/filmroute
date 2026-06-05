@@ -11,11 +11,13 @@ import { Step5Festivals } from './components/steps/Step5Festivals';
 import { Step6Budget } from './components/steps/Step6Budget';
 import { Step7Review } from './components/steps/Step7Review';
 import { StrategyReportView } from './components/report/StrategyReport';
+import { Dashboard } from './components/dashboard/Dashboard';
 import { Button } from './components/ui/Button';
 import { generateStrategy } from './utils/strategyEngine';
 import { exportReportToPDF } from './utils/pdfExport';
+import { saveStrategy, updateStrategy, type SavedStrategy } from './lib/strategies';
 import type { FilmData, StrategyReport } from './types/film';
-import { ChevronLeft, ChevronRight, Film, ArrowRight } from 'lucide-react';
+import { ChevronLeft, ChevronRight } from 'lucide-react';
 
 const TOTAL_STEPS = 7;
 
@@ -28,20 +30,24 @@ const EMPTY_DATA: FilmData = {
   budgetResources: {},
 };
 
+type View = 'dashboard' | 'wizard' | 'report';
+
 function AppContent() {
   const { user, loading } = useAuth();
-  const [started, setStarted] = useState(false);
+  const [view, setView] = useState<View>('dashboard');
   const [currentStep, setCurrentStep] = useState(1);
   const [filmData, setFilmData] = useState<FilmData>(EMPTY_DATA);
   const [report, setReport] = useState<StrategyReport | null>(null);
   const [isGenerating, setIsGenerating] = useState(false);
-  const [_isExporting, setIsExporting] = useState(false);
+  const [isSaving, setIsSaving] = useState(false);
+  const [isExporting, setIsExporting] = useState(false);
+  const [currentStrategyId, setCurrentStrategyId] = useState<string | null>(null);
+  const [saveError, setSaveError] = useState<string | null>(null);
 
   const updateData = useCallback((partial: Partial<FilmData>) => {
     setFilmData(prev => ({ ...prev, ...partial }));
   }, []);
 
-  // Auth guard
   if (loading) {
     return (
       <div className="min-h-screen bg-gradient-cinema flex items-center justify-center">
@@ -61,12 +67,51 @@ function AppContent() {
   const goNext = () => setCurrentStep(s => Math.min(s + 1, TOTAL_STEPS));
   const goPrev = () => setCurrentStep(s => Math.max(s - 1, 1));
 
+  const handleNew = () => {
+    setFilmData(EMPTY_DATA);
+    setReport(null);
+    setCurrentStrategyId(null);
+    setSaveError(null);
+    setCurrentStep(1);
+    setView('wizard');
+  };
+
+  const handleLoad = (strategy: SavedStrategy) => {
+    setFilmData(strategy.film_data);
+    setReport(strategy.report);
+    setCurrentStrategyId(strategy.id);
+    setSaveError(null);
+    setCurrentStep(1);
+    if (strategy.report) {
+      setView('report');
+    } else {
+      setView('wizard');
+    }
+  };
+
   const handleGenerate = async () => {
     setIsGenerating(true);
+    setSaveError(null);
     await new Promise(r => setTimeout(r, 800));
     const result = generateStrategy(filmData);
     setReport(result);
+    setView('report');
     setIsGenerating(false);
+
+    // Guardar en Supabase en segundo plano
+    setIsSaving(true);
+    try {
+      if (currentStrategyId) {
+        await updateStrategy(currentStrategyId, filmData, result);
+      } else {
+        const saved = await saveStrategy(filmData, result);
+        setCurrentStrategyId(saved.id);
+      }
+    } catch {
+      setSaveError('No se pudo guardar la estrategia en la nube. Puedes exportarla a PDF.');
+    } finally {
+      setIsSaving(false);
+    }
   };
 
   const handleExport = async () => {
@@ -82,64 +127,25 @@ function AppContent() {
     }
   };
 
-  const handleBack = () => {
+  const handleBackToWizard = () => {
     setReport(null);
     setCurrentStep(7);
+    setView('wizard');
   };
 
-  // Landing page
-  if (!started) {
+  const handleBackToDashboard = () => {
+    setView('dashboard');
+    setSaveError(null);
+  };
+
+  // Dashboard
+  if (view === 'dashboard') {
     return (
       <div className="min-h-screen bg-gradient-cinema flex flex-col">
-        <Header />
-        <main className="flex-1 flex items-center justify-center px-4 py-16">
-          <div className="max-w-3xl w-full text-center">
-            <div className="inline-flex items-center gap-2 bg-cinema-gold/10 border border-cinema-gold/30 rounded-full px-4 py-2 mb-8">
-              <Film size={14} className="text-cinema-gold" />
-              <span className="text-cinema-gold text-xs font-semibold uppercase tracking-widest">Distribución Independiente</span>
-            </div>
-
-            <h1 className="text-4xl sm:text-5xl font-display font-bold text-cinema-text mb-6 leading-tight">
-              Tu película merece<br />
-              <span className="text-cinema-gold">llegar al mundo</span>
-            </h1>
-
-            <p className="text-cinema-text-dim text-lg mb-4 max-w-xl mx-auto leading-relaxed">
-              FilmRoute es la herramienta para que productores, directores y cineastas independientes planifiquen la distribución de su película sin necesitar una gran distribuidora.
-            </p>
-
-            <p className="text-cinema-text-dim text-sm mb-10 max-w-lg mx-auto">
-              Introduce los datos de tu cortometraje, largometraje o documental y genera en minutos una estrategia completa: circuito de festivales, plan de marketing, ventanas de distribución y exportación PDF.
-            </p>
-
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-12">
-              {[
-                { icon: '🏆', title: 'Circuito de festivales', desc: '+25 festivales internacionales con deadlines y tasas' },
-                { icon: '📱', title: 'Plataformas digitales', desc: 'Netflix, MUBI, Filmin, Amazon y más de 15 plataformas' },
-                { icon: '📊', title: 'Informe exportable', desc: 'Descarga tu estrategia en PDF para presentarla a socios' },
-              ].map((f, i) => (
-                <div key={i} className="bg-cinema-card border border-cinema-border rounded-xl p-5 text-left">
-                  <div className="text-3xl mb-3">{f.icon}</div>
-                  <h3 className="font-semibold text-cinema-text text-sm mb-1">{f.title}</h3>
-                  <p className="text-cinema-text-dim text-xs">{f.desc}</p>
-                </div>
-              ))}
-            </div>
-
-            <button
-              onClick={() => setStarted(true)}
-              className="inline-flex items-center gap-3 bg-gradient-gold text-cinema-black font-bold px-10 py-4 rounded-xl text-base hover:opacity-90 transition-all shadow-2xl shadow-cinema-gold/30"
-            >
-              Comenzar ahora
-              <ArrowRight size={20} />
-            </button>
-
-            <p className="text-cinema-text-dim text-xs mt-4">
-              Gratuito · Sin registro · Datos privados (todo en tu navegador)
-            </p>
-          </div>
+        <Header onLogoClick={handleBackToDashboard} />
+        <main className="flex-1">
+          <Dashboard onNew={handleNew} onLoad={handleLoad} />
         </main>
-
         <footer className="border-t border-cinema-border py-6 text-center">
           <p className="text-cinema-text-dim text-xs">
             FilmRoute — Herramienta de distribución para cineastas independientes
@@ -150,15 +156,30 @@ function AppContent() {
   }
 
   // Report view
-  if (report) {
+  if (view === 'report' && report) {
     return (
       <div className="min-h-screen bg-gradient-cinema">
-        <Header />
+        <Header onLogoClick={handleBackToDashboard} />
         <main className="max-w-5xl mx-auto px-4 py-8">
+          {saveError && (
+            <div className="mb-4 flex items-center gap-2 bg-yellow-500/10 border border-yellow-500/30 rounded-xl px-4 py-3 text-yellow-400 text-sm">
+              <span>⚠️</span> {saveError}
+            </div>
+          )}
+          {isSaving && (
+            <div className="mb-4 flex items-center gap-2 text-cinema-text-dim text-xs">
+              <svg className="animate-spin w-3 h-3" fill="none" viewBox="0 0 24 24">
+                <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
+                <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
+              </svg>
+              Guardando en la nube...
+            </div>
+          )}
           <StrategyReportView
             report={report}
-            onBack={handleBack}
+            onBack={handleBackToWizard}
             onExport={handleExport}
+            isExporting={isExporting}
           />
         </main>
       </div>
@@ -168,7 +189,7 @@ function AppContent() {
   // Form wizard
   return (
     <div className="min-h-screen bg-gradient-cinema">
-      <Header />
+      <Header onLogoClick={handleBackToDashboard} />
 
       <div className="sticky top-[61px] z-30 bg-cinema-dark/90 backdrop-blur-sm border-b border-cinema-border py-4">
         <div className="max-w-5xl mx-auto px-4">
@@ -177,58 +198,23 @@ function AppContent() {
       </div>
 
       <main className="max-w-4xl mx-auto px-4 py-8">
-        {currentStep === 1 && (
-          <Step1BasicInfo
-            data={filmData.basicInfo}
-            onChange={updateData}
-          />
-        )}
-        {currentStep === 2 && (
-          <Step2CreativeDetails
-            data={filmData.creativeDetails}
-            onChange={updateData}
-          />
-        )}
-        {currentStep === 3 && (
-          <Step3Materials
-            data={filmData.materials}
-            onChange={updateData}
-          />
-        )}
-        {currentStep === 4 && (
-          <Step4Distribution
-            data={filmData.distributionGoals}
-            onChange={updateData}
-          />
-        )}
-        {currentStep === 5 && (
-          <Step5Festivals
-            data={filmData.festivalStrategy}
-            onChange={updateData}
-          />
-        )}
-        {currentStep === 6 && (
-          <Step6Budget
-            data={filmData.budgetResources}
-            onChange={updateData}
-          />
-        )}
+        {currentStep === 1 && <Step1BasicInfo data={filmData.basicInfo} onChange={updateData} />}
+        {currentStep === 2 && <Step2CreativeDetails data={filmData.creativeDetails} onChange={updateData} />}
+        {currentStep === 3 && <Step3Materials data={filmData.materials} onChange={updateData} />}
+        {currentStep === 4 && <Step4Distribution data={filmData.distributionGoals} onChange={updateData} />}
+        {currentStep === 5 && <Step5Festivals data={filmData.festivalStrategy} onChange={updateData} />}
+        {currentStep === 6 && <Step6Budget data={filmData.budgetResources} onChange={updateData} />}
         {currentStep === 7 && (
-          <Step7Review
-            data={filmData}
-            onGenerate={handleGenerate}
-            isGenerating={isGenerating}
-          />
+          <Step7Review data={filmData} onGenerate={handleGenerate} isGenerating={isGenerating} />
         )}
 
-        {/* Navigation */}
         <div className="flex items-center justify-between mt-10 pt-6 border-t border-cinema-border">
           <Button
             variant="secondary"
-            onClick={currentStep === 1 ? () => setStarted(false) : goPrev}
+            onClick={currentStep === 1 ? handleBackToDashboard : goPrev}
           >
             <ChevronLeft size={16} />
-            {currentStep === 1 ? 'Inicio' : 'Anterior'}
+            {currentStep === 1 ? 'Mis estrategias' : 'Anterior'}
           </Button>
 
           <span className="text-cinema-text-dim text-xs">
