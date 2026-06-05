@@ -1,11 +1,12 @@
-import { Film, LogOut, User } from 'lucide-react';
+import { Film, LogOut, User, Settings } from 'lucide-react';
 import { useAuth } from '../../contexts/AuthContext';
 
 interface HeaderProps {
   onLogoClick?: () => void;
+  onAdminClick?: () => void;
 }
 
-export function Header({ onLogoClick }: HeaderProps = {}) {
+export function Header({ onLogoClick, onAdminClick }: HeaderProps = {}) {
   const { user, signOut } = useAuth();
 
   const displayName = user?.user_metadata?.full_name
@@ -34,6 +35,16 @@ export function Header({ onLogoClick }: HeaderProps = {}) {
               <User size={13} className="text-cinema-gold" />
               <span className="text-xs text-cinema-text-dim max-w-[140px] truncate">{displayName}</span>
             </div>
+            {onAdminClick && (
+              <button
+                onClick={onAdminClick}
+                title="Panel de administración"
+                className="flex items-center gap-1.5 text-cinema-text-dim hover:text-cinema-gold transition-colors text-xs px-3 py-1.5 rounded-full border border-cinema-border hover:border-cinema-gold/40"
+              >
+                <Settings size={13} />
+                <span className="hidden sm:inline">Admin</span>
+              </button>
+            )}
             <button
               onClick={signOut}
               title="Cerrar sesión"

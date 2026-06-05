@@ -3,6 +3,7 @@ import type {
   StrategyPhase, DistributionWindow,
 } from '../types/film';
 import { FESTIVALS_DATABASE } from '../data/festivals';
+export type { RecommendedFestival };
 import { PLATFORMS_DATABASE } from '../data/platforms';
 
 function scoreFestivalMatch(festival: RecommendedFestival, data: FilmData): number {
@@ -111,8 +112,9 @@ function getRisks(data: FilmData): string[] {
   return risks;
 }
 
-function recommendFestivals(data: FilmData): RecommendedFestival[] {
-  const scored = FESTIVALS_DATABASE.map(f => ({
+function recommendFestivals(data: FilmData, festivalsDb?: RecommendedFestival[]): RecommendedFestival[] {
+  const source = (festivalsDb && festivalsDb.length > 0) ? festivalsDb : FESTIVALS_DATABASE;
+  const scored = source.map(f => ({
     festival: f,
     score: scoreFestivalMatch(f, data),
   }));
@@ -333,8 +335,8 @@ function buildExecutiveSummary(data: FilmData, festivals: RecommendedFestival[])
     `La clave del éxito será la constancia en la campaña de festivales y la calidad de los materiales de comunicación.`;
 }
 
-export function generateStrategy(data: FilmData): StrategyReport {
-  const festivals = recommendFestivals(data);
+export function generateStrategy(data: FilmData, festivalsDb?: RecommendedFestival[]): StrategyReport {
+  const festivals = recommendFestivals(data, festivalsDb);
   const strengths = getStrengths(data);
   const weaknesses = getWeaknesses(data);
   const opportunities = getOpportunities(data);

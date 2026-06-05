@@ -30,8 +30,11 @@ import { generateStrategy } from './utils/strategyEngine';
 import { exportReportToPDF } from './utils/pdfExport';
 import { saveStrategy, updateStrategy, type SavedStrategy } from './lib/strategies';
 import { validateStep, hasErrors, type StepErrors } from './utils/validation';
-import type { FilmData, StrategyReport } from './types/film';
+import { listFestivalsFromDb, getIsAdmin, rowToFestival } from './lib/festivalsDb';
+import type { FilmData, StrategyReport, RecommendedFestival } from './types/film';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
+
+const FestivalsAdmin = lazy(() => import('./components/admin/FestivalsAdmin').then(m => ({ default: m.FestivalsAdmin })));
 
 const TOTAL_STEPS = 7;
 const DRAFT_KEY = 'filmroute_draft';
@@ -68,7 +71,7 @@ function clearDraft() {
   } catch {}
 }
 
-type View = 'dashboard' | 'wizard' | 'report';
+type View = 'dashboard' | 'wizard' | 'report' | 'admin';
 
 function SetNewPasswordView({ updatePassword }: { updatePassword: (p: string) => Promise<{ error: string | null }> }) {
   const [password, setPassword] = useState('');
@@ -170,10 +173,23 @@ function AppContent() {
   const [saveError, setSaveError] = useState<string | null>(null);
   const [stepErrors, setStepErrors] = useState<StepErrors>({});
   const [draftRestored, setDraftRestored] = useState(false);
+  const [isAdmin, setIsAdmin] = useState(false);
+  const [festivals, setFestivals] = useState<RecommendedFestival[]>([]);
 
   const updateData = useCallback((partial: Partial<FilmData>) => {
     setFilmData(prev => ({ ...prev, ...partial }));
   }, []);
+
+  // Cargar festivales desde Supabase y comprobar si el usuario es admin
+  useEffect(() => {
+    if (!user) return;
+    listFestivalsFromDb()
+      .then(rows => setFestivals(rows.map(rowToFestival)))
+      .catch(() => {}); // fallback al archivo estático si falla
+    getIsAdmin(user.id)
+      .then(setIsAdmin)
+      .catch(() => {});
+  }, [user]);
 
   // Restaurar borrador al entrar al wizard si no hay estrategia cargada
   useEffect(() => {
@@ -264,7 +280,7 @@ function AppContent() {
     setIsGenerating(true);
     setSaveError(null);
     await new Promise(r => setTimeout(r, 800));
-    const result = generateStrategy(filmData);
+    const result = generateStrategy(filmData, festivals.length > 0 ? festivals : undefined);
     setReport(result);
     setView('report');
     setIsGenerating(false);
@@ -310,11 +326,23 @@ function AppContent() {
     setSaveError(null);
   };
 
+  // Admin
+  if (view === 'admin') {
+    return (
+      <div className="min-h-screen bg-gradient-cinema">
+        <Header onLogoClick={handleBackToDashboard} />
+        <Suspense fallback={<PageSpinner />}>
+          <FestivalsAdmin onBack={handleBackToDashboard} />
+        </Suspense>
+      </div>
+    );
+  }
+
   // Dashboard
   if (view === 'dashboard') {
     return (
       <div className="min-h-screen bg-gradient-cinema flex flex-col">
-        <Header onLogoClick={handleBackToDashboard} />
+        <Header onLogoClick={handleBackToDashboard} onAdminClick={isAdmin ? () => setView('admin') : undefined} />
         <main className="flex-1">
           <Suspense fallback={<PageSpinner />}>
             <Dashboard onNew={handleNew} onLoad={handleLoad} />
