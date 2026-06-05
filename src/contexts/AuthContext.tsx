@@ -43,6 +43,9 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   }, []);
 
   const signUp = async (email: string, password: string, fullName: string) => {
+    if (!email.toLowerCase().endsWith('@luratlantik.com')) {
+      return { error: 'Solo se permiten cuentas con dominio @luratlantik.com' };
+    }
     const { error } = await supabase.auth.signUp({
       email,
       password,

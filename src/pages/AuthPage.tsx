@@ -45,6 +45,7 @@ export function AuthPage() {
 
     if (mode === 'register') {
       if (!fullName.trim()) return setError('Introduce tu nombre completo.');
+      if (!email.toLowerCase().endsWith('@luratlantik.com')) return setError('Solo se permiten cuentas con dominio @luratlantik.com.');
       if (password !== confirmPassword) return setError('Las contraseñas no coinciden.');
       if (password.length < 6) return setError('La contraseña debe tener al menos 6 caracteres.');
     }
@@ -179,12 +180,17 @@ export function AuthPage() {
                   </label>
                   <input
                     type="email"
-                    placeholder="tu@email.com"
+                    placeholder={mode === 'register' ? 'nombre@luratlantik.com' : 'tu@email.com'}
                     value={email}
                     onChange={e => setEmail(e.target.value)}
                     required
                     className={inputClass}
                   />
+                  {mode === 'register' && (
+                    <p className="text-xs text-cinema-text-dim mt-1">
+                      Solo se aceptan cuentas con dominio <span className="text-cinema-gold">@luratlantik.com</span>
+                    </p>
+                  )}
                 </div>
 
                 {mode !== 'recovery' && (
