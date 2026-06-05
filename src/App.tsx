@@ -1,18 +1,31 @@
-import { useState, useCallback, useEffect } from 'react';
+import { useState, useCallback, useEffect, lazy, Suspense } from 'react';
 import { AuthProvider, useAuth } from './contexts/AuthContext';
-import { AuthPage } from './pages/AuthPage';
 import { Header } from './components/layout/Header';
 import { StepIndicator } from './components/layout/StepIndicator';
-import { Step1BasicInfo } from './components/steps/Step1BasicInfo';
-import { Step2CreativeDetails } from './components/steps/Step2CreativeDetails';
-import { Step3Materials } from './components/steps/Step3Materials';
-import { Step4Distribution } from './components/steps/Step4Distribution';
-import { Step5Festivals } from './components/steps/Step5Festivals';
-import { Step6Budget } from './components/steps/Step6Budget';
-import { Step7Review } from './components/steps/Step7Review';
-import { StrategyReportView } from './components/report/StrategyReport';
-import { Dashboard } from './components/dashboard/Dashboard';
 import { Button } from './components/ui/Button';
+
+// Vistas lazy — solo se descargan cuando el usuario las necesita
+const AuthPage = lazy(() => import('./pages/AuthPage').then(m => ({ default: m.AuthPage })));
+const Dashboard = lazy(() => import('./components/dashboard/Dashboard').then(m => ({ default: m.Dashboard })));
+const StrategyReportView = lazy(() => import('./components/report/StrategyReport').then(m => ({ default: m.StrategyReportView })));
+const Step1BasicInfo = lazy(() => import('./components/steps/Step1BasicInfo').then(m => ({ default: m.Step1BasicInfo })));
+const Step2CreativeDetails = lazy(() => import('./components/steps/Step2CreativeDetails').then(m => ({ default: m.Step2CreativeDetails })));
+const Step3Materials = lazy(() => import('./components/steps/Step3Materials').then(m => ({ default: m.Step3Materials })));
+const Step4Distribution = lazy(() => import('./components/steps/Step4Distribution').then(m => ({ default: m.Step4Distribution })));
+const Step5Festivals = lazy(() => import('./components/steps/Step5Festivals').then(m => ({ default: m.Step5Festivals })));
+const Step6Budget = lazy(() => import('./components/steps/Step6Budget').then(m => ({ default: m.Step6Budget })));
+const Step7Review = lazy(() => import('./components/steps/Step7Review').then(m => ({ default: m.Step7Review })));
+
+function PageSpinner() {
+  return (
+    <div className="flex items-center justify-center min-h-[40vh]">
+      <svg className="animate-spin w-7 h-7 text-cinema-gold" fill="none" viewBox="0 0 24 24">
+        <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
+        <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
+      </svg>
+    </div>
+  );
+}
 import { generateStrategy } from './utils/strategyEngine';
 import { exportReportToPDF } from './utils/pdfExport';
 import { saveStrategy, updateStrategy, type SavedStrategy } from './lib/strategies';
@@ -111,7 +124,7 @@ function AppContent() {
     );
   }
 
-  if (!user) return <AuthPage />;
+  if (!user) return <Suspense fallback={<PageSpinner />}><AuthPage /></Suspense>;
 
   const goNext = () => {
     const errors = validateStep(currentStep, filmData);
@@ -214,7 +227,9 @@ function AppContent() {
       <div className="min-h-screen bg-gradient-cinema flex flex-col">
         <Header onLogoClick={handleBackToDashboard} />
         <main className="flex-1">
-          <Dashboard onNew={handleNew} onLoad={handleLoad} />
+          <Suspense fallback={<PageSpinner />}>
+            <Dashboard onNew={handleNew} onLoad={handleLoad} />
+          </Suspense>
         </main>
         <footer className="border-t border-cinema-border py-6 text-center">
           <p className="text-cinema-text-dim text-xs">
@@ -245,12 +260,14 @@ function AppContent() {
               Guardando en la nube...
             </div>
           )}
-          <StrategyReportView
-            report={report}
-            onBack={handleBackToWizard}
-            onExport={handleExport}
-            isExporting={isExporting}
-          />
+          <Suspense fallback={<PageSpinner />}>
+            <StrategyReportView
+              report={report}
+              onBack={handleBackToWizard}
+              onExport={handleExport}
+              isExporting={isExporting}
+            />
+          </Suspense>
         </main>
       </div>
     );
@@ -274,15 +291,17 @@ function AppContent() {
             <span>Borrador restaurado — tus datos del formulario anterior se han recuperado automáticamente.</span>
           </div>
         )}
-        {currentStep === 1 && <Step1BasicInfo data={filmData.basicInfo} onChange={updateData} errors={stepErrors} />}
-        {currentStep === 2 && <Step2CreativeDetails data={filmData.creativeDetails} onChange={updateData} errors={stepErrors} />}
-        {currentStep === 3 && <Step3Materials data={filmData.materials} onChange={updateData} />}
-        {currentStep === 4 && <Step4Distribution data={filmData.distributionGoals} onChange={updateData} errors={stepErrors} />}
-        {currentStep === 5 && <Step5Festivals data={filmData.festivalStrategy} onChange={updateData} errors={stepErrors} />}
-        {currentStep === 6 && <Step6Budget data={filmData.budgetResources} onChange={updateData} errors={stepErrors} />}
-        {currentStep === 7 && (
-          <Step7Review data={filmData} onGenerate={handleGenerate} isGenerating={isGenerating} />
-        )}
+        <Suspense fallback={<PageSpinner />}>
+          {currentStep === 1 && <Step1BasicInfo data={filmData.basicInfo} onChange={updateData} errors={stepErrors} />}
+          {currentStep === 2 && <Step2CreativeDetails data={filmData.creativeDetails} onChange={updateData} errors={stepErrors} />}
+          {currentStep === 3 && <Step3Materials data={filmData.materials} onChange={updateData} />}
+          {currentStep === 4 && <Step4Distribution data={filmData.distributionGoals} onChange={updateData} errors={stepErrors} />}
+          {currentStep === 5 && <Step5Festivals data={filmData.festivalStrategy} onChange={updateData} errors={stepErrors} />}
+          {currentStep === 6 && <Step6Budget data={filmData.budgetResources} onChange={updateData} errors={stepErrors} />}
+          {currentStep === 7 && (
+            <Step7Review data={filmData} onGenerate={handleGenerate} isGenerating={isGenerating} />
+          )}
+        </Suspense>
 
         <div className="flex items-center justify-between mt-10 pt-6 border-t border-cinema-border">
           <Button
