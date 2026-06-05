@@ -1,11 +1,20 @@
 import type { StrategyReport } from '../types/film';
 
+const GOLD: [number, number, number] = [201, 168, 76];
+const DARK: [number, number, number] = [26, 26, 38];
+const GREY: [number, number, number] = [100, 100, 100];
+const BLACK: [number, number, number] = [50, 50, 50];
+const GREEN: [number, number, number] = [34, 197, 94];
+const RED: [number, number, number] = [239, 68, 68];
+const YELLOW: [number, number, number] = [234, 179, 8];
+
 export async function exportReportToPDF(report: StrategyReport): Promise<void> {
   const { jsPDF } = await import('jspdf');
   const autoTable = (await import('jspdf-autotable')).default;
 
   const doc = new jsPDF({ orientation: 'portrait', unit: 'mm', format: 'a4' });
   const pageW = doc.internal.pageSize.getWidth();
+  const pageH = doc.internal.pageSize.getHeight();
   const margin = 15;
   const contentW = pageW - margin * 2;
   let y = 0;
@@ -16,63 +25,76 @@ export async function exportReportToPDF(report: StrategyReport): Promise<void> {
   };
 
   const checkSpace = (needed: number) => {
-    if (y + needed > 270) addPage();
+    if (y + needed > pageH - 18) addPage();
   };
 
-  // Header
+  const sectionTitle = (title: string) => {
+    checkSpace(20);
+    doc.setTextColor(...GOLD);
+    doc.setFontSize(11);
+    doc.setFont('helvetica', 'bold');
+    doc.text(title, margin, y);
+    y += 5;
+    doc.setDrawColor(...GREY);
+    doc.line(margin, y, pageW - margin, y);
+    y += 6;
+  };
+
+  // ── Portada ──────────────────────────────────────────────────────────────
   doc.setFillColor(10, 10, 15);
-  doc.rect(0, 0, pageW, 45, 'F');
-  doc.setTextColor(201, 168, 76);
-  doc.setFontSize(20);
+  doc.rect(0, 0, pageW, 50, 'F');
+
+  doc.setTextColor(...GOLD);
+  doc.setFontSize(22);
   doc.setFont('helvetica', 'bold');
   doc.text('FilmRoute', margin, 18);
-  doc.setFontSize(10);
+
+  doc.setFontSize(9);
   doc.setTextColor(156, 163, 175);
   doc.setFont('helvetica', 'normal');
-  doc.text('Estrategia de Distribución Cinematográfica Independiente', margin, 26);
+  doc.text('Estrategia de Distribucion Cinematografica Independiente', margin, 26);
+
   doc.setTextColor(229, 231, 235);
-  doc.setFontSize(14);
+  doc.setFontSize(15);
   doc.setFont('helvetica', 'bold');
-  doc.text(`"${report.filmTitle}"`, margin, 37);
-  doc.setFontSize(8);
+  const titleText = `"${report.filmTitle}"`;
+  doc.text(titleText, margin, 39);
+
+  doc.setFontSize(7);
   doc.setFont('helvetica', 'normal');
   doc.setTextColor(156, 163, 175);
-  doc.text(`Generado: ${report.generatedAt} | Índice de distribución: ${report.overallScore}/100`, pageW - margin, 37, { align: 'right' });
+  doc.text(
+    `Generado: ${report.generatedAt}  |  Indice de distribucion: ${report.overallScore}/100`,
+    pageW - margin,
+    39,
+    { align: 'right' }
+  );
 
-  y = 55;
+  // Línea dorada decorativa bajo portada
+  doc.setDrawColor(...GOLD);
+  doc.setLineWidth(0.4);
+  doc.line(margin, 49, pageW - margin, 49);
+  doc.setLineWidth(0.2);
 
-  // Resumen ejecutivo
-  doc.setTextColor(201, 168, 76);
-  doc.setFontSize(11);
-  doc.setFont('helvetica', 'bold');
-  doc.text('RESUMEN EJECUTIVO', margin, y);
-  y += 6;
-  doc.setTextColor(100, 100, 100);
-  doc.setFontSize(8);
-  doc.line(margin, y, pageW - margin, y);
-  y += 4;
-  doc.setTextColor(50, 50, 50);
+  y = 62;
+
+  // ── Resumen ejecutivo ────────────────────────────────────────────────────
+  sectionTitle('RESUMEN EJECUTIVO');
+  doc.setTextColor(...BLACK);
   doc.setFont('helvetica', 'normal');
+  doc.setFontSize(8.5);
   const summaryLines = doc.splitTextToSize(report.executiveSummary, contentW);
   doc.text(summaryLines, margin, y);
-  y += summaryLines.length * 5 + 8;
+  y += summaryLines.length * 5 + 10;
 
-  // DAFO
-  checkSpace(40);
-  doc.setTextColor(201, 168, 76);
-  doc.setFontSize(11);
-  doc.setFont('helvetica', 'bold');
-  doc.text('ANÁLISIS DAFO', margin, y);
-  y += 6;
-  doc.setTextColor(100, 100, 100);
-  doc.line(margin, y, pageW - margin, y);
-  y += 6;
+  // ── DAFO ─────────────────────────────────────────────────────────────────
+  sectionTitle('ANALISIS DAFO');
 
   const dafoData = [
-    ['✓ Fortalezas', report.strengths.join('\n')],
-    ['! Debilidades', report.weaknesses.join('\n') || 'Sin debilidades críticas identificadas'],
-    ['→ Oportunidades', report.opportunities.join('\n')],
-    ['⚠ Riesgos', report.risks.join('\n')],
+    ['Fortalezas', report.strengths.join('\n') || '-'],
+    ['Debilidades', report.weaknesses.join('\n') || 'Sin debilidades criticas identificadas'],
+    ['Oportunidades', report.opportunities.join('\n') || '-'],
+    ['Riesgos', report.risks.join('\n') || '-'],
   ];
 
   autoTable(doc, {
@@ -80,25 +102,17 @@ export async function exportReportToPDF(report: StrategyReport): Promise<void> {
     head: [],
     body: dafoData,
     margin: { left: margin, right: margin },
-    styles: { fontSize: 7, cellPadding: 3, overflow: 'linebreak' },
+    styles: { fontSize: 7.5, cellPadding: 3.5, overflow: 'linebreak' },
     columnStyles: {
-      0: { fontStyle: 'bold', cellWidth: 30, textColor: [201, 168, 76] },
-      1: { textColor: [50, 50, 50] },
+      0: { fontStyle: 'bold', cellWidth: 28, textColor: GOLD },
+      1: { textColor: BLACK },
     },
     theme: 'grid',
   });
-  y = (doc as any).lastAutoTable.finalY + 10;
+  y = (doc as any).lastAutoTable.finalY + 12;
 
-  // Festivales recomendados
-  checkSpace(30);
-  doc.setTextColor(201, 168, 76);
-  doc.setFontSize(11);
-  doc.setFont('helvetica', 'bold');
-  doc.text(`FESTIVALES RECOMENDADOS (${report.recommendedFestivals.length})`, margin, y);
-  y += 6;
-  doc.setTextColor(100, 100, 100);
-  doc.line(margin, y, pageW - margin, y);
-  y += 4;
+  // ── Festivales recomendados ───────────────────────────────────────────────
+  sectionTitle(`FESTIVALES RECOMENDADOS (${report.recommendedFestivals.length})`);
 
   const festivalRows = report.recommendedFestivals.map(f => [
     f.name,
@@ -107,58 +121,170 @@ export async function exportReportToPDF(report: StrategyReport): Promise<void> {
     f.month,
     f.deadline,
     f.submissionFee,
+    f.reason,
   ]);
 
   autoTable(doc, {
     startY: y,
-    head: [['Festival', 'País', 'Tier', 'Mes', 'Deadline', 'Tasa']],
+    head: [['Festival', 'Pais', 'Tier', 'Mes', 'Deadline', 'Tasa', 'Razon']],
     body: festivalRows,
     margin: { left: margin, right: margin },
-    styles: { fontSize: 7, cellPadding: 2 },
-    headStyles: { fillColor: [26, 26, 38], textColor: [201, 168, 76], fontStyle: 'bold' },
-    alternateRowStyles: { fillColor: [240, 240, 245] },
+    styles: { fontSize: 6.5, cellPadding: 2, overflow: 'linebreak' },
+    headStyles: { fillColor: DARK, textColor: GOLD, fontStyle: 'bold' },
+    columnStyles: {
+      0: { cellWidth: 38 },
+      6: { cellWidth: 42 },
+    },
+    alternateRowStyles: { fillColor: [245, 245, 248] },
     theme: 'striped',
   });
-  y = (doc as any).lastAutoTable.finalY + 10;
+  y = (doc as any).lastAutoTable.finalY + 12;
 
-  // Ventanas de distribución
-  checkSpace(30);
-  doc.setTextColor(201, 168, 76);
-  doc.setFontSize(11);
-  doc.setFont('helvetica', 'bold');
-  doc.text('VENTANAS DE DISTRIBUCIÓN', margin, y);
-  y += 6;
-  doc.setTextColor(100, 100, 100);
-  doc.line(margin, y, pageW - margin, y);
-  y += 4;
+  // ── Hoja de ruta de festivales ────────────────────────────────────────────
+  if (report.festivalRoadmap.length > 0) {
+    sectionTitle('HOJA DE RUTA — CIRCUITO DE FESTIVALES');
 
-  const windowRows = report.distributionWindows.map(w => [w.window, w.platform, w.timing, w.revenue]);
+    const roadmapRows = report.festivalRoadmap.map(r => [
+      r.month,
+      r.festivals.join(', '),
+    ]);
+
+    autoTable(doc, {
+      startY: y,
+      head: [['Mes', 'Festivales']],
+      body: roadmapRows,
+      margin: { left: margin, right: margin },
+      styles: { fontSize: 7.5, cellPadding: 3, overflow: 'linebreak' },
+      headStyles: { fillColor: DARK, textColor: GOLD, fontStyle: 'bold' },
+      columnStyles: {
+        0: { cellWidth: 30, fontStyle: 'bold' },
+        1: { textColor: BLACK },
+      },
+      theme: 'striped',
+    });
+    y = (doc as any).lastAutoTable.finalY + 12;
+  }
+
+  // ── Plataformas recomendadas ──────────────────────────────────────────────
+  if (report.recommendedPlatforms.length > 0) {
+    sectionTitle('PLATAFORMAS RECOMENDADAS');
+
+    const platformRows = report.recommendedPlatforms.map(p => [
+      p.name,
+      p.type,
+      p.territory,
+      p.probability,
+      p.notes,
+    ]);
+
+    autoTable(doc, {
+      startY: y,
+      head: [['Plataforma', 'Tipo', 'Territorio', 'Probabilidad', 'Notas']],
+      body: platformRows,
+      margin: { left: margin, right: margin },
+      styles: { fontSize: 7, cellPadding: 2.5, overflow: 'linebreak' },
+      headStyles: { fillColor: DARK, textColor: GOLD, fontStyle: 'bold' },
+      columnStyles: {
+        0: { cellWidth: 32, fontStyle: 'bold' },
+        4: { cellWidth: 45 },
+      },
+      didParseCell: (data) => {
+        if (data.column.index === 3 && data.section === 'body') {
+          const val = String(platformRows[data.row.index]?.[3] ?? '').toLowerCase();
+          if (val.includes('alta')) data.cell.styles.textColor = GREEN;
+          else if (val.includes('media')) data.cell.styles.textColor = YELLOW;
+          else if (val.includes('baja')) data.cell.styles.textColor = RED;
+        }
+      },
+      theme: 'striped',
+    });
+    y = (doc as any).lastAutoTable.finalY + 12;
+  }
+
+  // ── Ventanas de distribución ──────────────────────────────────────────────
+  sectionTitle('VENTANAS DE DISTRIBUCION');
+
+  const windowRows = report.distributionWindows.map(w => [
+    w.window,
+    w.platform,
+    w.timing,
+    w.revenue,
+    w.notes,
+  ]);
+
   autoTable(doc, {
     startY: y,
-    head: [['Ventana', 'Plataforma', 'Timing', 'Ingresos Estimados']],
+    head: [['Ventana', 'Plataforma', 'Timing', 'Ingresos Est.', 'Notas']],
     body: windowRows,
     margin: { left: margin, right: margin },
-    styles: { fontSize: 7, cellPadding: 2 },
-    headStyles: { fillColor: [26, 26, 38], textColor: [201, 168, 76], fontStyle: 'bold' },
+    styles: { fontSize: 7, cellPadding: 2.5, overflow: 'linebreak' },
+    headStyles: { fillColor: DARK, textColor: GOLD, fontStyle: 'bold' },
+    columnStyles: { 4: { cellWidth: 42 } },
     theme: 'striped',
   });
-  y = (doc as any).lastAutoTable.finalY + 10;
+  y = (doc as any).lastAutoTable.finalY + 12;
 
-  // Checklist de entregables
+  // ── Fases de marketing ────────────────────────────────────────────────────
+  if (report.marketingPhases.length > 0) {
+    sectionTitle('PLAN DE MARKETING — FASES');
+
+    report.marketingPhases.forEach((phase, i) => {
+      checkSpace(30);
+
+      // Cabecera de fase
+      doc.setFillColor(...DARK);
+      doc.rect(margin, y - 3, contentW, 8, 'F');
+      doc.setTextColor(...GOLD);
+      doc.setFontSize(8.5);
+      doc.setFont('helvetica', 'bold');
+      doc.text(`FASE ${i + 1}: ${phase.phase.toUpperCase()}`, margin + 3, y + 2);
+      doc.setTextColor(156, 163, 175);
+      doc.setFont('helvetica', 'normal');
+      doc.setFontSize(7.5);
+      doc.text(`Duracion: ${phase.duration}  |  Presupuesto: ${phase.budget}`, pageW - margin - 3, y + 2, { align: 'right' });
+      y += 10;
+
+      // Acciones
+      doc.setTextColor(...BLACK);
+      doc.setFontSize(7.5);
+      doc.setFont('helvetica', 'bold');
+      doc.text('Acciones:', margin + 2, y);
+      y += 5;
+      doc.setFont('helvetica', 'normal');
+      phase.actions.forEach(action => {
+        checkSpace(6);
+        const lines = doc.splitTextToSize(`- ${action}`, contentW - 6);
+        doc.text(lines, margin + 4, y);
+        y += lines.length * 4.5;
+      });
+
+      // KPIs
+      y += 2;
+      doc.setFont('helvetica', 'bold');
+      doc.setFontSize(7.5);
+      doc.text('KPIs:', margin + 2, y);
+      y += 5;
+      doc.setFont('helvetica', 'normal');
+      doc.setTextColor(...GREY);
+      phase.kpis.forEach(kpi => {
+        checkSpace(6);
+        const lines = doc.splitTextToSize(`* ${kpi}`, contentW - 6);
+        doc.text(lines, margin + 4, y);
+        y += lines.length * 4.5;
+      });
+
+      y += 6;
+    });
+  }
+
+  // ── Checklist de entregables ──────────────────────────────────────────────
   addPage();
-  doc.setTextColor(201, 168, 76);
-  doc.setFontSize(11);
-  doc.setFont('helvetica', 'bold');
-  doc.text('CHECKLIST DE ENTREGABLES', margin, y);
-  y += 6;
-  doc.setTextColor(100, 100, 100);
-  doc.line(margin, y, pageW - margin, y);
-  y += 4;
+  sectionTitle('CHECKLIST DE ENTREGABLES');
 
   const checklistRows = report.deliverableChecklist.map(item => [
     item.item,
     item.priority.toUpperCase(),
-    item.status === 'listo' ? '✓' : item.status === 'en_proceso' ? '⏳' : '✗',
+    item.status === 'listo' ? 'Listo' : item.status === 'en_proceso' ? 'En proceso' : 'Pendiente',
     item.deadline,
   ]);
 
@@ -167,74 +293,74 @@ export async function exportReportToPDF(report: StrategyReport): Promise<void> {
     head: [['Entregable', 'Prioridad', 'Estado', 'Deadline']],
     body: checklistRows,
     margin: { left: margin, right: margin },
-    styles: { fontSize: 7, cellPadding: 2 },
-    headStyles: { fillColor: [26, 26, 38], textColor: [201, 168, 76], fontStyle: 'bold' },
+    styles: { fontSize: 7.5, cellPadding: 2.5 },
+    headStyles: { fillColor: DARK, textColor: GOLD, fontStyle: 'bold' },
     columnStyles: {
-      1: {
-        fontStyle: 'bold',
-      },
+      1: { cellWidth: 22, fontStyle: 'bold' },
+      2: { cellWidth: 22 },
+      3: { cellWidth: 28 },
     },
     didParseCell: (data) => {
-      if (data.column.index === 2 && data.section === 'body') {
-        const val = checklistRows[data.row.index]?.[2];
-        if (val === '✓') data.cell.styles.textColor = [34, 197, 94];
-        else if (val === '✗') data.cell.styles.textColor = [239, 68, 68];
-        else data.cell.styles.textColor = [234, 179, 8];
+      if (data.section !== 'body') return;
+      if (data.column.index === 1) {
+        const val = String(checklistRows[data.row.index]?.[1] ?? '');
+        if (val === 'ALTA') data.cell.styles.textColor = RED;
+        else if (val === 'MEDIA') data.cell.styles.textColor = YELLOW;
+        else data.cell.styles.textColor = GREEN;
+      }
+      if (data.column.index === 2) {
+        const val = String(checklistRows[data.row.index]?.[2] ?? '');
+        if (val === 'Listo') data.cell.styles.textColor = GREEN;
+        else if (val === 'En proceso') data.cell.styles.textColor = YELLOW;
+        else data.cell.styles.textColor = RED;
       }
     },
     theme: 'striped',
   });
-  y = (doc as any).lastAutoTable.finalY + 10;
+  y = (doc as any).lastAutoTable.finalY + 12;
 
-  // Presupuesto
+  // ── Presupuesto ───────────────────────────────────────────────────────────
   if (report.totalBudgetEstimate > 0) {
-    checkSpace(40);
-    doc.setTextColor(201, 168, 76);
-    doc.setFontSize(11);
-    doc.setFont('helvetica', 'bold');
-    doc.text('DESGLOSE PRESUPUESTARIO', margin, y);
-    y += 6;
-    doc.setTextColor(100, 100, 100);
-    doc.line(margin, y, pageW - margin, y);
-    y += 4;
+    checkSpace(50);
+    sectionTitle('DESGLOSE PRESUPUESTARIO');
 
     const budgetRows = report.budgetBreakdown.map(b => [
       b.category,
-      `${b.recommended.toLocaleString('es-ES')} €`,
+      `${b.recommended.toLocaleString('es-ES')} EUR`,
       `${b.percentage}%`,
     ]);
-    budgetRows.push(['TOTAL', `${report.totalBudgetEstimate.toLocaleString('es-ES')} €`, '100%']);
+    budgetRows.push(['TOTAL ESTIMADO', `${report.totalBudgetEstimate.toLocaleString('es-ES')} EUR`, '100%']);
 
     autoTable(doc, {
       startY: y,
-      head: [['Categoría', 'Importe', '%']],
+      head: [['Categoria', 'Importe', '%']],
       body: budgetRows,
       margin: { left: margin, right: margin },
       styles: { fontSize: 8, cellPadding: 3 },
-      headStyles: { fillColor: [26, 26, 38], textColor: [201, 168, 76], fontStyle: 'bold' },
+      headStyles: { fillColor: DARK, textColor: GOLD, fontStyle: 'bold' },
+      didParseCell: (data) => {
+        if (data.row.index === budgetRows.length - 1 && data.section === 'body') {
+          data.cell.styles.fontStyle = 'bold';
+          data.cell.styles.textColor = GOLD;
+          data.cell.styles.fillColor = DARK;
+        }
+      },
       theme: 'striped',
     });
-    y = (doc as any).lastAutoTable.finalY + 10;
+    y = (doc as any).lastAutoTable.finalY + 12;
   }
 
-  // Próximos pasos
-  checkSpace(50);
-  doc.setTextColor(201, 168, 76);
-  doc.setFontSize(11);
-  doc.setFont('helvetica', 'bold');
-  doc.text('PRÓXIMOS PASOS INMEDIATOS', margin, y);
-  y += 6;
-  doc.setTextColor(100, 100, 100);
-  doc.line(margin, y, pageW - margin, y);
-  y += 6;
+  // ── Próximos pasos ────────────────────────────────────────────────────────
+  checkSpace(30);
+  sectionTitle('PROXIMOS PASOS INMEDIATOS');
 
   report.nextSteps.forEach((step, i) => {
-    checkSpace(10);
-    doc.setTextColor(201, 168, 76);
+    checkSpace(12);
+    doc.setTextColor(...GOLD);
     doc.setFontSize(9);
     doc.setFont('helvetica', 'bold');
     doc.text(`${i + 1}.`, margin, y);
-    doc.setTextColor(50, 50, 50);
+    doc.setTextColor(...BLACK);
     doc.setFont('helvetica', 'normal');
     doc.setFontSize(8);
     const lines = doc.splitTextToSize(step, contentW - 8);
@@ -242,16 +368,22 @@ export async function exportReportToPDF(report: StrategyReport): Promise<void> {
     y += lines.length * 5 + 3;
   });
 
-  // Footer en todas las páginas
+  // ── Footer en todas las páginas ───────────────────────────────────────────
   const totalPages = doc.getNumberOfPages();
   for (let page = 1; page <= totalPages; page++) {
     doc.setPage(page);
     doc.setFillColor(10, 10, 15);
-    doc.rect(0, 287, pageW, 10, 'F');
-    doc.setFontSize(7);
-    doc.setTextColor(100, 100, 100);
-    doc.text(`FilmRoute — Estrategia de Distribución | "${report.filmTitle}" | Pág. ${page} de ${totalPages}`, pageW / 2, 292, { align: 'center' });
+    doc.rect(0, pageH - 10, pageW, 10, 'F');
+    doc.setFontSize(6.5);
+    doc.setTextColor(...GREY);
+    doc.text(
+      `FilmRoute  |  "${report.filmTitle}"  |  Pagina ${page} de ${totalPages}`,
+      pageW / 2,
+      pageH - 4,
+      { align: 'center' }
+    );
   }
 
-  doc.save(`FilmRoute_Estrategia_${report.filmTitle.replace(/[^a-zA-Z0-9]/g, '_')}.pdf`);
+  const filename = `FilmRoute_${report.filmTitle.replace(/[^a-zA-Z0-9]/g, '_')}.pdf`;
+  doc.save(filename);
 }
