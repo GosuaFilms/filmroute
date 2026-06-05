@@ -1,4 +1,4 @@
-import { useState, useCallback } from 'react';
+import { useState, useCallback, useEffect } from 'react';
 import { AuthProvider, useAuth } from './contexts/AuthContext';
 import { AuthPage } from './pages/AuthPage';
 import { Header } from './components/layout/Header';
@@ -21,6 +21,7 @@ import type { FilmData, StrategyReport } from './types/film';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 
 const TOTAL_STEPS = 7;
+const DRAFT_KEY = 'filmroute_draft';
 
 const EMPTY_DATA: FilmData = {
   basicInfo: {},
@@ -30,6 +31,29 @@ const EMPTY_DATA: FilmData = {
   festivalStrategy: {},
   budgetResources: {},
 };
+
+function loadDraft(): FilmData | null {
+  try {
+    const raw = localStorage.getItem(DRAFT_KEY);
+    return raw ? (JSON.parse(raw) as FilmData) : null;
+  } catch {
+    return null;
+  }
+}
+
+function saveDraft(data: FilmData) {
+  try {
+    localStorage.setItem(DRAFT_KEY, JSON.stringify(data));
+  } catch {
+    // localStorage puede estar lleno o bloqueado; ignorar silenciosamente
+  }
+}
+
+function clearDraft() {
+  try {
+    localStorage.removeItem(DRAFT_KEY);
+  } catch {}
+}
 
 type View = 'dashboard' | 'wizard' | 'report';
 
@@ -45,10 +69,33 @@ function AppContent() {
   const [currentStrategyId, setCurrentStrategyId] = useState<string | null>(null);
   const [saveError, setSaveError] = useState<string | null>(null);
   const [stepErrors, setStepErrors] = useState<StepErrors>({});
+  const [draftRestored, setDraftRestored] = useState(false);
 
   const updateData = useCallback((partial: Partial<FilmData>) => {
     setFilmData(prev => ({ ...prev, ...partial }));
   }, []);
+
+  // Restaurar borrador al entrar al wizard si no hay estrategia cargada
+  useEffect(() => {
+    if (view === 'wizard' && !currentStrategyId) {
+      const draft = loadDraft();
+      if (draft && draft.basicInfo?.title) {
+        setFilmData(draft);
+        setDraftRestored(true);
+        const timer = setTimeout(() => setDraftRestored(false), 4000);
+        return () => clearTimeout(timer);
+      }
+    }
+  // Solo al montar el wizard por primera vez
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [view]);
+
+  // Auto-guardar borrador en localStorage cada vez que cambia filmData
+  useEffect(() => {
+    if (view === 'wizard') {
+      saveDraft(filmData);
+    }
+  }, [filmData, view]);
 
   if (loading) {
     return (
@@ -83,11 +130,13 @@ function AppContent() {
   };
 
   const handleNew = () => {
+    clearDraft();
     setFilmData(EMPTY_DATA);
     setReport(null);
     setCurrentStrategyId(null);
     setSaveError(null);
     setStepErrors({});
+    setDraftRestored(false);
     setCurrentStep(1);
     setView('wizard');
   };
@@ -129,6 +178,7 @@ function AppContent() {
         const saved = await saveStrategy(filmData, result);
         setCurrentStrategyId(saved.id);
       }
+      clearDraft();
     } catch {
       setSaveError('No se pudo guardar la estrategia en la nube. Puedes exportarla a PDF.');
     } finally {
@@ -220,6 +270,12 @@ function AppContent() {
       </div>
 
       <main className="max-w-4xl mx-auto px-4 py-8">
+        {draftRestored && (
+          <div className="mb-6 flex items-center gap-2 bg-cinema-gold/10 border border-cinema-gold/30 rounded-xl px-4 py-3 text-cinema-gold text-sm">
+            <span>💾</span>
+            <span>Borrador restaurado — tus datos del formulario anterior se han recuperado automáticamente.</span>
+          </div>
+        )}
         {currentStep === 1 && <Step1BasicInfo data={filmData.basicInfo} onChange={updateData} errors={stepErrors} />}
         {currentStep === 2 && <Step2CreativeDetails data={filmData.creativeDetails} onChange={updateData} errors={stepErrors} />}
         {currentStep === 3 && <Step3Materials data={filmData.materials} onChange={updateData} />}
