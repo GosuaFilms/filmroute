@@ -3,10 +3,12 @@ import { Input } from '../ui/Input';
 import { Select } from '../ui/Select';
 import { SectionCard } from '../ui/SectionCard';
 import { CheckboxGroup } from '../ui/CheckboxGroup';
+import type { StepErrors } from '../../utils/validation';
 
 interface Props {
   data: Partial<BasicInfo>;
   onChange: (data: Partial<FilmData>) => void;
+  errors?: StepErrors;
 }
 
 const FILM_TYPES = [
@@ -63,7 +65,7 @@ const SUBTITLE_OPTIONS = [
   { value: 'arabe', label: 'Árabe' },
 ];
 
-export function Step1BasicInfo({ data, onChange }: Props) {
+export function Step1BasicInfo({ data, onChange, errors = {} }: Props) {
   const update = (field: keyof BasicInfo, value: string | number | string[]) => {
     onChange({ basicInfo: { ...data, [field]: value } });
   };
@@ -83,6 +85,7 @@ export function Step1BasicInfo({ data, onChange }: Props) {
             value={data.title ?? ''}
             onChange={e => update('title', e.target.value)}
             required
+            error={errors.title}
           />
           <Input
             label="Título original (si difiere)"
@@ -97,6 +100,7 @@ export function Step1BasicInfo({ data, onChange }: Props) {
             onChange={e => update('filmType', e.target.value)}
             placeholder="Selecciona el tipo"
             required
+            error={errors.filmType}
           />
           <Select
             label="Género principal"
@@ -105,6 +109,7 @@ export function Step1BasicInfo({ data, onChange }: Props) {
             onChange={e => update('genre', e.target.value)}
             placeholder="Selecciona el género"
             required
+            error={errors.genre}
           />
           <Input
             label="Subgénero o estilo"
@@ -121,6 +126,7 @@ export function Step1BasicInfo({ data, onChange }: Props) {
             value={data.duration ?? ''}
             onChange={e => update('duration', parseInt(e.target.value) || 0)}
             required
+            error={errors.duration}
           />
           <Input
             label="Año de producción"
@@ -131,6 +137,7 @@ export function Step1BasicInfo({ data, onChange }: Props) {
             value={data.productionYear ?? ''}
             onChange={e => update('productionYear', parseInt(e.target.value) || 0)}
             required
+            error={errors.productionYear}
           />
           <Input
             label="País de producción"
@@ -138,6 +145,7 @@ export function Step1BasicInfo({ data, onChange }: Props) {
             value={data.country ?? ''}
             onChange={e => update('country', e.target.value)}
             required
+            error={errors.country}
           />
           <Input
             label="Países de coproducción"
@@ -158,6 +166,7 @@ export function Step1BasicInfo({ data, onChange }: Props) {
             onChange={e => update('originalLanguage', e.target.value)}
             placeholder="Selecciona el idioma"
             required
+            error={errors.originalLanguage}
           />
         </div>
         <div className="mt-4">
@@ -186,6 +195,7 @@ export function Step1BasicInfo({ data, onChange }: Props) {
             value={data.directorName ?? ''}
             onChange={e => update('directorName', e.target.value)}
             required
+            error={errors.directorName}
           />
           <Input
             label="Productor/a"

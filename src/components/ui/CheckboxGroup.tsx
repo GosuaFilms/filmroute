@@ -1,13 +1,14 @@
 interface CheckboxGroupProps {
   label: string;
   hint?: string;
+  error?: string;
   options: { value: string; label: string }[];
   selected: string[];
   onChange: (values: string[]) => void;
   columns?: 1 | 2 | 3;
 }
 
-export function CheckboxGroup({ label, hint, options, selected, onChange, columns = 2 }: CheckboxGroupProps) {
+export function CheckboxGroup({ label, hint, error, options, selected, onChange, columns = 2 }: CheckboxGroupProps) {
   const toggle = (value: string) => {
     if (selected.includes(value)) {
       onChange(selected.filter(v => v !== value));
@@ -20,6 +21,7 @@ export function CheckboxGroup({ label, hint, options, selected, onChange, column
     <div className="flex flex-col gap-2">
       <span className="text-sm font-medium text-cinema-text">{label}</span>
       {hint && <p className="text-xs text-cinema-text-dim -mt-1">{hint}</p>}
+      {error && <p className="text-xs text-red-400 -mt-1">{error}</p>}
       <div className={`grid gap-2 ${columns === 3 ? 'grid-cols-1 sm:grid-cols-3' : columns === 2 ? 'grid-cols-1 sm:grid-cols-2' : 'grid-cols-1'}`}>
         {options.map(opt => (
           <label

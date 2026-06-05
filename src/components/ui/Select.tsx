@@ -4,11 +4,12 @@ import clsx from 'clsx';
 interface SelectProps extends SelectHTMLAttributes<HTMLSelectElement> {
   label: string;
   hint?: string;
+  error?: string;
   options: { value: string; label: string }[];
   placeholder?: string;
 }
 
-export function Select({ label, hint, options, placeholder, className, id, ...props }: SelectProps) {
+export function Select({ label, hint, error, options, placeholder, className, id, ...props }: SelectProps) {
   const selectId = id ?? label.toLowerCase().replace(/\s+/g, '-');
   return (
     <div className="flex flex-col gap-1.5">
@@ -19,9 +20,10 @@ export function Select({ label, hint, options, placeholder, className, id, ...pr
       <select
         id={selectId}
         className={clsx(
-          'bg-cinema-card border border-cinema-border rounded-lg px-4 py-2.5 text-cinema-text text-sm transition-colors',
+          'bg-cinema-card border rounded-lg px-4 py-2.5 text-cinema-text text-sm transition-colors',
           'focus:outline-none focus:ring-2 focus:ring-cinema-gold/50 focus:border-cinema-gold',
           'hover:border-cinema-gold/50 appearance-none cursor-pointer',
+          error ? 'border-red-500' : 'border-cinema-border',
           className,
         )}
         {...props}
@@ -34,6 +36,7 @@ export function Select({ label, hint, options, placeholder, className, id, ...pr
         ))}
       </select>
       {hint && <p className="text-xs text-cinema-text-dim">{hint}</p>}
+      {error && <p className="text-xs text-red-400">{error}</p>}
     </div>
   );
 }

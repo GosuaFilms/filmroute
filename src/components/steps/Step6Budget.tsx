@@ -5,9 +5,12 @@ import { Select } from '../ui/Select';
 import { Textarea } from '../ui/Textarea';
 import { TrendingUp } from 'lucide-react';
 
+import type { StepErrors } from '../../utils/validation';
+
 interface Props {
   data: Partial<BudgetResources>;
   onChange: (data: Partial<FilmData>) => void;
+  errors?: StepErrors;
 }
 
 const TEAM_SIZES = [
@@ -33,7 +36,7 @@ const HOURS_OPTIONS = [
   { value: '40', label: '40 horas/semana (jornada completa)' },
 ];
 
-export function Step6Budget({ data, onChange }: Props) {
+export function Step6Budget({ data, onChange, errors = {} }: Props) {
   const update = (field: keyof BudgetResources, value: string | number | boolean) => {
     onChange({ budgetResources: { ...data, [field]: value } });
   };
@@ -66,6 +69,7 @@ export function Step6Budget({ data, onChange }: Props) {
             onChange={e => update('totalDistributionBudget', parseInt(e.target.value) || 0)}
             hint="Incluye todo: inscripciones, materiales, marketing, viajes, publicista..."
             required
+            error={errors.totalDistributionBudget}
           />
           {total > 0 && (
             <div className="bg-cinema-dark rounded-lg p-4">

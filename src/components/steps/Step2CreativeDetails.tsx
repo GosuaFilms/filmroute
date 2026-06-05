@@ -5,9 +5,12 @@ import { Select } from '../ui/Select';
 import { SectionCard } from '../ui/SectionCard';
 import { CheckboxGroup } from '../ui/CheckboxGroup';
 
+import type { StepErrors } from '../../utils/validation';
+
 interface Props {
   data: Partial<CreativeDetails>;
   onChange: (data: Partial<FilmData>) => void;
+  errors?: StepErrors;
 }
 
 const THEMES = [
@@ -51,7 +54,7 @@ const AGE_RATINGS = [
   { value: 'NR', label: 'Sin calificar (NR)' },
 ];
 
-export function Step2CreativeDetails({ data, onChange }: Props) {
+export function Step2CreativeDetails({ data, onChange, errors = {} }: Props) {
   const update = (field: keyof CreativeDetails, value: string | string[]) => {
     onChange({ creativeDetails: { ...data, [field]: value } });
   };
@@ -73,6 +76,7 @@ export function Step2CreativeDetails({ data, onChange }: Props) {
             onChange={e => update('shortSynopsis', e.target.value)}
             rows={3}
             required
+            error={errors.shortSynopsis}
           />
           <Textarea
             label="Sinopsis larga (máx. 400 palabras)"
@@ -103,6 +107,7 @@ export function Step2CreativeDetails({ data, onChange }: Props) {
               onChange={e => update('targetAudience', e.target.value)}
               placeholder="Selecciona el público"
               required
+              error={errors.targetAudience}
             />
             <Select
               label="Clasificación por edades"

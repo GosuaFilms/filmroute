@@ -16,6 +16,7 @@ import { Button } from './components/ui/Button';
 import { generateStrategy } from './utils/strategyEngine';
 import { exportReportToPDF } from './utils/pdfExport';
 import { saveStrategy, updateStrategy, type SavedStrategy } from './lib/strategies';
+import { validateStep, hasErrors, type StepErrors } from './utils/validation';
 import type { FilmData, StrategyReport } from './types/film';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 
@@ -43,6 +44,7 @@ function AppContent() {
   const [isExporting, setIsExporting] = useState(false);
   const [currentStrategyId, setCurrentStrategyId] = useState<string | null>(null);
   const [saveError, setSaveError] = useState<string | null>(null);
+  const [stepErrors, setStepErrors] = useState<StepErrors>({});
 
   const updateData = useCallback((partial: Partial<FilmData>) => {
     setFilmData(prev => ({ ...prev, ...partial }));
@@ -64,14 +66,28 @@ function AppContent() {
 
   if (!user) return <AuthPage />;
 
-  const goNext = () => setCurrentStep(s => Math.min(s + 1, TOTAL_STEPS));
-  const goPrev = () => setCurrentStep(s => Math.max(s - 1, 1));
+  const goNext = () => {
+    const errors = validateStep(currentStep, filmData);
+    if (hasErrors(errors)) {
+      setStepErrors(errors);
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+      return;
+    }
+    setStepErrors({});
+    setCurrentStep(s => Math.min(s + 1, TOTAL_STEPS));
+  };
+
+  const goPrev = () => {
+    setStepErrors({});
+    setCurrentStep(s => Math.max(s - 1, 1));
+  };
 
   const handleNew = () => {
     setFilmData(EMPTY_DATA);
     setReport(null);
     setCurrentStrategyId(null);
     setSaveError(null);
+    setStepErrors({});
     setCurrentStep(1);
     setView('wizard');
   };
@@ -90,6 +106,12 @@ function AppContent() {
   };
 
   const handleGenerate = async () => {
+    const errors = validateStep(7, filmData);
+    if (hasErrors(errors)) {
+      setStepErrors(errors);
+      return;
+    }
+    setStepErrors({});
     setIsGenerating(true);
     setSaveError(null);
     await new Promise(r => setTimeout(r, 800));
@@ -198,12 +220,12 @@ function AppContent() {
       </div>
 
       <main className="max-w-4xl mx-auto px-4 py-8">
-        {currentStep === 1 && <Step1BasicInfo data={filmData.basicInfo} onChange={updateData} />}
-        {currentStep === 2 && <Step2CreativeDetails data={filmData.creativeDetails} onChange={updateData} />}
+        {currentStep === 1 && <Step1BasicInfo data={filmData.basicInfo} onChange={updateData} errors={stepErrors} />}
+        {currentStep === 2 && <Step2CreativeDetails data={filmData.creativeDetails} onChange={updateData} errors={stepErrors} />}
         {currentStep === 3 && <Step3Materials data={filmData.materials} onChange={updateData} />}
-        {currentStep === 4 && <Step4Distribution data={filmData.distributionGoals} onChange={updateData} />}
-        {currentStep === 5 && <Step5Festivals data={filmData.festivalStrategy} onChange={updateData} />}
-        {currentStep === 6 && <Step6Budget data={filmData.budgetResources} onChange={updateData} />}
+        {currentStep === 4 && <Step4Distribution data={filmData.distributionGoals} onChange={updateData} errors={stepErrors} />}
+        {currentStep === 5 && <Step5Festivals data={filmData.festivalStrategy} onChange={updateData} errors={stepErrors} />}
+        {currentStep === 6 && <Step6Budget data={filmData.budgetResources} onChange={updateData} errors={stepErrors} />}
         {currentStep === 7 && (
           <Step7Review data={filmData} onGenerate={handleGenerate} isGenerating={isGenerating} />
         )}

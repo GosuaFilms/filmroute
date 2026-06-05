@@ -4,9 +4,12 @@ import { CheckboxGroup } from '../ui/CheckboxGroup';
 import { Select } from '../ui/Select';
 import { Input } from '../ui/Input';
 
+import type { StepErrors } from '../../utils/validation';
+
 interface Props {
   data: Partial<DistributionGoals>;
   onChange: (data: Partial<FilmData>) => void;
+  errors?: StepErrors;
 }
 
 const DISTRIBUTION_TARGETS = [
@@ -52,7 +55,7 @@ const RELEASE_WINDOWS = [
   { value: 'sin_prisa', label: 'Sin urgencia / seguir el circuito de festivales' },
 ];
 
-export function Step4Distribution({ data, onChange }: Props) {
+export function Step4Distribution({ data, onChange, errors = {} }: Props) {
   const update = (field: keyof DistributionGoals, value: string | string[] | boolean) => {
     onChange({ distributionGoals: { ...data, [field]: value } });
   };
@@ -72,6 +75,7 @@ export function Step4Distribution({ data, onChange }: Props) {
           selected={data.primaryTargets ?? []}
           onChange={values => update('primaryTargets', values)}
           columns={1}
+          error={errors.primaryTargets}
         />
       </SectionCard>
 

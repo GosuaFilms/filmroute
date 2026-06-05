@@ -6,9 +6,12 @@ import { Input } from '../ui/Input';
 import { Textarea } from '../ui/Textarea';
 import { Info, Trophy } from 'lucide-react';
 
+import type { StepErrors } from '../../utils/validation';
+
 interface Props {
   data: Partial<FestivalStrategy>;
   onChange: (data: Partial<FilmData>) => void;
+  errors?: StepErrors;
 }
 
 const FESTIVAL_TIERS = [
@@ -45,7 +48,7 @@ const PREMIERE_STATUS = [
   { value: 'premiere_internacional', label: 'Estreno internacional realizado' },
 ];
 
-export function Step5Festivals({ data, onChange }: Props) {
+export function Step5Festivals({ data, onChange, errors = {} }: Props) {
   const update = (field: keyof FestivalStrategy, value: string | string[] | boolean | number) => {
     onChange({ festivalStrategy: { ...data, [field]: value } });
   };
@@ -110,6 +113,7 @@ export function Step5Festivals({ data, onChange }: Props) {
             selected={data.targetTiers ?? []}
             onChange={values => update('targetTiers', values)}
             columns={1}
+            error={errors.targetTiers}
           />
           <CheckboxGroup
             label="Enfoque geográfico de festivales"
@@ -156,6 +160,8 @@ export function Step5Festivals({ data, onChange }: Props) {
             value={data.startDate ?? ''}
             onChange={e => update('startDate', e.target.value)}
             className="sm:col-span-1"
+            required
+            error={errors.startDate}
           />
         </div>
 
