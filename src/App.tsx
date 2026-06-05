@@ -141,17 +141,15 @@ function AppContent() {
     setView('wizard');
   };
 
-  const handleLoad = (strategy: SavedStrategy) => {
+  const handleLoad = (strategy: SavedStrategy, mode: 'report' | 'wizard') => {
     setFilmData(strategy.film_data);
     setReport(strategy.report);
     setCurrentStrategyId(strategy.id);
     setSaveError(null);
+    setStepErrors({});
+    setDraftRestored(false);
     setCurrentStep(1);
-    if (strategy.report) {
-      setView('report');
-    } else {
-      setView('wizard');
-    }
+    setView(mode === 'report' && strategy.report ? 'report' : 'wizard');
   };
 
   const handleGenerate = async () => {
