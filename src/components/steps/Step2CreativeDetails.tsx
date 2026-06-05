@@ -69,20 +69,22 @@ export function Step2CreativeDetails({ data, onChange, errors = {} }: Props) {
       <SectionCard title="Sinopsis">
         <div className="space-y-4">
           <Textarea
-            label="Sinopsis corta (máx. 100 palabras)"
+            label="Sinopsis corta"
             hint="La que aparece en catálogos de festivales y plataformas"
             placeholder="Una frase poderosa que capture la esencia de tu película..."
             value={data.shortSynopsis ?? ''}
             onChange={e => update('shortSynopsis', e.target.value)}
             rows={3}
             required
+            maxWords={100}
             error={errors.shortSynopsis}
           />
           <Textarea
-            label="Sinopsis larga (máx. 400 palabras)"
+            label="Sinopsis larga"
             hint="Para el press kit y materiales de prensa"
             placeholder="Descripción completa de la historia, personajes y conflicto principal..."
             value={data.longSynopsis ?? ''}
+            maxWords={400}
             onChange={e => update('longSynopsis', e.target.value)}
             rows={6}
           />
