@@ -1,12 +1,18 @@
 import { useState, type FormEvent } from 'react';
-import { Film, Eye, EyeOff, AlertCircle, CheckCircle } from 'lucide-react';
+import { Film, Eye, EyeOff, AlertCircle, CheckCircle, Mail } from 'lucide-react';
 import { useAuth } from '../contexts/AuthContext';
 import clsx from 'clsx';
 
-type Mode = 'login' | 'register';
+type Mode = 'login' | 'register' | 'recovery';
+
+const TAB_LABELS: Record<Mode, string> = {
+  login: 'Iniciar sesión',
+  register: 'Crear cuenta',
+  recovery: 'Recuperar contraseña',
+};
 
 export function AuthPage() {
-  const { signIn, signUp } = useAuth();
+  const { signIn, signUp, resetPassword } = useAuth();
   const [mode, setMode] = useState<Mode>('login');
   const [fullName, setFullName] = useState('');
   const [email, setEmail] = useState('');
@@ -24,6 +30,7 @@ export function AuthPage() {
     setEmail('');
     setPassword('');
     setConfirmPassword('');
+    setShowPassword(false);
   };
 
   const switchMode = (m: Mode) => {
@@ -47,7 +54,7 @@ export function AuthPage() {
     if (mode === 'login') {
       const { error } = await signIn(email, password);
       if (error) setError(error);
-    } else {
+    } else if (mode === 'register') {
       const { error } = await signUp(email, password, fullName);
       if (error) {
         setError(error);
@@ -58,10 +65,20 @@ export function AuthPage() {
         setConfirmPassword('');
         setFullName('');
       }
+    } else {
+      const { error } = await resetPassword(email);
+      if (error) {
+        setError(error);
+      } else {
+        setSuccess('Te hemos enviado un email con el enlace de recuperación. Revisa también la carpeta de spam.');
+        setEmail('');
+      }
     }
 
     setLoading(false);
   };
+
+  const inputClass = 'bg-cinema-dark border border-cinema-border rounded-lg px-4 py-3 text-cinema-text placeholder-cinema-muted text-sm focus:outline-none focus:ring-2 focus:ring-cinema-gold/50 focus:border-cinema-gold transition-colors w-full';
 
   return (
     <div className="min-h-screen bg-gradient-cinema flex flex-col">
@@ -82,22 +99,29 @@ export function AuthPage() {
       {/* Main */}
       <main className="flex-1 flex items-center justify-center px-4 py-12">
         <div className="w-full max-w-md">
+          {/* Nota de acceso interno */}
+          <div className="flex items-center justify-center gap-2 mb-5 text-cinema-text-dim text-xs">
+            <span className="w-12 h-px bg-cinema-border" />
+            <span>Acceso exclusivo para empleados de LUR Atlantik Films</span>
+            <span className="w-12 h-px bg-cinema-border" />
+          </div>
+
           {/* Card */}
           <div className="bg-cinema-card border border-cinema-border rounded-2xl overflow-hidden shadow-2xl shadow-black/50">
             {/* Tabs */}
             <div className="flex border-b border-cinema-border">
-              {(['login', 'register'] as Mode[]).map(m => (
+              {(['login', 'register', 'recovery'] as Mode[]).map(m => (
                 <button
                   key={m}
                   onClick={() => switchMode(m)}
                   className={clsx(
-                    'flex-1 py-4 text-sm font-semibold transition-all',
+                    'flex-1 py-3.5 text-xs font-semibold transition-all',
                     mode === m
                       ? 'text-cinema-gold border-b-2 border-cinema-gold bg-cinema-gold/5'
                       : 'text-cinema-text-dim hover:text-cinema-text',
                   )}
                 >
-                  {m === 'login' ? 'Iniciar sesión' : 'Crear cuenta'}
+                  {TAB_LABELS[m]}
                 </button>
               ))}
             </div>
@@ -106,12 +130,14 @@ export function AuthPage() {
               {/* Title */}
               <div className="mb-6">
                 <h1 className="text-xl font-display font-bold text-cinema-text">
-                  {mode === 'login' ? 'Bienvenido de nuevo' : 'Únete a FilmRoute'}
+                  {mode === 'login' && 'Bienvenido de nuevo'}
+                  {mode === 'register' && 'Nueva cuenta'}
+                  {mode === 'recovery' && '¿Olvidaste tu contraseña?'}
                 </h1>
                 <p className="text-cinema-text-dim text-sm mt-1">
-                  {mode === 'login'
-                    ? 'Accede a tu estrategia de distribución'
-                    : 'Crea tu cuenta gratuita y empieza a distribuir'}
+                  {mode === 'login' && 'Accede a tu estrategia de distribución'}
+                  {mode === 'register' && 'Crea tu acceso como empleado de LUR'}
+                  {mode === 'recovery' && 'Introduce tu email y te enviaremos un enlace para restablecerla'}
                 </p>
               </div>
 
@@ -142,7 +168,7 @@ export function AuthPage() {
                       value={fullName}
                       onChange={e => setFullName(e.target.value)}
                       required
-                      className="bg-cinema-dark border border-cinema-border rounded-lg px-4 py-3 text-cinema-text placeholder-cinema-muted text-sm focus:outline-none focus:ring-2 focus:ring-cinema-gold/50 focus:border-cinema-gold transition-colors"
+                      className={inputClass}
                     />
                   </div>
                 )}
@@ -157,32 +183,34 @@ export function AuthPage() {
                     value={email}
                     onChange={e => setEmail(e.target.value)}
                     required
-                    className="bg-cinema-dark border border-cinema-border rounded-lg px-4 py-3 text-cinema-text placeholder-cinema-muted text-sm focus:outline-none focus:ring-2 focus:ring-cinema-gold/50 focus:border-cinema-gold transition-colors"
+                    className={inputClass}
                   />
                 </div>
 
-                <div className="flex flex-col gap-1.5">
-                  <label className="text-sm font-medium text-cinema-text">
-                    Contraseña <span className="text-cinema-gold">*</span>
-                  </label>
-                  <div className="relative">
-                    <input
-                      type={showPassword ? 'text' : 'password'}
-                      placeholder={mode === 'register' ? 'Mínimo 6 caracteres' : '••••••••'}
-                      value={password}
-                      onChange={e => setPassword(e.target.value)}
-                      required
-                      className="w-full bg-cinema-dark border border-cinema-border rounded-lg px-4 py-3 pr-11 text-cinema-text placeholder-cinema-muted text-sm focus:outline-none focus:ring-2 focus:ring-cinema-gold/50 focus:border-cinema-gold transition-colors"
-                    />
-                    <button
-                      type="button"
-                      onClick={() => setShowPassword(s => !s)}
-                      className="absolute right-3 top-1/2 -translate-y-1/2 text-cinema-muted hover:text-cinema-text transition-colors"
-                    >
-                      {showPassword ? <EyeOff size={16} /> : <Eye size={16} />}
-                    </button>
+                {mode !== 'recovery' && (
+                  <div className="flex flex-col gap-1.5">
+                    <label className="text-sm font-medium text-cinema-text">
+                      Contraseña <span className="text-cinema-gold">*</span>
+                    </label>
+                    <div className="relative">
+                      <input
+                        type={showPassword ? 'text' : 'password'}
+                        placeholder={mode === 'register' ? 'Mínimo 6 caracteres' : '••••••••'}
+                        value={password}
+                        onChange={e => setPassword(e.target.value)}
+                        required
+                        className={clsx(inputClass, 'pr-11')}
+                      />
+                      <button
+                        type="button"
+                        onClick={() => setShowPassword(s => !s)}
+                        className="absolute right-3 top-1/2 -translate-y-1/2 text-cinema-muted hover:text-cinema-text transition-colors"
+                      >
+                        {showPassword ? <EyeOff size={16} /> : <Eye size={16} />}
+                      </button>
+                    </div>
                   </div>
-                </div>
+                )}
 
                 {mode === 'register' && (
                   <div className="flex flex-col gap-1.5">
@@ -195,7 +223,7 @@ export function AuthPage() {
                       value={confirmPassword}
                       onChange={e => setConfirmPassword(e.target.value)}
                       required
-                      className="bg-cinema-dark border border-cinema-border rounded-lg px-4 py-3 text-cinema-text placeholder-cinema-muted text-sm focus:outline-none focus:ring-2 focus:ring-cinema-gold/50 focus:border-cinema-gold transition-colors"
+                      className={inputClass}
                     />
                   </div>
                 )}
@@ -211,30 +239,33 @@ export function AuthPage() {
                         <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
                         <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
                       </svg>
-                      {mode === 'login' ? 'Iniciando sesión...' : 'Creando cuenta...'}
+                      {mode === 'login' ? 'Iniciando sesión...' : mode === 'register' ? 'Creando cuenta...' : 'Enviando enlace...'}
                     </>
                   ) : (
-                    mode === 'login' ? 'Iniciar sesión' : 'Crear cuenta gratuita'
+                    <>
+                      {mode === 'recovery' && <Mail size={15} />}
+                      {mode === 'login' ? 'Iniciar sesión' : mode === 'register' ? 'Crear cuenta' : 'Enviar enlace de recuperación'}
+                    </>
                   )}
                 </button>
               </form>
 
-              {/* Switch mode link */}
-              <p className="text-center text-sm text-cinema-text-dim mt-6">
-                {mode === 'login' ? '¿No tienes cuenta?' : '¿Ya tienes cuenta?'}{' '}
-                <button
-                  onClick={() => switchMode(mode === 'login' ? 'register' : 'login')}
-                  className="text-cinema-gold hover:text-cinema-gold-light font-medium transition-colors"
-                >
-                  {mode === 'login' ? 'Regístrate gratis' : 'Inicia sesión'}
-                </button>
-              </p>
+              {/* Volver al login desde recovery */}
+              {mode === 'recovery' && (
+                <p className="text-center text-sm text-cinema-text-dim mt-6">
+                  <button
+                    onClick={() => switchMode('login')}
+                    className="text-cinema-gold hover:opacity-80 font-medium transition-opacity"
+                  >
+                    ← Volver al inicio de sesión
+                  </button>
+                </p>
+              )}
             </div>
           </div>
 
-          {/* Footer note */}
           <p className="text-center text-cinema-text-dim text-xs mt-6">
-            Tus datos son privados y seguros · Cuenta gratuita · Sin tarjeta de crédito
+            Uso interno · LUR Atlantik Films · Datos privados y seguros
           </p>
         </div>
       </main>

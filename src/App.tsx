@@ -70,8 +70,95 @@ function clearDraft() {
 
 type View = 'dashboard' | 'wizard' | 'report';
 
+function SetNewPasswordView({ updatePassword }: { updatePassword: (p: string) => Promise<{ error: string | null }> }) {
+  const [password, setPassword] = useState('');
+  const [confirm, setConfirm] = useState('');
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const [done, setDone] = useState(false);
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setError(null);
+    if (password.length < 6) return setError('La contraseña debe tener al menos 6 caracteres.');
+    if (password !== confirm) return setError('Las contraseñas no coinciden.');
+    setLoading(true);
+    const { error } = await updatePassword(password);
+    if (error) { setError(error); setLoading(false); return; }
+    setDone(true);
+    setLoading(false);
+  };
+
+  return (
+    <div className="min-h-screen bg-gradient-cinema flex flex-col items-center justify-center px-4">
+      <div className="w-full max-w-md bg-cinema-card border border-cinema-border rounded-2xl p-8 shadow-2xl shadow-black/50">
+        <div className="flex items-center gap-2 text-cinema-gold mb-6">
+          <svg width="24" height="24" fill="none" stroke="currentColor" strokeWidth="1.5" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M16.5 10.5V6.75a4.5 4.5 0 10-9 0v3.75m-.75 11.25h10.5a2.25 2.25 0 002.25-2.25v-6.75a2.25 2.25 0 00-2.25-2.25H6.75a2.25 2.25 0 00-2.25 2.25v6.75a2.25 2.25 0 002.25 2.25z" /></svg>
+          <span className="font-display font-bold text-lg">FilmRoute</span>
+        </div>
+
+        {done ? (
+          <div className="text-center">
+            <div className="w-14 h-14 rounded-full bg-green-500/10 flex items-center justify-center mx-auto mb-4">
+              <svg className="w-7 h-7 text-green-400" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" /></svg>
+            </div>
+            <h2 className="text-xl font-display font-bold text-cinema-text mb-2">Contraseña actualizada</h2>
+            <p className="text-cinema-text-dim text-sm">Tu contraseña se ha cambiado correctamente. Ya puedes usar la aplicación.</p>
+          </div>
+        ) : (
+          <>
+            <h2 className="text-xl font-display font-bold text-cinema-text mb-1">Nueva contraseña</h2>
+            <p className="text-cinema-text-dim text-sm mb-6">Introduce y confirma tu nueva contraseña.</p>
+
+            {error && (
+              <div className="flex items-start gap-3 bg-red-900/20 border border-red-700/40 rounded-xl p-4 mb-5">
+                <svg className="w-4 h-4 text-red-400 mt-0.5 shrink-0" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M12 9v3.75m9-.75a9 9 0 11-18 0 9 9 0 0118 0zm-9 3.75h.008v.008H12v-.008z" /></svg>
+                <p className="text-sm text-red-300">{error}</p>
+              </div>
+            )}
+
+            <form onSubmit={handleSubmit} className="space-y-4">
+              <div className="flex flex-col gap-1.5">
+                <label className="text-sm font-medium text-cinema-text">Nueva contraseña <span className="text-cinema-gold">*</span></label>
+                <input
+                  type="password"
+                  placeholder="Mínimo 6 caracteres"
+                  value={password}
+                  onChange={e => setPassword(e.target.value)}
+                  required
+                  className="bg-cinema-dark border border-cinema-border rounded-lg px-4 py-3 text-cinema-text placeholder-cinema-muted text-sm focus:outline-none focus:ring-2 focus:ring-cinema-gold/50 focus:border-cinema-gold transition-colors"
+                />
+              </div>
+              <div className="flex flex-col gap-1.5">
+                <label className="text-sm font-medium text-cinema-text">Confirmar contraseña <span className="text-cinema-gold">*</span></label>
+                <input
+                  type="password"
+                  placeholder="Repite la contraseña"
+                  value={confirm}
+                  onChange={e => setConfirm(e.target.value)}
+                  required
+                  className="bg-cinema-dark border border-cinema-border rounded-lg px-4 py-3 text-cinema-text placeholder-cinema-muted text-sm focus:outline-none focus:ring-2 focus:ring-cinema-gold/50 focus:border-cinema-gold transition-colors"
+                />
+              </div>
+              <button
+                type="submit"
+                disabled={loading}
+                className="w-full bg-gradient-gold text-cinema-black font-bold py-3.5 rounded-xl text-sm hover:opacity-90 transition-all disabled:opacity-60 flex items-center justify-center gap-2"
+              >
+                {loading ? (
+                  <><svg className="animate-spin w-4 h-4" fill="none" viewBox="0 0 24 24"><circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" /><path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" /></svg> Guardando...</>
+                ) : 'Guardar nueva contraseña'}
+              </button>
+            </form>
+          </>
+        )}
+      </div>
+    </div>
+  );
+}
+
 function AppContent() {
-  const { user, loading } = useAuth();
+  const { user, loading, isRecoveryMode, updatePassword } = useAuth();
   const [view, setView] = useState<View>('dashboard');
   const [currentStep, setCurrentStep] = useState(1);
   const [filmData, setFilmData] = useState<FilmData>(EMPTY_DATA);
@@ -125,6 +212,8 @@ function AppContent() {
   }
 
   if (!user) return <Suspense fallback={<PageSpinner />}><AuthPage /></Suspense>;
+
+  if (isRecoveryMode) return <SetNewPasswordView updatePassword={updatePassword} />;
 
   const goNext = () => {
     const errors = validateStep(currentStep, filmData);
