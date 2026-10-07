@@ -35,6 +35,7 @@ import type { FilmData, StrategyReport, RecommendedFestival } from './types/film
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 
 const FestivalsAdmin = lazy(() => import('./components/admin/FestivalsAdmin').then(m => ({ default: m.FestivalsAdmin })));
+const SubmissionTracker = lazy(() => import('./components/submissions/SubmissionTracker').then(m => ({ default: m.SubmissionTracker })));
 
 const TOTAL_STEPS = 7;
 const DRAFT_KEY = 'filmroute_draft';
@@ -71,7 +72,7 @@ function clearDraft() {
   } catch {}
 }
 
-type View = 'dashboard' | 'wizard' | 'report' | 'admin';
+type View = 'dashboard' | 'wizard' | 'report' | 'admin' | 'tracker';
 
 function SetNewPasswordView({ updatePassword }: { updatePassword: (p: string) => Promise<{ error: string | null }> }) {
   const [password, setPassword] = useState('');
@@ -326,6 +327,35 @@ function AppContent() {
     setSaveError(null);
   };
 
+  // Tracker de envíos independiente
+  if (view === 'tracker' && currentStrategyId) {
+    const trackerTitle = filmData.basicInfo?.title?.trim() || 'Estrategia';
+    return (
+      <div className="min-h-screen bg-gradient-cinema">
+        <Header onLogoClick={handleBackToDashboard} />
+        <main className="max-w-4xl mx-auto px-4 py-8">
+          <div className="mb-6">
+            <button
+              onClick={handleBackToDashboard}
+              className="text-cinema-text-dim hover:text-cinema-text text-sm flex items-center gap-1 mb-4 transition-colors"
+            >
+              ← Volver al dashboard
+            </button>
+            <h2 className="text-xl font-display font-bold text-cinema-text">
+              Envíos — <span className="text-cinema-gold">"{trackerTitle}"</span>
+            </h2>
+          </div>
+          <Suspense fallback={<PageSpinner />}>
+            <SubmissionTracker
+              strategyId={currentStrategyId}
+              suggestedFestivals={report?.recommendedFestivals}
+            />
+          </Suspense>
+        </main>
+      </div>
+    );
+  }
+
   // Admin
   if (view === 'admin') {
     return (
@@ -345,7 +375,16 @@ function AppContent() {
         <Header onLogoClick={handleBackToDashboard} onAdminClick={isAdmin ? () => setView('admin') : undefined} />
         <main className="flex-1">
           <Suspense fallback={<PageSpinner />}>
-            <Dashboard onNew={handleNew} onLoad={handleLoad} />
+            <Dashboard
+              onNew={handleNew}
+              onLoad={handleLoad}
+              onTracker={(strategy) => {
+                setFilmData(strategy.film_data);
+                setReport(strategy.report);
+                setCurrentStrategyId(strategy.id);
+                setView('tracker');
+              }}
+            />
           </Suspense>
         </main>
         <footer className="border-t border-cinema-border py-6 text-center">
@@ -383,6 +422,7 @@ function AppContent() {
               onBack={handleBackToWizard}
               onExport={handleExport}
               isExporting={isExporting}
+              strategyId={currentStrategyId}
             />
           </Suspense>
         </main>

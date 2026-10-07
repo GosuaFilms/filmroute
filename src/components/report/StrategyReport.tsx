@@ -1,12 +1,14 @@
 import type { StrategyReport } from '../../types/film';
 import { Download, Trophy, Globe, Tv, CheckSquare, BarChart2, Calendar, TrendingUp, AlertTriangle, ChevronRight, Star } from 'lucide-react';
 import clsx from 'clsx';
+import { SubmissionTracker } from '../submissions/SubmissionTracker';
 
 interface Props {
   report: StrategyReport;
   onBack: () => void;
   onExport: () => void;
   isExporting?: boolean;
+  strategyId?: string | null;
 }
 
 interface CardProps {
@@ -46,7 +48,7 @@ function StatusBadge({ status }: { status: string }) {
   );
 }
 
-export function StrategyReportView({ report, onBack, onExport, isExporting = false }: Props) {
+export function StrategyReportView({ report, onBack, onExport, isExporting = false, strategyId }: Props) {
   return (
     <div className="space-y-6" id="strategy-report">
       {/* Header del informe */}
@@ -297,6 +299,14 @@ export function StrategyReportView({ report, onBack, onExport, isExporting = fal
           ))}
         </ol>
       </ReportCard>
+
+      {/* Tracker de envíos */}
+      {strategyId && (
+        <SubmissionTracker
+          strategyId={strategyId}
+          suggestedFestivals={report.recommendedFestivals}
+        />
+      )}
 
       {/* Botones de acción */}
       <div className="flex flex-col sm:flex-row gap-3 pb-8">

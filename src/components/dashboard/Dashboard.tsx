@@ -1,11 +1,12 @@
 import { useState, useEffect } from 'react';
-import { Film, Plus, Trash2, Clock, FileText, Pencil, AlertCircle, Trophy, Star } from 'lucide-react';
+import { Film, Plus, Trash2, Clock, FileText, Pencil, AlertCircle, Trophy, Star, Send } from 'lucide-react';
 import { listStrategies, deleteStrategy, type SavedStrategy } from '../../lib/strategies';
 import { Button } from '../ui/Button';
 
 interface DashboardProps {
   onNew: () => void;
   onLoad: (strategy: SavedStrategy, mode: 'report' | 'wizard') => void;
+  onTracker: (strategy: SavedStrategy) => void;
 }
 
 const FILM_TYPE_LABELS: Record<string, string> = {
@@ -49,7 +50,7 @@ function ScoreBadge({ score }: { score: number }) {
   );
 }
 
-export function Dashboard({ onNew, onLoad }: DashboardProps) {
+export function Dashboard({ onNew, onLoad, onTracker }: DashboardProps) {
   const [strategies, setStrategies] = useState<SavedStrategy[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -162,6 +163,7 @@ export function Dashboard({ onNew, onLoad }: DashboardProps) {
                 strategy={s}
                 onViewReport={() => onLoad(s, 'report')}
                 onEdit={() => onLoad(s, 'wizard')}
+                onTracker={() => onTracker(s)}
                 onDelete={e => handleDelete(s.id, e)}
                 isDeleting={deletingId === s.id}
                 formatDate={formatDate}
@@ -203,12 +205,13 @@ interface CardProps {
   strategy: SavedStrategy;
   onViewReport: (() => void) | null;
   onEdit: () => void;
+  onTracker: () => void;
   onDelete: (e: React.MouseEvent) => void;
   isDeleting: boolean;
   formatDate: (iso: string) => string;
 }
 
-function StrategyCard({ strategy: s, onViewReport, onEdit, onDelete, isDeleting, formatDate }: CardProps) {
+function StrategyCard({ strategy: s, onViewReport, onEdit, onTracker, onDelete, isDeleting, formatDate }: CardProps) {
   const filmType = s.film_data?.basicInfo?.filmType;
   const genre = s.film_data?.basicInfo?.genre;
   const country = s.film_data?.basicInfo?.country;
@@ -271,7 +274,7 @@ function StrategyCard({ strategy: s, onViewReport, onEdit, onDelete, isDeleting,
       </div>
 
       {/* Acciones */}
-      <div className="flex gap-2 mt-4 pt-4 border-t border-cinema-border">
+      <div className="flex gap-2 mt-4 pt-4 border-t border-cinema-border flex-wrap">
         {onViewReport && (
           <button
             onClick={onViewReport}
@@ -281,12 +284,22 @@ function StrategyCard({ strategy: s, onViewReport, onEdit, onDelete, isDeleting,
             Ver informe
           </button>
         )}
+        {onViewReport && (
+          <button
+            onClick={onTracker}
+            className="flex items-center justify-center gap-2 bg-cinema-dark border border-cinema-border text-cinema-text text-sm px-4 py-2 rounded-lg hover:border-blue-400/40 hover:text-blue-400 transition-all"
+            title="Seguimiento de envíos a festivales"
+          >
+            <Send size={14} />
+            Envíos
+          </button>
+        )}
         <button
           onClick={onEdit}
-          className="flex-1 flex items-center justify-center gap-2 bg-cinema-dark border border-cinema-border text-cinema-text text-sm px-4 py-2 rounded-lg hover:border-cinema-gold/40 hover:text-cinema-gold transition-all"
+          className="flex items-center justify-center gap-2 bg-cinema-dark border border-cinema-border text-cinema-text text-sm px-4 py-2 rounded-lg hover:border-cinema-gold/40 hover:text-cinema-gold transition-all"
         >
           <Pencil size={14} />
-          {onViewReport ? 'Editar datos' : 'Continuar editando'}
+          {onViewReport ? 'Editar' : 'Continuar editando'}
         </button>
       </div>
     </li>
