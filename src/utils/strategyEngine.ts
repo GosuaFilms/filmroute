@@ -335,6 +335,80 @@ function buildExecutiveSummary(data: FilmData, festivals: RecommendedFestival[])
     `La clave del éxito será la constancia en la campaña de festivales y la calidad de los materiales de comunicación.`;
 }
 
+function buildNextSteps(data: FilmData, festivals: RecommendedFestival[]): string[] {
+  const steps: string[] = [];
+  const { basicInfo, materials: m, budgetResources: br, festivalStrategy: fs, distributionGoals: dg } = data;
+  const isShort = basicInfo.filmType === 'cortometraje';
+  const isDoc = basicInfo.filmType === 'documental';
+
+  // 1. Materiales críticos pendientes
+  const missingCritical: string[] = [];
+  if (!m.dcp || m.dcp === 'no_disponible') missingCritical.push('DCP');
+  if (!m.trailerTeaser && !m.trailerTheatrical) missingCritical.push('tráiler');
+  if (!m.pressKit || m.pressKit === 'no_disponible') missingCritical.push('press kit');
+  if (!m.subtitleFiles || m.subtitleFiles === 'no_disponible') missingCritical.push('subtítulos en inglés');
+  if (missingCritical.length > 0) {
+    steps.push(`Completar los materiales prioritarios pendientes: ${missingCritical.join(', ')}. Sin ellos no podrás inscribirte en la mayoría de festivales.`);
+  }
+
+  // 2. FilmFreeway
+  if (!fs.hasFilmFreewayAccount) {
+    steps.push('Crear cuenta en FilmFreeway (filmfreeway.com) e importar los datos de la película. Es la plataforma de inscripción más usada en el circuito internacional.');
+  }
+
+  // 3. Primer festival concreto a enviar
+  const tierAFestivals = festivals.filter(f => f.tier === 'tier_a').slice(0, 2);
+  const tierBFestivals = festivals.filter(f => f.tier === 'tier_b').slice(0, 2);
+  if (fs.worldPremiereAvailable && tierAFestivals.length > 0) {
+    steps.push(`Aprovechar el estreno mundial disponible enviando primero a ${tierAFestivals.map(f => f.name).join(' y ')} antes de que cierren sus deadlines.`);
+  } else if (tierBFestivals.length > 0) {
+    steps.push(`Iniciar la campaña con festivales especializados: ${tierBFestivals.map(f => f.name).join(' y ')} son buenas opciones para tu proyecto.`);
+  }
+
+  // 4. Derechos musicales y archivo
+  if (!m.musicRightsCleared || !m.archiveFootageCleared) {
+    const pending = [
+      ...(!m.musicRightsCleared ? ['derechos musicales'] : []),
+      ...(!m.archiveFootageCleared ? ['material de archivo'] : []),
+    ];
+    steps.push(`Regularizar los ${pending.join(' y ')} antes de distribuir en plataformas — pueden bloquear el estreno en Filmin, MUBI o televisión.`);
+  }
+
+  // 5. Plataformas según tipo
+  if (isShort) {
+    steps.push('Contactar a MUBI (submissions@mubi.com) para la ventana digital — son muy receptivos con cortometrajes de calidad. Vimeo Staff Picks es el siguiente paso si no hay acuerdo.');
+  } else if (isDoc) {
+    steps.push('Enviar propuesta a MUBI, Filmin y explorar Arte Francia (arte.tv) — son los tres compradores más accesibles para documentales independientes sin distribuidora.');
+  } else {
+    steps.push('Contactar a MUBI (submissions@mubi.com) y Filmin para la ventana SVOD. Son las plataformas más accesibles para cine independiente sin distribuidora.');
+  }
+
+  // 6. Publicista / sales agent si tiene presupuesto y no lo tiene
+  if ((br.totalDistributionBudget ?? 0) > 8000 && !br.hasPublicist && !br.hasSalesAgent) {
+    steps.push('Con el presupuesto disponible, considera contratar un publicista o agente de ventas para festivales Tier A — el impacto en cobertura mediática justifica la inversión.');
+  } else if (!br.hasPublicist) {
+    steps.push('Registrar la película en SGAE o DAMA (según el país) para proteger los derechos de autor antes de cualquier proyección pública.');
+  }
+
+  // 7. Desglose de presupuesto si no tiene uno definido
+  if (!br.festivalsBudget && !br.marketingBudget) {
+    steps.push('Desglosar el presupuesto total de distribución siguiendo las proporciones recomendadas en este informe, priorizando inscripciones y materiales.');
+  }
+
+  // 8. Comunidad y networking
+  const community = isDoc
+    ? 'Documentalistas de España (www.documentalistas.es)'
+    : 'AECINE o cineastas.net';
+  steps.push(`Unirse a redes de cineastas independientes (${community}) para acceder a convocatorias, ayudas y contactos del sector.`);
+
+  // 9. Estrategia digital si quiere streaming
+  if (dg.wantsStreaming) {
+    steps.push('Preparar una estrategia de redes sociales con al menos 3 meses de antelación al lanzamiento digital: Instagram, X y TikTok son los canales con mayor alcance para cine independiente.');
+  }
+
+  return steps.slice(0, 8);
+}
+
 export function generateStrategy(data: FilmData, festivalsDb?: RecommendedFestival[]): StrategyReport {
   const festivals = recommendFestivals(data, festivalsDb);
   const strengths = getStrengths(data);
@@ -359,15 +433,7 @@ export function generateStrategy(data: FilmData, festivalsDb?: RecommendedFestiv
       notes: p.notes,
     }));
 
-  const nextSteps = [
-    'Completar todos los materiales con prioridad "alta" del checklist de entregables',
-    'Crear cuenta en FilmFreeway (www.filmfreeway.com) e importar los datos de la película',
-    'Enviar a los 3 festivales Tier A más relevantes antes de que cierren sus deadlines',
-    'Contactar a MUBI (submissions@mubi.com) y Filmin para explorar opciones de distribución digital',
-    'Registrar la obra en SGAE o DAMA para proteger los derechos de autor',
-    'Preparar presupuesto detallado siguiendo el desglose recomendado en este informe',
-    'Unirse a grupos de distribución de cine independiente (AECINE, CIMA, cineastas.net)',
-  ];
+  const nextSteps = buildNextSteps(data, festivals);
 
   return {
     filmTitle: data.basicInfo.title ?? 'Sin título',
