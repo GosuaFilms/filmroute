@@ -297,7 +297,7 @@ function AppContent() {
       console.error('Asesor IA no disponible:', aiError);
       setAiNotice(aiError.startsWith('Has alcanzado el límite')
         ? `${aiError}. Se ha generado un informe estándar; podrás volver a usar el asesor IA más tarde.`
-        : 'El asesor IA no está disponible ahora mismo; se ha generado un informe estándar. Puedes pulsar "Generar análisis con IA" para intentarlo de nuevo.');
+        : `El asesor IA no está disponible ahora mismo (motivo: ${aiError}); se ha generado un informe estándar. Puedes pulsar "Generar análisis con IA" para intentarlo de nuevo.`);
     }
     setReport(result);
     setView('report');
