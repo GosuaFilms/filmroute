@@ -189,6 +189,7 @@ export function Dashboard({ onNew, onLoad, onTracker }: DashboardProps) {
                 strategy={s}
                 onViewReport={null}
                 onEdit={() => onLoad(s, 'wizard')}
+                onTracker={() => onTracker(s)}
                 onDelete={e => handleDelete(s.id, e)}
                 isDeleting={deletingId === s.id}
                 formatDate={formatDate}
