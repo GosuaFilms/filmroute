@@ -1,4 +1,5 @@
 import type { FilmData } from '../../types/film';
+import { formatEuro } from '../../utils/format';
 import { Film, Globe, Award, Package, Target, DollarSign } from 'lucide-react';
 
 interface Props {
@@ -102,9 +103,9 @@ export function Step7Review({ data, onGenerate, isGenerating }: Props) {
         </ReviewSection>
 
         <ReviewSection icon={<DollarSign size={16} />} title="Presupuesto y recursos">
-          <ReviewRow label="Presupuesto total" value={br.totalDistributionBudget ? `${br.totalDistributionBudget.toLocaleString('es-ES')} €` : undefined} />
-          <ReviewRow label="Presupuesto festivales" value={br.festivalsBudget ? `${br.festivalsBudget.toLocaleString('es-ES')} €` : undefined} />
-          <ReviewRow label="Presupuesto marketing" value={br.marketingBudget ? `${br.marketingBudget.toLocaleString('es-ES')} €` : undefined} />
+          <ReviewRow label="Presupuesto total" value={br.totalDistributionBudget ? formatEuro(br.totalDistributionBudget) : undefined} />
+          <ReviewRow label="Presupuesto festivales" value={br.festivalsBudget ? formatEuro(br.festivalsBudget) : undefined} />
+          <ReviewRow label="Presupuesto marketing" value={br.marketingBudget ? formatEuro(br.marketingBudget) : undefined} />
           <ReviewRow label="Equipo" value={br.teamSize} />
           <ReviewRow label="Tiene publicista" value={br.hasPublicist} />
           <ReviewRow label="Tiene sales agent" value={br.hasSalesAgent} />

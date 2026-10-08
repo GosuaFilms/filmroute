@@ -5,6 +5,12 @@ import type {
 import { FESTIVALS_DATABASE } from '../data/festivals';
 export type { RecommendedFestival };
 import { PLATFORMS_DATABASE } from '../data/platforms';
+import { formatEuro, genreLabel } from './format';
+
+function premiereAlreadyDone(data: FilmData): boolean {
+  const fs = data.festivalStrategy;
+  return !fs.worldPremiereAvailable && (fs.currentPremiereStatus ?? '').trim().length > 0;
+}
 
 function scoreFestivalMatch(festival: RecommendedFestival, data: FilmData): number {
   let score = 0;
@@ -23,6 +29,7 @@ function scoreFestivalMatch(festival: RecommendedFestival, data: FilmData): numb
   )) score += 15;
 
   if (festivalStrategy.worldPremiereAvailable && festival.prestige > 85) score += 10;
+  if (premiereAlreadyDone(data) && festival.tier === 'tier_a') score -= 40;
 
   if (creativeDetails.awards && creativeDetails.awards.length > 10) score += 5;
 
@@ -149,10 +156,13 @@ export function rankFestivalCandidates(data: FilmData, festivalsDb: RecommendedF
 
 function recommendFestivals(data: FilmData, festivalsDb?: RecommendedFestival[]): RecommendedFestival[] {
   const source = (festivalsDb && festivalsDb.length > 0) ? festivalsDb : FESTIVALS_DATABASE;
-  const scored = source.map(f => ({
-    festival: f,
-    score: scoreFestivalMatch(f, data),
-  }));
+  const filmType = data.basicInfo.filmType;
+  const scored = source
+    .filter(f => !filmType || f.acceptsTypes.includes(filmType))
+    .map(f => ({
+      festival: f,
+      score: scoreFestivalMatch(f, data),
+    }));
 
   scored.sort((a, b) => {
     if (b.score !== a.score) return b.score - a.score;
@@ -196,7 +206,7 @@ function buildMarketingPhases(data: FilmData): StrategyPhase[] {
         'Configurar perfiles en redes sociales (Instagram, X/Twitter)',
         isShort ? 'Abrir cuenta en FilmFreeway y Festhome' : 'Definir territorios prioritarios con agente de ventas',
       ],
-      budget: budget > 0 ? `${Math.round(budget * 0.25).toLocaleString('es-ES')} €` : 'A definir',
+      budget: budget > 0 ? formatEuro(budget * 0.25) : 'A definir',
       kpis: ['Press kit completado', 'DCP técnicamente validado', '500+ seguidores en RRSS', 'Página web activa'],
     },
     {
@@ -212,7 +222,7 @@ function buildMarketingPhases(data: FilmData): StrategyPhase[] {
         'Gestionar redes sociales durante festivales (stories, reels, actualizaciones)',
         'Enviar notas de prensa a medios especializados en cada selección',
       ],
-      budget: budget > 0 ? `${Math.round(budget * 0.40).toLocaleString('es-ES')} €` : 'A definir',
+      budget: budget > 0 ? formatEuro(budget * 0.40) : 'A definir',
       kpis: ['Mínimo 10 selecciones en festivales', '3+ premios o menciones', 'Cobertura en medios especializados', 'Contactos con distribuidores'],
     },
     {
@@ -227,7 +237,7 @@ function buildMarketingPhases(data: FilmData): StrategyPhase[] {
         'Estrategia de email marketing a base de datos construida en festivales',
         'Explorar distribución educativa si el contenido lo permite',
       ],
-      budget: budget > 0 ? `${Math.round(budget * 0.25).toLocaleString('es-ES')} €` : 'A definir',
+      budget: budget > 0 ? formatEuro(budget * 0.25) : 'A definir',
       kpis: ['Acuerdo con mínimo 2 plataformas', '10.000+ visualizaciones primer mes', 'Cobertura en medios generalistas'],
     },
     {
@@ -240,7 +250,7 @@ function buildMarketingPhases(data: FilmData): StrategyPhase[] {
         'Actualizar estrategia digital basándose en datos de audiencia',
         'Considerar distribución en territorios secundarios no cubiertos',
       ],
-      budget: budget > 0 ? `${Math.round(budget * 0.10).toLocaleString('es-ES')} €` : 'A definir',
+      budget: budget > 0 ? formatEuro(budget * 0.10) : 'A definir',
       kpis: ['Acuerdo de TV firmado', 'Recuperación del 30-50% de la inversión de distribución'],
     },
   ];
@@ -361,10 +371,12 @@ function buildExecutiveSummary(data: FilmData, festivals: RecommendedFestival[])
   const typeLabels: Record<string, string> = { cortometraje: 'cortometraje', largometraje: 'largometraje', documental: 'documental', mediometraje: 'mediometraje' };
   const typeLabel = typeLabels[type] ?? 'obra';
 
-  return `"${title}" es un ${typeLabel}${genre ? ` de género ${genre}` : ''} con potencial real de distribución independiente. ` +
+  const genreText = genre ? genreLabel(genre) : '';
+  const descriptor = !genreText ? typeLabel : genreText.startsWith(typeLabel) ? genreText : `${typeLabel} de ${genreText}`;
+  return `"${title}" es un ${descriptor} con potencial real de distribución independiente. ` +
     `Basándonos en los datos introducidos, hemos identificado ${festivals.length} festivales relevantes y ` +
     `diseñado una estrategia en 4 fases que abarca desde la preparación de materiales hasta la explotación de derechos secundarios. ` +
-    `${budget > 0 ? `Con un presupuesto de distribución de ${budget.toLocaleString('es-ES')}€, ` : ''}` +
+    `${budget > 0 ? `Con un presupuesto de distribución de ${formatEuro(budget)}, ` : ''}` +
     `la ruta recomendada prioriza el circuito de festivales como plataforma de visibilidad y validación antes del lanzamiento digital. ` +
     `Las plataformas MUBI y Filmin son las vías de distribución digital más accesibles sin distribuidora. ` +
     `La clave del éxito será la constancia en la campaña de festivales y la calidad de los materiales de comunicación.`;
@@ -464,7 +476,7 @@ export function generateStrategy(data: FilmData, festivalsDb?: RecommendedFestiv
       name: p.name,
       type: p.type,
       territory: p.territory,
-      probability: p.prestige > 80 ? 'Media-Alta' : p.prestige > 60 ? 'Media' : 'Alta (DIY)',
+      probability: p.prestige > 80 ? 'Baja-Media (requiere agente o distribuidora)' : p.prestige > 60 ? 'Media' : 'Alta (DIY)',
       notes: p.notes,
     }));
 

@@ -1,4 +1,5 @@
 import type { StrategyReport } from '../types/film';
+import { formatNumber } from './format';
 
 const GOLD: [number, number, number] = [201, 168, 76];
 const DARK: [number, number, number] = [26, 26, 38];
@@ -285,7 +286,7 @@ export async function exportReportToPDF(report: StrategyReport): Promise<void> {
       doc.setTextColor(...GOLD);
       doc.setFontSize(8.5);
       setBold();
-      doc.text(`FASE ${i + 1}: ${phase.phase.toUpperCase()}`, margin + 3, y + 2);
+      doc.text(`FASE ${i + 1}: ${phase.phase.replace(/^fase\s*\d+\s*[:.\-–—]\s*/i, '').toUpperCase()}`, margin + 3, y + 2);
       doc.setTextColor(156, 163, 175);
       setNormal();
       doc.setFontSize(7.5);
@@ -374,10 +375,10 @@ export async function exportReportToPDF(report: StrategyReport): Promise<void> {
 
     const budgetRows = report.budgetBreakdown.map(b => [
       b.category,
-      `${b.recommended.toLocaleString('es-ES')} EUR`,
+      `${formatNumber(b.recommended)} €`,
       `${b.percentage}%`,
     ]);
-    budgetRows.push(['TOTAL ESTIMADO', `${report.totalBudgetEstimate.toLocaleString('es-ES')} EUR`, '100%']);
+    budgetRows.push(['TOTAL ESTIMADO', `${formatNumber(report.totalBudgetEstimate)} €`, '100%']);
 
     autoTable(doc, {
       startY: y,

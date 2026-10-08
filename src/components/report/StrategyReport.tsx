@@ -1,4 +1,5 @@
 import type { StrategyReport } from '../../types/film';
+import { formatEuro } from '../../utils/format';
 import { Download, Trophy, Globe, Tv, CheckSquare, BarChart2, Calendar, TrendingUp, AlertTriangle, ChevronRight, Star, Sparkles } from 'lucide-react';
 import clsx from 'clsx';
 import { SubmissionTracker } from '../submissions/SubmissionTracker';
@@ -305,14 +306,14 @@ export function StrategyReportView({ report, onBack, onExport, isExporting = fal
                   <div className="bg-cinema-gold rounded-full h-2 transition-all" style={{ width: `${item.percentage}%` }} />
                 </div>
                 <span className="text-xs text-cinema-gold font-medium w-28 text-right flex-shrink-0">
-                  {item.recommended.toLocaleString('es-ES')}€ ({item.percentage}%)
+                  {formatEuro(item.recommended)} ({item.percentage}%)
                 </span>
               </div>
             ))}
           </div>
           <div className="mt-4 pt-4 border-t border-cinema-border flex justify-between">
             <span className="text-sm font-semibold text-cinema-text">Total estimado</span>
-            <span className="text-sm font-bold text-cinema-gold">{report.totalBudgetEstimate.toLocaleString('es-ES')} €</span>
+            <span className="text-sm font-bold text-cinema-gold">{formatEuro(report.totalBudgetEstimate)}</span>
           </div>
         </ReportCard>
       )}
