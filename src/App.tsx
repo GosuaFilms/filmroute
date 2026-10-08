@@ -85,7 +85,7 @@ function SetNewPasswordView({ updatePassword }: { updatePassword: (p: string) =>
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError(null);
-    if (password.length < 6) return setError('La contraseña debe tener al menos 6 caracteres.');
+    if (password.length < 8) return setError('La contraseña debe tener al menos 8 caracteres.');
     if (password !== confirm) return setError('Las contraseñas no coinciden.');
     setLoading(true);
     const { error } = await updatePassword(password);
@@ -127,7 +127,7 @@ function SetNewPasswordView({ updatePassword }: { updatePassword: (p: string) =>
                 <label className="text-sm font-medium text-cinema-text">Nueva contraseña <span className="text-cinema-gold">*</span></label>
                 <input
                   type="password"
-                  placeholder="Mínimo 6 caracteres"
+                  placeholder="Mínimo 8 caracteres"
                   value={password}
                   onChange={e => setPassword(e.target.value)}
                   required

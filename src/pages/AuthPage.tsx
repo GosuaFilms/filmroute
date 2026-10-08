@@ -46,7 +46,7 @@ export function AuthPage() {
     if (mode === 'register') {
       if (!fullName.trim()) return setError('Introduce tu nombre completo.');
       if (password !== confirmPassword) return setError('Las contraseñas no coinciden.');
-      if (password.length < 6) return setError('La contraseña debe tener al menos 6 caracteres.');
+      if (password.length < 8) return setError('La contraseña debe tener al menos 8 caracteres.');
     }
 
     setLoading(true);
@@ -195,7 +195,7 @@ export function AuthPage() {
                     <div className="relative">
                       <input
                         type={showPassword ? 'text' : 'password'}
-                        placeholder={mode === 'register' ? 'Mínimo 6 caracteres' : '••••••••'}
+                        placeholder={mode === 'register' ? 'Mínimo 8 caracteres' : '••••••••'}
                         value={password}
                         onChange={e => setPassword(e.target.value)}
                         required

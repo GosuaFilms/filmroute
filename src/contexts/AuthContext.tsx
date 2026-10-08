@@ -94,10 +94,10 @@ function translateError(msg: string): string {
   if (msg.includes('Invalid login credentials')) return 'Email o contraseña incorrectos.';
   if (msg.includes('Email not confirmed')) return 'Confirma tu email antes de iniciar sesión.';
   if (msg.includes('User already registered')) return 'Ya existe una cuenta con este email.';
-  if (msg.includes('Password should be at least')) return 'La contraseña debe tener al menos 6 caracteres.';
+  if (msg.includes('Password should be at least')) return 'La contraseña debe tener al menos 8 caracteres.';
   if (msg.includes('Unable to validate email')) return 'El formato del email no es válido.';
   if (msg.includes('signup_disabled')) return 'El registro está temporalmente desactivado.';
   if (msg.includes('same_password')) return 'La nueva contraseña debe ser diferente a la actual.';
-  if (msg.includes('weak_password') || msg.includes('Password should be')) return 'La contraseña debe tener al menos 6 caracteres.';
+  if (msg.includes('weak_password') || msg.includes('Password should be')) return 'La contraseña es demasiado débil o ha aparecido en filtraciones de datos. Usa al menos 8 caracteres y una contraseña que no uses en otros sitios.';
   return 'Ha ocurrido un error. Inténtalo de nuevo.';
 }
