@@ -117,7 +117,23 @@ export async function exportReportToPDF(report: StrategyReport): Promise<void> {
   doc.setFontSize(8.5);
   const summaryLines = doc.splitTextToSize(report.executiveSummary, contentW);
   doc.text(summaryLines, margin, y);
-  y += summaryLines.length * 5 + 10;
+  y += summaryLines.length * 5 + 4;
+
+  if (report.scoreRationale) {
+    checkSpace(14);
+    doc.setTextColor(...GREY);
+    doc.setFontSize(7.5);
+    const rationaleLines = doc.splitTextToSize(`Sobre el índice de distribución: ${report.scoreRationale}`, contentW);
+    doc.text(rationaleLines, margin, y);
+    y += rationaleLines.length * 4.5 + 2;
+  }
+  if (report.aiGenerated) {
+    doc.setTextColor(...GOLD);
+    doc.setFontSize(7);
+    doc.text('Estrategia elaborada por el asesor IA de FilmRoute a partir de los datos facilitados.', margin, y);
+    y += 4;
+  }
+  y += 6;
 
   // ── DAFO ─────────────────────────────────────────────────────────────────
   sectionTitle('ANÁLISIS DAFO');
