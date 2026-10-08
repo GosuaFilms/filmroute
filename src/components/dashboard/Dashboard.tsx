@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { Film, Plus, Trash2, Clock, FileText, Pencil, AlertCircle, Trophy, Star, Send } from 'lucide-react';
 import { listStrategies, deleteStrategy, type SavedStrategy } from '../../lib/strategies';
+import { getSubmissionStatsByStrategy, type SubmissionStats } from '../../lib/submissions';
 import { Button } from '../ui/Button';
 
 interface DashboardProps {
@@ -55,6 +56,7 @@ export function Dashboard({ onNew, onLoad, onTracker }: DashboardProps) {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [deletingId, setDeletingId] = useState<string | null>(null);
+  const [submissionStats, setSubmissionStats] = useState<Record<string, SubmissionStats>>({});
 
   useEffect(() => {
     load();
@@ -66,6 +68,7 @@ export function Dashboard({ onNew, onLoad, onTracker }: DashboardProps) {
       setError(null);
       const data = await listStrategies();
       setStrategies(data);
+      getSubmissionStatsByStrategy().then(setSubmissionStats).catch(() => {});
     } catch {
       setError('No se pudieron cargar las estrategias. Comprueba tu conexión.');
     } finally {
@@ -164,6 +167,7 @@ export function Dashboard({ onNew, onLoad, onTracker }: DashboardProps) {
                 onViewReport={() => onLoad(s, 'report')}
                 onEdit={() => onLoad(s, 'wizard')}
                 onTracker={() => onTracker(s)}
+                stats={submissionStats[s.id]}
                 onDelete={e => handleDelete(s.id, e)}
                 isDeleting={deletingId === s.id}
                 formatDate={formatDate}
@@ -190,6 +194,7 @@ export function Dashboard({ onNew, onLoad, onTracker }: DashboardProps) {
                 onViewReport={null}
                 onEdit={() => onLoad(s, 'wizard')}
                 onTracker={() => onTracker(s)}
+                stats={submissionStats[s.id]}
                 onDelete={e => handleDelete(s.id, e)}
                 isDeleting={deletingId === s.id}
                 formatDate={formatDate}
@@ -210,9 +215,10 @@ interface CardProps {
   onDelete: (e: React.MouseEvent) => void;
   isDeleting: boolean;
   formatDate: (iso: string) => string;
+  stats?: SubmissionStats;
 }
 
-function StrategyCard({ strategy: s, onViewReport, onEdit, onTracker, onDelete, isDeleting, formatDate }: CardProps) {
+function StrategyCard({ strategy: s, onViewReport, onEdit, onTracker, onDelete, isDeleting, formatDate, stats }: CardProps) {
   const filmType = s.film_data?.basicInfo?.filmType;
   const genre = s.film_data?.basicInfo?.genre;
   const country = s.film_data?.basicInfo?.country;
@@ -251,6 +257,12 @@ function StrategyCard({ strategy: s, onViewReport, onEdit, onTracker, onDelete, 
               {festivalCount !== undefined && (
                 <span className="text-[11px] bg-cinema-gold/10 border border-cinema-gold/20 rounded-full px-2 py-0.5 text-cinema-gold">
                   {festivalCount} festivales
+                </span>
+              )}
+              {stats && stats.total > 0 && (
+                <span className="text-[11px] bg-blue-400/10 border border-blue-400/20 rounded-full px-2 py-0.5 text-blue-400">
+                  {stats.total} envío{stats.total !== 1 ? 's' : ''}
+                  {stats.selected > 0 && ` · ${stats.selected} selección${stats.selected !== 1 ? 'es' : ''}`}
                 </span>
               )}
             </div>

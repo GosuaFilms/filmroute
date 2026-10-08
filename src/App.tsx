@@ -6,6 +6,7 @@ import { Button } from './components/ui/Button';
 
 // Vistas lazy — solo se descargan cuando el usuario las necesita
 const AuthPage = lazy(() => import('./pages/AuthPage').then(m => ({ default: m.AuthPage })));
+const LandingPage = lazy(() => import('./pages/LandingPage').then(m => ({ default: m.LandingPage })));
 const Dashboard = lazy(() => import('./components/dashboard/Dashboard').then(m => ({ default: m.Dashboard })));
 const StrategyReportView = lazy(() => import('./components/report/StrategyReport').then(m => ({ default: m.StrategyReportView })));
 const Step1BasicInfo = lazy(() => import('./components/steps/Step1BasicInfo').then(m => ({ default: m.Step1BasicInfo })));
@@ -163,6 +164,7 @@ function SetNewPasswordView({ updatePassword }: { updatePassword: (p: string) =>
 
 function AppContent() {
   const { user, loading, isRecoveryMode, updatePassword } = useAuth();
+  const [showAuth, setShowAuth] = useState(false);
   const [view, setView] = useState<View>('dashboard');
   const [currentStep, setCurrentStep] = useState(1);
   const [filmData, setFilmData] = useState<FilmData>(EMPTY_DATA);
@@ -172,6 +174,8 @@ function AppContent() {
   const [isExporting, setIsExporting] = useState(false);
   const [currentStrategyId, setCurrentStrategyId] = useState<string | null>(null);
   const [saveError, setSaveError] = useState<string | null>(null);
+  const [aiNotice, setAiNotice] = useState<string | null>(null);
+  const [savedOk, setSavedOk] = useState(false);
   const [stepErrors, setStepErrors] = useState<StepErrors>({});
   const [draftRestored, setDraftRestored] = useState(false);
   const [isAdmin, setIsAdmin] = useState(false);
@@ -228,7 +232,13 @@ function AppContent() {
     );
   }
 
-  if (!user) return <Suspense fallback={<PageSpinner />}><AuthPage /></Suspense>;
+  if (!user) {
+    return (
+      <Suspense fallback={<PageSpinner />}>
+        {showAuth ? <AuthPage /> : <LandingPage onAccess={() => setShowAuth(true)} />}
+      </Suspense>
+    );
+  }
 
   if (isRecoveryMode) return <SetNewPasswordView updatePassword={updatePassword} />;
 
@@ -253,7 +263,7 @@ function AppContent() {
     setFilmData(EMPTY_DATA);
     setReport(null);
     setCurrentStrategyId(null);
-    setSaveError(null);
+    setSaveError(null); setAiNotice(null);
     setStepErrors({});
     setDraftRestored(false);
     setCurrentStep(1);
@@ -264,7 +274,7 @@ function AppContent() {
     setFilmData(strategy.film_data);
     setReport(strategy.report);
     setCurrentStrategyId(strategy.id);
-    setSaveError(null);
+    setSaveError(null); setAiNotice(null);
     setStepErrors({});
     setDraftRestored(false);
     setCurrentStep(1);
@@ -280,10 +290,12 @@ function AppContent() {
     setStepErrors({});
     setIsGenerating(true);
     setSaveError(null);
+    setAiNotice(null);
+    setSavedOk(false);
     const { report: result, aiError } = await generateStrategyWithAI(filmData, festivals.length > 0 ? festivals : undefined);
     if (aiError) {
       console.error('Asesor IA no disponible:', aiError);
-      setSaveError('El asesor IA no está disponible ahora mismo; se ha generado un informe estándar. Puedes volver a generarlo más tarde.');
+      setAiNotice('El asesor IA no está disponible ahora mismo; se ha generado un informe estándar. Puedes pulsar "Generar análisis con IA" para intentarlo de nuevo.');
     }
     setReport(result);
     setView('report');
@@ -299,6 +311,8 @@ function AppContent() {
         setCurrentStrategyId(saved.id);
       }
       clearDraft();
+      setSavedOk(true);
+      setTimeout(() => setSavedOk(false), 4000);
     } catch {
       setSaveError('No se pudo guardar la estrategia en la nube. Puedes exportarla a PDF.');
     } finally {
@@ -327,7 +341,7 @@ function AppContent() {
 
   const handleBackToDashboard = () => {
     setView('dashboard');
-    setSaveError(null);
+    setSaveError(null); setAiNotice(null);
   };
 
   // Tracker de envíos independiente
@@ -405,9 +419,19 @@ function AppContent() {
       <div className="min-h-screen bg-gradient-cinema">
         <Header onLogoClick={handleBackToDashboard} />
         <main className="max-w-5xl mx-auto px-4 py-8">
+          {aiNotice && (
+            <div className="mb-4 flex items-center gap-2 bg-yellow-500/10 border border-yellow-500/30 rounded-xl px-4 py-3 text-yellow-400 text-sm">
+              <span>⚠️</span> {aiNotice}
+            </div>
+          )}
           {saveError && (
             <div className="mb-4 flex items-center gap-2 bg-yellow-500/10 border border-yellow-500/30 rounded-xl px-4 py-3 text-yellow-400 text-sm">
               <span>⚠️</span> {saveError}
+            </div>
+          )}
+          {savedOk && (
+            <div className="mb-4 flex items-center gap-2 bg-green-500/10 border border-green-500/30 rounded-xl px-4 py-3 text-green-400 text-sm">
+              <span>✓</span> Estrategia guardada en tu cuenta.
             </div>
           )}
           {isSaving && (
@@ -426,6 +450,8 @@ function AppContent() {
               onExport={handleExport}
               isExporting={isExporting}
               strategyId={currentStrategyId}
+              onRegenerate={handleGenerate}
+              isRegenerating={isGenerating}
             />
           </Suspense>
         </main>

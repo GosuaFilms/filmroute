@@ -61,6 +61,23 @@ export async function deleteSubmission(id: string): Promise<void> {
   if (error) throw error;
 }
 
+export interface SubmissionStats {
+  total: number;
+  selected: number;
+}
+
+export async function getSubmissionStatsByStrategy(): Promise<Record<string, SubmissionStats>> {
+  const { data, error } = await supabase.from('submissions').select('strategy_id, status');
+  if (error) throw error;
+  const stats: Record<string, SubmissionStats> = {};
+  for (const row of (data ?? []) as { strategy_id: string; status: SubmissionStatus }[]) {
+    const s = stats[row.strategy_id] ??= { total: 0, selected: 0 };
+    s.total += 1;
+    if (row.status === 'seleccionado') s.selected += 1;
+  }
+  return stats;
+}
+
 export async function listAllSubmissionsForUser(): Promise<(Submission & { film_title: string })[]> {
   const { data, error } = await supabase
     .from('submissions')

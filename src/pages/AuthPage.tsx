@@ -103,7 +103,7 @@ export function AuthPage() {
           {/* Nota de acceso interno */}
           <div className="flex items-center justify-center gap-2 mb-5 text-cinema-text-dim text-xs">
             <span className="w-12 h-px bg-cinema-border" />
-            <span>Acceso exclusivo para empleados de LUR Atlantik Films</span>
+            <span>Beta privada · Acceso por invitación</span>
             <span className="w-12 h-px bg-cinema-border" />
           </div>
 

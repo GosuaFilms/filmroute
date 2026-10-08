@@ -9,6 +9,8 @@ interface Props {
   onExport: () => void;
   isExporting?: boolean;
   strategyId?: string | null;
+  onRegenerate?: () => void;
+  isRegenerating?: boolean;
 }
 
 interface CardProps {
@@ -48,7 +50,7 @@ function StatusBadge({ status }: { status: string }) {
   );
 }
 
-export function StrategyReportView({ report, onBack, onExport, isExporting = false, strategyId }: Props) {
+export function StrategyReportView({ report, onBack, onExport, isExporting = false, strategyId, onRegenerate, isRegenerating = false }: Props) {
   return (
     <div className="space-y-6" id="strategy-report">
       {/* Header del informe */}
@@ -62,6 +64,25 @@ export function StrategyReportView({ report, onBack, onExport, isExporting = fal
               <span className="inline-flex items-center gap-1.5 mt-2 text-[11px] font-semibold text-cinema-gold bg-cinema-gold/10 border border-cinema-gold/30 rounded-full px-2.5 py-1">
                 <Sparkles size={12} /> Estrategia elaborada por el asesor IA de FilmRoute
               </span>
+            )}
+            {onRegenerate && (
+              <div className="mt-3">
+                <button
+                  onClick={onRegenerate}
+                  disabled={isRegenerating}
+                  className={clsx(
+                    'inline-flex items-center gap-2 text-xs font-semibold rounded-lg px-3 py-1.5 transition-all disabled:opacity-60',
+                    report.aiGenerated
+                      ? 'text-cinema-text-dim border border-cinema-border hover:text-cinema-gold hover:border-cinema-gold/40'
+                      : 'bg-gradient-gold text-cinema-black hover:opacity-90',
+                  )}
+                >
+                  <Sparkles size={13} />
+                  {isRegenerating
+                    ? 'El asesor IA está analizando…'
+                    : report.aiGenerated ? 'Regenerar análisis' : 'Generar análisis con IA'}
+                </button>
+              </div>
             )}
           </div>
           <div className="flex items-center gap-3 flex-shrink-0">

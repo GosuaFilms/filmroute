@@ -46,6 +46,31 @@ function getMaterialsScore(data: FilmData): number {
   return Math.min(score, 100);
 }
 
+// Media ponderada de cuatro bloques (cada uno 0-100): materiales 40%, preparación 20%, presupuesto 20%, encaje con festivales 20%
+function computeOverallScore(data: FilmData, festivals: RecommendedFestival[]): number {
+  const { materials: m, festivalStrategy: fs, budgetResources: br, basicInfo } = data;
+
+  const hasEnglishSubs = (basicInfo.availableSubtitles ?? []).includes('ingles') || m.subtitleFiles === 'listo';
+  const readiness =
+    (fs.hasFilmFreewayAccount ? 25 : 0) +
+    (hasEnglishSubs ? 25 : 0) +
+    (m.musicRightsCleared ? 25 : 0) +
+    (m.archiveFootageCleared ? 25 : 0);
+
+  const budget = br.totalDistributionBudget ?? 0;
+  const budgetScore = budget >= 10000 ? 100 : budget >= 5000 ? 75 : budget >= 2000 ? 50 : budget > 0 ? 25 : 0;
+
+  const target = fs.targetFestivalCount ?? 15;
+  const festivalFit =
+    (fs.worldPremiereAvailable ? 40 : 15) +
+    ((fs.targetTiers ?? []).length > 0 ? 30 : 0) +
+    Math.round(30 * Math.min(festivals.length / Math.max(target, 1), 1));
+
+  return Math.round(
+    getMaterialsScore(data) * 0.4 + readiness * 0.2 + budgetScore * 0.2 + Math.min(festivalFit, 100) * 0.2,
+  );
+}
+
 function getStrengths(data: FilmData): string[] {
   const strengths: string[] = [];
   const { basicInfo, materials, creativeDetails, festivalStrategy } = data;
@@ -448,10 +473,7 @@ export function generateStrategy(data: FilmData, festivalsDb?: RecommendedFestiv
   return {
     filmTitle: data.basicInfo.title ?? 'Sin título',
     generatedAt: new Date().toLocaleDateString('es-ES', { year: 'numeric', month: 'long', day: 'numeric' }),
-    overallScore: Math.min(
-      Math.round((getMaterialsScore(data) * 0.4) + (strengths.length * 8) + (festivals.length > 10 ? 20 : 10)),
-      100,
-    ),
+    overallScore: computeOverallScore(data, festivals),
     strengths,
     weaknesses,
     opportunities,
