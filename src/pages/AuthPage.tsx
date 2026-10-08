@@ -45,7 +45,6 @@ export function AuthPage() {
 
     if (mode === 'register') {
       if (!fullName.trim()) return setError('Introduce tu nombre completo.');
-      if (!email.toLowerCase().endsWith('@luratlantik.com')) return setError('Solo se permiten cuentas con dominio @luratlantik.com.');
       if (password !== confirmPassword) return setError('Las contraseñas no coinciden.');
       if (password.length < 6) return setError('La contraseña debe tener al menos 6 caracteres.');
     }
@@ -100,10 +99,10 @@ export function AuthPage() {
       {/* Main */}
       <main className="flex-1 flex items-center justify-center px-4 py-12">
         <div className="w-full max-w-md">
-          {/* Nota de acceso interno */}
+          {/* Nota de acceso */}
           <div className="flex items-center justify-center gap-2 mb-5 text-cinema-text-dim text-xs">
             <span className="w-12 h-px bg-cinema-border" />
-            <span>Beta privada · Acceso por invitación</span>
+            <span>Planifica la distribución de tu película</span>
             <span className="w-12 h-px bg-cinema-border" />
           </div>
 
@@ -137,7 +136,7 @@ export function AuthPage() {
                 </h1>
                 <p className="text-cinema-text-dim text-sm mt-1">
                   {mode === 'login' && 'Accede a tu estrategia de distribución'}
-                  {mode === 'register' && 'Crea tu acceso como empleado de LUR'}
+                  {mode === 'register' && 'Crea tu cuenta gratuita en FilmRoute'}
                   {mode === 'recovery' && 'Introduce tu email y te enviaremos un enlace para restablecerla'}
                 </p>
               </div>
@@ -180,17 +179,12 @@ export function AuthPage() {
                   </label>
                   <input
                     type="email"
-                    placeholder={mode === 'register' ? 'nombre@luratlantik.com' : 'tu@email.com'}
+                    placeholder="tu@email.com"
                     value={email}
                     onChange={e => setEmail(e.target.value)}
                     required
                     className={inputClass}
                   />
-                  {mode === 'register' && (
-                    <p className="text-xs text-cinema-text-dim mt-1">
-                      Solo se aceptan cuentas con dominio <span className="text-cinema-gold">@luratlantik.com</span>
-                    </p>
-                  )}
                 </div>
 
                 {mode !== 'recovery' && (
@@ -271,7 +265,7 @@ export function AuthPage() {
           </div>
 
           <p className="text-center text-cinema-text-dim text-xs mt-6">
-            Uso interno · LUR Atlantik Films · Datos privados y seguros
+            FilmRoute · LUR Atlantik Films · Tus datos son privados
           </p>
         </div>
       </main>

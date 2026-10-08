@@ -66,9 +66,30 @@ export async function POST(request: Request): Promise<Response> {
   // Solo usuarios autenticados pueden consumir créditos de IA
   const token = request.headers.get('authorization')?.replace(/^Bearer\s+/i, '');
   if (!token) return json(401, { error: 'No autenticado' });
-  const supabase = createClient(supabaseUrl, supabaseAnonKey);
+  // Cliente con el token del usuario para que las políticas RLS se apliquen en su nombre
+  const supabase = createClient(supabaseUrl, supabaseAnonKey, {
+    global: { headers: { Authorization: `Bearer ${token}` } },
+  });
   const { data: { user }, error: authError } = await supabase.auth.getUser(token);
   if (authError || !user) return json(401, { error: 'Sesión no válida' });
+
+  const { data: profile } = await supabase.from('profiles').select('is_admin').eq('id', user.id).maybeSingle();
+  if (!profile?.is_admin) {
+    const dailyLimit = Number(process.env.AI_DAILY_LIMIT) || 10;
+    const since = new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString();
+    const { count, error: usageError } = await supabase
+      .from('ai_usage')
+      .select('id', { count: 'exact', head: true })
+      .eq('user_id', user.id)
+      .gte('created_at', since);
+    if (usageError) {
+      console.error('ai_usage check failed:', usageError.message);
+      return json(503, { error: 'No se pudo comprobar el límite de uso' });
+    }
+    if ((count ?? 0) >= dailyLimit) {
+      return json(429, { error: `Has alcanzado el límite de ${dailyLimit} análisis con IA en 24 horas` });
+    }
+  }
 
   let body: RequestBody;
   try {
@@ -114,6 +135,9 @@ export async function POST(request: Request): Promise<Response> {
       .filter(f => candidateNames.has(f.name))
       .slice(0, targetCount);
     advice.overallScore = Math.min(Math.max(advice.overallScore, 0), 100);
+
+    const { error: logError } = await supabase.from('ai_usage').insert({ user_id: user.id });
+    if (logError) console.error('ai_usage insert failed:', logError.message);
 
     return json(200, advice);
   } catch (error) {
