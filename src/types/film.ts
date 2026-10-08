@@ -166,4 +166,6 @@ export interface StrategyReport {
   totalBudgetEstimate: number;
   executiveSummary: string;
   nextSteps: string[];
+  aiGenerated?: boolean;
+  scoreRationale?: string;
 }

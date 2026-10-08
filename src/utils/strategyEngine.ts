@@ -112,6 +112,16 @@ function getRisks(data: FilmData): string[] {
   return risks;
 }
 
+export function rankFestivalCandidates(data: FilmData, festivalsDb: RecommendedFestival[] | undefined, limit: number): RecommendedFestival[] {
+  const source = (festivalsDb && festivalsDb.length > 0) ? festivalsDb : FESTIVALS_DATABASE;
+  return source
+    .filter(f => !data.basicInfo.filmType || f.acceptsTypes.includes(data.basicInfo.filmType))
+    .map(f => ({ festival: f, score: scoreFestivalMatch(f, data) }))
+    .sort((a, b) => b.score - a.score || b.festival.prestige - a.festival.prestige)
+    .slice(0, limit)
+    .map(s => s.festival);
+}
+
 function recommendFestivals(data: FilmData, festivalsDb?: RecommendedFestival[]): RecommendedFestival[] {
   const source = (festivalsDb && festivalsDb.length > 0) ? festivalsDb : FESTIVALS_DATABASE;
   const scored = source.map(f => ({
@@ -128,7 +138,7 @@ function recommendFestivals(data: FilmData, festivalsDb?: RecommendedFestival[])
   return scored.slice(0, maxFestivals).map(s => s.festival);
 }
 
-function buildFestivalRoadmap(festivals: RecommendedFestival[]): { month: string; festivals: string[] }[] {
+export function buildFestivalRoadmap(festivals: RecommendedFestival[]): { month: string; festivals: string[] }[] {
   const months = ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'];
   const roadmap: { month: string; festivals: string[] }[] = [];
 

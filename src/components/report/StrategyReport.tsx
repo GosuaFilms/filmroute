@@ -1,5 +1,5 @@
 import type { StrategyReport } from '../../types/film';
-import { Download, Trophy, Globe, Tv, CheckSquare, BarChart2, Calendar, TrendingUp, AlertTriangle, ChevronRight, Star } from 'lucide-react';
+import { Download, Trophy, Globe, Tv, CheckSquare, BarChart2, Calendar, TrendingUp, AlertTriangle, ChevronRight, Star, Sparkles } from 'lucide-react';
 import clsx from 'clsx';
 import { SubmissionTracker } from '../submissions/SubmissionTracker';
 
@@ -58,6 +58,11 @@ export function StrategyReportView({ report, onBack, onExport, isExporting = fal
             <div className="text-cinema-gold text-xs font-semibold uppercase tracking-widest mb-2">Informe de Estrategia de Distribución</div>
             <h1 className="text-2xl sm:text-3xl font-display font-bold text-cinema-text mb-1">"{report.filmTitle}"</h1>
             <p className="text-cinema-text-dim text-sm">Generado el {report.generatedAt}</p>
+            {report.aiGenerated && (
+              <span className="inline-flex items-center gap-1.5 mt-2 text-[11px] font-semibold text-cinema-gold bg-cinema-gold/10 border border-cinema-gold/30 rounded-full px-2.5 py-1">
+                <Sparkles size={12} /> Estrategia elaborada por el asesor IA de FilmRoute
+              </span>
+            )}
           </div>
           <div className="flex items-center gap-3 flex-shrink-0">
             <div className="text-center bg-cinema-dark border border-cinema-gold/30 rounded-xl p-4">
@@ -70,7 +75,12 @@ export function StrategyReportView({ report, onBack, onExport, isExporting = fal
 
         {/* Resumen ejecutivo */}
         <div className="mt-5 bg-cinema-black/40 rounded-xl p-4 border border-cinema-border/50">
-          <p className="text-sm text-cinema-text leading-relaxed">{report.executiveSummary}</p>
+          <p className="text-sm text-cinema-text leading-relaxed whitespace-pre-line">{report.executiveSummary}</p>
+          {report.scoreRationale && (
+            <p className="text-xs text-cinema-text-dim leading-relaxed mt-3 pt-3 border-t border-cinema-border/50">
+              <span className="text-cinema-gold font-semibold">Sobre el índice: </span>{report.scoreRationale}
+            </p>
+          )}
         </div>
       </div>
 

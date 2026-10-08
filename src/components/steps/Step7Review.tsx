@@ -117,8 +117,11 @@ export function Step7Review({ data, onGenerate, isGenerating }: Props) {
         <div className="text-5xl mb-4">🎬</div>
         <h3 className="text-xl font-display font-bold text-cinema-gold mb-2">Todo listo para generar tu estrategia</h3>
         <p className="text-cinema-text-dim text-sm mb-6 max-w-md mx-auto">
-          El motor de análisis cruzará todos los datos para generar un informe completo con festivales recomendados, plan de marketing, ventanas de distribución y checklist de entregables.
+          Nuestro asesor de distribución con IA analizará tu película y redactará una estrategia personalizada: festivales seleccionados de nuestra base de datos, plan de marketing, ventanas de distribución y próximos pasos.
         </p>
+        {isGenerating && (
+          <p className="text-cinema-text-dim text-xs mb-4">Esto puede tardar hasta un minuto.</p>
+        )}
         <button
           onClick={onGenerate}
           disabled={isGenerating}
@@ -130,7 +133,7 @@ export function Step7Review({ data, onGenerate, isGenerating }: Props) {
                 <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
                 <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
               </svg>
-              Generando estrategia...
+              El asesor IA está analizando tu película…
             </>
           ) : (
             <>

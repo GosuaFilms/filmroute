@@ -26,7 +26,7 @@ function PageSpinner() {
     </div>
   );
 }
-import { generateStrategy } from './utils/strategyEngine';
+import { generateStrategyWithAI } from './lib/aiAdvisor';
 import { exportReportToPDF } from './utils/pdfExport';
 import { saveStrategy, updateStrategy, type SavedStrategy } from './lib/strategies';
 import { validateStep, hasErrors, type StepErrors } from './utils/validation';
@@ -280,8 +280,11 @@ function AppContent() {
     setStepErrors({});
     setIsGenerating(true);
     setSaveError(null);
-    await new Promise(r => setTimeout(r, 800));
-    const result = generateStrategy(filmData, festivals.length > 0 ? festivals : undefined);
+    const { report: result, aiError } = await generateStrategyWithAI(filmData, festivals.length > 0 ? festivals : undefined);
+    if (aiError) {
+      console.error('Asesor IA no disponible:', aiError);
+      setSaveError('El asesor IA no está disponible ahora mismo; se ha generado un informe estándar. Puedes volver a generarlo más tarde.');
+    }
     setReport(result);
     setView('report');
     setIsGenerating(false);
