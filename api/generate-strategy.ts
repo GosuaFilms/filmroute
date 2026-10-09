@@ -1,11 +1,10 @@
 import Anthropic from '@anthropic-ai/sdk';
 import { zodOutputFormat } from '@anthropic-ai/sdk/helpers/zod';
-import { createClient, type SupabaseClient } from '@supabase/supabase-js';
+import type { SupabaseClient } from '@supabase/supabase-js';
 import { z } from 'zod';
+import { MODEL, anthropicErrorResponse, authorize, checkDailyLimit, json, logUsage } from './_shared.js';
 
 export const maxDuration = 300;
-
-const MODEL = 'claude-opus-5-5';
 
 const PhaseSchema = z.object({
   phase: z.string(),
@@ -43,6 +42,23 @@ const AdvisorSchema = z.object({
     category: z.string(),
     amount: z.number(),
   })),
+  externalFestivals: z.array(z.object({
+    name: z.string(),
+    country: z.string(),
+    city: z.string(),
+    dates: z.string(),
+    deadline: z.string(),
+    submissionFee: z.string(),
+    reason: z.string(),
+    url: z.string(),
+  })),
+  externalPlatforms: z.array(z.object({
+    name: z.string(),
+    type: z.string(),
+    territory: z.string(),
+    notes: z.string(),
+    url: z.string(),
+  })),
   deliverableChecklist: z.array(z.object({
     item: z.string(),
     status: z.enum(['listo', 'en_proceso', 'no_disponible']),
@@ -69,6 +85,7 @@ Reglas:
 - distributionWindows: entre 4 y 7 ventanas de explotación en orden cronológico, adaptadas a esta película: usa fechas o meses concretos coherentes con el estado del estreno, la distribuidora y los acuerdos que figuren en los datos (por ejemplo, la ventana de la televisión participante). revenue: expectativa de ingresos realista y prudente; notes: condiciones clave (exclusividad, territorios, orden respecto a otras ventanas).
 - budgetBreakdown: reparto recomendado del presupuesto total de distribución, entre 5 y 9 partidas con importes en euros enteros que sumen exactamente ese total, adaptadas a la estrategia (por ejemplo, campaña de premios, coloquios, subtítulos de idiomas concretos). Si las partidas que indica el cineasta son incoherentes, propón el reparto correcto. Si el presupuesto total es 0 o no consta, devuelve una lista vacía.
 - deliverableChecklist: entre 10 y 18 entregables necesarios para ejecutar ESTA estrategia, incluidos los específicos que se deriven de ella (versiones subtituladas concretas, materiales para campañas de premios, guía didáctica, versión para televisión…). status según los datos facilitados (si no consta, no_disponible); priority según la urgencia en el calendario; deadline con una fecha o hito concreto.
+- externalFestivals y externalPlatforms: si se aporta <investigacion_web>, selecciona de ella las oportunidades externas más valiosas para esta película (como máximo 8 festivales o mercados y 4 plataformas o televisiones), copiando los datos y la URL tal y como aparecen en la investigación. Nunca inventes ni completes datos que no estén en la investigación: si falta, escribe "Por confirmar". Tenlas en cuenta también en la estrategia, el calendario y los próximos pasos, dejando claro que son sugerencias externas pendientes de verificar. Si no hay investigación web, devuelve listas vacías.
 - posterAnalysis: si se adjunta el cartel de la película, valóralo como herramienta de venta en 3-5 frases: legibilidad del título en miniatura (catálogos de festivales y plataformas), si transmite género y tono, coherencia con el público objetivo y la estrategia, y qué conviene ajustar (laureles tras las selecciones, bloque de créditos, versiones por territorio). Ten en cuenta el cartel también en el resto del análisis cuando sea relevante. Si no hay cartel, devuelve una cadena vacía.`;
 
 interface RequestBody {
@@ -76,13 +93,21 @@ interface RequestBody {
   candidates: { name: string }[];
   platformCandidates?: { name: string }[];
   targetFestivalCount: number;
+  webResearch?: { notes?: string; sources?: string[] };
 }
 
-function json(status: number, body: unknown): Response {
-  return new Response(JSON.stringify(body), {
-    status,
-    headers: { 'Content-Type': 'application/json' },
+// Una sugerencia externa solo se acepta si su URL aparece en la investigación web (evita datos inventados)
+function sourcedOnly<T extends { url: string }>(items: T[], research: string, sources: string[]): T[] {
+  const known = new Set(sources.map(normalizeUrl));
+  return items.filter(i => {
+    const url = i.url.trim();
+    if (!/^https?:\/\//i.test(url)) return false;
+    return research.includes(url) || known.has(normalizeUrl(url));
   });
+}
+
+function normalizeUrl(url: string): string {
+  return url.trim().toLowerCase().replace(/^https?:\/\/(www\.)?/, '').replace(/[/#?]+$/, '');
 }
 
 // Las partidas deben sumar exactamente el total declarado; los porcentajes se derivan de los importes
@@ -113,39 +138,11 @@ async function loadPoster(
 }
 
 export async function POST(request: Request): Promise<Response> {
-  const supabaseUrl = process.env.VITE_SUPABASE_URL ?? process.env.SUPABASE_URL;
-  const supabaseAnonKey = process.env.VITE_SUPABASE_ANON_KEY ?? process.env.SUPABASE_ANON_KEY;
-  if (!supabaseUrl || !supabaseAnonKey || !process.env.ANTHROPIC_API_KEY) {
-    return json(500, { error: 'Servidor no configurado' });
-  }
-
-  // Solo usuarios autenticados pueden consumir créditos de IA
-  const token = request.headers.get('authorization')?.replace(/^Bearer\s+/i, '');
-  if (!token) return json(401, { error: 'No autenticado' });
-  // Cliente con el token del usuario para que las políticas RLS se apliquen en su nombre
-  const supabase = createClient(supabaseUrl, supabaseAnonKey, {
-    global: { headers: { Authorization: `Bearer ${token}` } },
-  });
-  const { data: { user }, error: authError } = await supabase.auth.getUser(token);
-  if (authError || !user) return json(401, { error: 'Sesión no válida' });
-
-  const { data: profile } = await supabase.from('profiles').select('is_admin').eq('id', user.id).maybeSingle();
-  if (!profile?.is_admin) {
-    const dailyLimit = Number(process.env.AI_DAILY_LIMIT) || 10;
-    const since = new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString();
-    const { count, error: usageError } = await supabase
-      .from('ai_usage')
-      .select('id', { count: 'exact', head: true })
-      .eq('user_id', user.id)
-      .gte('created_at', since);
-    if (usageError) {
-      console.error('ai_usage check failed:', usageError.message);
-      return json(503, { error: 'No se pudo comprobar el límite de uso' });
-    }
-    if ((count ?? 0) >= dailyLimit) {
-      return json(429, { error: `Has alcanzado el límite de ${dailyLimit} análisis con IA en 24 horas` });
-    }
-  }
+  const auth = await authorize(request);
+  if (auth instanceof Response) return auth;
+  const limited = await checkDailyLimit(auth);
+  if (limited) return limited;
+  const { supabase, user } = auth;
 
   let body: RequestBody;
   try {
@@ -162,6 +159,10 @@ export async function POST(request: Request): Promise<Response> {
   const targetCount = Math.min(Math.max(Number(body.targetFestivalCount) || 12, 3), 25);
 
   const poster = await loadPoster(supabase, user.id, body.filmData);
+  const researchNotes = typeof body.webResearch?.notes === 'string' ? body.webResearch.notes.slice(0, 40_000) : '';
+  const researchSources = Array.isArray(body.webResearch?.sources)
+    ? body.webResearch.sources.filter((u): u is string => typeof u === 'string').slice(0, 60)
+    : [];
 
   const client = new Anthropic();
   try {
@@ -187,7 +188,8 @@ export async function POST(request: Request): Promise<Response> {
               `Cartel adjunto: ${poster ? 'sí (imagen anterior)' : 'no'}\n\n` +
               `<datos_pelicula>\n${JSON.stringify(body.filmData, null, 2)}\n</datos_pelicula>\n\n` +
               `<festivales_candidatos>\n${JSON.stringify(body.candidates, null, 2)}\n</festivales_candidatos>\n\n` +
-              `<plataformas_candidatas>\n${JSON.stringify(body.platformCandidates ?? [], null, 2)}\n</plataformas_candidatas>`,
+              `<plataformas_candidatas>\n${JSON.stringify(body.platformCandidates ?? [], null, 2)}\n</plataformas_candidatas>` +
+              (researchNotes ? `\n\n<investigacion_web>\n${researchNotes}\n</investigacion_web>` : ''),
           },
         ],
       }],
@@ -211,20 +213,12 @@ export async function POST(request: Request): Promise<Response> {
       (body.filmData as { budgetResources?: { totalDistributionBudget?: unknown } })?.budgetResources?.totalDistributionBudget,
     ) || 0;
     const budgetBreakdown = normalizeBudget(advice.budgetBreakdown, totalBudget);
+    const externalFestivals = sourcedOnly(advice.externalFestivals, researchNotes, researchSources).slice(0, 8);
+    const externalPlatforms = sourcedOnly(advice.externalPlatforms, researchNotes, researchSources).slice(0, 4);
 
-    const { error: logError } = await supabase.from('ai_usage').insert({ user_id: user.id });
-    if (logError) console.error('ai_usage insert failed:', logError.message);
-
-    return json(200, { ...advice, budgetBreakdown });
+    await logUsage(auth);
+    return json(200, { ...advice, budgetBreakdown, externalFestivals, externalPlatforms });
   } catch (error) {
-    if (error instanceof Anthropic.RateLimitError) {
-      return json(429, { error: 'Demasiadas peticiones, inténtalo en un minuto' });
-    }
-    if (error instanceof Anthropic.APIError) {
-      console.error(`Anthropic API error ${error.status}:`, error.message);
-      return json(502, { error: 'Error del servicio de IA' });
-    }
-    console.error('generate-strategy error:', error);
-    return json(500, { error: 'Error interno' });
+    return anthropicErrorResponse(error, 'generate-strategy');
   }
 }

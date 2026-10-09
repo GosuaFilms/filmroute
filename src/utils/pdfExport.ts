@@ -536,6 +536,71 @@ export async function exportReportToPDF(report: StrategyReport, filmData?: FilmD
     y += 6;
   });
 
+  // ── OPORTUNIDADES ENCONTRADAS EN LA WEB ────────────────────────────────────
+  const extFestivals = report.externalFestivals ?? [];
+  const extPlatforms = report.externalPlatforms ?? [];
+  if (extFestivals.length + extPlatforms.length > 0) {
+    section('Oportunidades en la web', 'Encontradas fuera de nuestra base de datos · verifica fechas y requisitos en la fuente', 50);
+    const extItems = [
+      ...extFestivals.map(f => ({
+        name: f.name,
+        badge: 'FESTIVAL · SUGERENCIA EXTERNA',
+        meta: [f.country, f.city, f.dates].filter(Boolean).join('  ·  '),
+        facts: `Plazo: ${f.deadline}     Tasa: ${f.submissionFee}`,
+        text: f.reason,
+        url: f.url,
+      })),
+      ...extPlatforms.map(p => ({
+        name: p.name,
+        badge: 'PLATAFORMA · SUGERENCIA EXTERNA',
+        meta: [p.type, p.territory].filter(Boolean).join('  ·  '),
+        facts: '',
+        text: p.notes,
+        url: p.url,
+      })),
+    ];
+    for (const item of extItems) {
+      sans(8.5);
+      const lines = wrap(item.text, CW - 6);
+      ensure(Math.min(26 + lines.length * lh(8.5), 60));
+      fill(C.gold);
+      doc.rect(ML, y - 4, 0.8, 8, 'F');
+      serif(12);
+      color(C.text);
+      doc.text(wrap(item.name, CW - 6)[0], ML + 5, y);
+      sansBold(5.8);
+      color(C.gold);
+      spaced(item.badge, ML + 5, y + 4.8, 0.7);
+      sans(7.6);
+      color(C.muted);
+      let iy = y + 9.5;
+      if (item.meta) {
+        doc.text(wrap(item.meta, CW - 6)[0], ML + 5, iy);
+        iy += 4.2;
+      }
+      if (item.facts) {
+        sansBold(7.2);
+        color(C.gold);
+        doc.text(wrap(item.facts, CW - 6)[0], ML + 5, iy);
+        iy += 4.2;
+      }
+      y = iy + 1.5;
+      writeLines(lines, ML + 5, 8.5, () => sans(8.5), C.text);
+      if (/^https?:\/\//i.test(item.url.trim())) {
+        ensure(5);
+        sans(7.2);
+        color(C.blue);
+        doc.textWithLink(wrap(item.url, CW - 6)[0], ML + 5, y, { url: item.url.trim() });
+        y += 4;
+      }
+      y += 2;
+      stroke(C.hair);
+      doc.setLineWidth(0.2);
+      doc.line(ML + 5, y, ML + CW, y);
+      y += 6;
+    }
+  }
+
   // ── 04 CALENDARIO ──────────────────────────────────────────────────────────
   if (report.festivalRoadmap.length > 0) {
     section('Calendario del circuito', 'Meses de celebración de los festivales seleccionados');

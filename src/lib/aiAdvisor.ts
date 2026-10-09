@@ -1,6 +1,8 @@
 import { supabase } from './supabase';
 import { buildFestivalRoadmap, generateStrategy, platformCandidates, rankFestivalCandidates } from '../utils/strategyEngine';
-import type { DistributionWindow, FilmData, RecommendedFestival, StrategyPhase, StrategyReport } from '../types/film';
+import { FESTIVALS_DATABASE } from '../data/festivals';
+import { PLATFORMS_DATABASE } from '../data/platforms';
+import type { DistributionWindow, ExternalFestival, ExternalPlatform, FilmData, RecommendedFestival, StrategyPhase, StrategyReport } from '../types/film';
 
 const CANDIDATE_POOL = 40;
 
@@ -20,6 +22,28 @@ interface AdvisorResponse {
   distributionWindows: DistributionWindow[];
   budgetBreakdown: StrategyReport['budgetBreakdown'];
   deliverableChecklist: StrategyReport['deliverableChecklist'];
+  externalFestivals: ExternalFestival[];
+  externalPlatforms: ExternalPlatform[];
+}
+
+export type GenerationStage = 'research' | 'writing';
+
+interface WebResearch {
+  notes: string;
+  sources: string[];
+}
+
+async function postJson<T>(url: string, token: string, body: unknown): Promise<T> {
+  const res = await fetch(url, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
+    body: JSON.stringify(body),
+  });
+  if (!res.ok) {
+    const err = await res.json().catch(() => null) as { error?: string } | null;
+    throw new Error(err?.error ?? `Error ${res.status}`);
+  }
+  return res.json() as Promise<T>;
 }
 
 export interface GenerationResult {
@@ -32,6 +56,7 @@ export interface GenerationResult {
 export async function generateStrategyWithAI(
   filmData: FilmData,
   festivalsDb: RecommendedFestival[] | undefined,
+  onStage?: (stage: GenerationStage) => void,
 ): Promise<GenerationResult> {
   const base = generateStrategy(filmData, festivalsDb);
   const candidates = rankFestivalCandidates(filmData, festivalsDb, CANDIDATE_POOL);
@@ -41,31 +66,34 @@ export async function generateStrategyWithAI(
     const { data: { session } } = await supabase.auth.getSession();
     if (!session) throw new Error('Sin sesión');
 
-    const res = await fetch('/api/generate-strategy', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${session.access_token}`,
-      },
-      body: JSON.stringify({
-        filmData,
-        candidates,
-        platformCandidates: platformPool.map(p => ({
-          name: p.name,
-          type: p.type,
-          territory: p.territory,
-          submissionProcess: p.submissionProcess,
-          revenueModel: p.revenueModel,
-          notes: p.notes,
-        })),
-        targetFestivalCount: filmData.festivalStrategy.targetFestivalCount ?? 15,
-      }),
+    // Fase 1: investigación web de oportunidades fuera de la base de datos. Si falla, se sigue sin ella.
+    onStage?.('research');
+    const knownFestivals = (festivalsDb && festivalsDb.length > 0 ? festivalsDb : FESTIVALS_DATABASE).map(f => f.name);
+    const research = await postJson<WebResearch>('/api/research-opportunities', session.access_token, {
+      filmData,
+      knownFestivals,
+      knownPlatforms: PLATFORMS_DATABASE.map(p => p.name),
+    }).catch(e => {
+      console.warn('Investigación web no disponible:', e instanceof Error ? e.message : e);
+      return null;
     });
-    if (!res.ok) {
-      const body = await res.json().catch(() => null) as { error?: string } | null;
-      throw new Error(body?.error ?? `Error ${res.status}`);
-    }
-    const advice = await res.json() as AdvisorResponse;
+
+    // Fase 2: redacción de la estrategia
+    onStage?.('writing');
+    const advice = await postJson<AdvisorResponse>('/api/generate-strategy', session.access_token, {
+      filmData,
+      candidates,
+      platformCandidates: platformPool.map(p => ({
+        name: p.name,
+        type: p.type,
+        territory: p.territory,
+        submissionProcess: p.submissionProcess,
+        revenueModel: p.revenueModel,
+        notes: p.notes,
+      })),
+      targetFestivalCount: filmData.festivalStrategy.targetFestivalCount ?? 15,
+      webResearch: research ?? undefined,
+    });
 
     const byName = new Map(candidates.map(f => [f.name, f]));
     const festivals = advice.festivals
@@ -102,6 +130,8 @@ export async function generateStrategyWithAI(
         distributionWindows: advice.distributionWindows?.length ? advice.distributionWindows : base.distributionWindows,
         budgetBreakdown: advice.budgetBreakdown?.length ? advice.budgetBreakdown : base.budgetBreakdown,
         deliverableChecklist: advice.deliverableChecklist?.length ? advice.deliverableChecklist : base.deliverableChecklist,
+        externalFestivals: advice.externalFestivals ?? [],
+        externalPlatforms: advice.externalPlatforms ?? [],
         aiGenerated: true,
       },
     };

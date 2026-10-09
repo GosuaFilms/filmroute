@@ -1,6 +1,6 @@
 import type { StrategyReport } from '../../types/film';
 import { formatEuro } from '../../utils/format';
-import { Download, Trophy, Globe, Tv, CheckSquare, BarChart2, Calendar, TrendingUp, AlertTriangle, ChevronRight, Star, Sparkles, ImageIcon } from 'lucide-react';
+import { Download, Trophy, Globe, Tv, CheckSquare, BarChart2, Calendar, TrendingUp, AlertTriangle, ChevronRight, Star, Sparkles, ImageIcon, Search, ExternalLink } from 'lucide-react';
 import clsx from 'clsx';
 import { SubmissionTracker } from '../submissions/SubmissionTracker';
 
@@ -13,6 +13,7 @@ interface Props {
   onRegenerate?: () => void;
   isRegenerating?: boolean;
   posterUrl?: string | null;
+  progressLabel?: string;
 }
 
 interface CardProps {
@@ -34,6 +35,10 @@ function ReportCard({ title, icon, children, className = '' }: CardProps) {
   );
 }
 
+function isWebUrl(url: string): boolean {
+  return /^https?:\/\//i.test(url.trim());
+}
+
 function StatusBadge({ status }: { status: string }) {
   const map: Record<string, string> = {
     listo: 'bg-green-900/40 text-green-400 border-green-800',
@@ -52,7 +57,7 @@ function StatusBadge({ status }: { status: string }) {
   );
 }
 
-export function StrategyReportView({ report, onBack, onExport, isExporting = false, strategyId, onRegenerate, isRegenerating = false, posterUrl }: Props) {
+export function StrategyReportView({ report, onBack, onExport, isExporting = false, strategyId, onRegenerate, isRegenerating = false, posterUrl, progressLabel }: Props) {
   return (
     <div className="space-y-6" id="strategy-report">
       {/* Header del informe */}
@@ -89,7 +94,7 @@ export function StrategyReportView({ report, onBack, onExport, isExporting = fal
                 >
                   <Sparkles size={13} />
                   {isRegenerating
-                    ? 'El asesor IA está analizando…'
+                    ? progressLabel ?? 'El asesor IA está analizando…'
                     : report.aiGenerated ? 'Regenerar análisis' : 'Generar análisis con IA'}
                 </button>
               </div>
@@ -191,6 +196,51 @@ export function StrategyReportView({ report, onBack, onExport, isExporting = fal
           ))}
         </div>
       </ReportCard>
+
+      {/* Oportunidades encontradas en la web */}
+      {((report.externalFestivals?.length ?? 0) > 0 || (report.externalPlatforms?.length ?? 0) > 0) && (
+        <ReportCard title="Oportunidades encontradas en la web" icon={<Search size={18} />}>
+          <p className="text-xs text-cinema-text-dim mb-4">
+            El asesor ha buscado en internet oportunidades que no están en nuestra base de datos. Son sugerencias externas:
+            verifica fechas, plazos y requisitos en la fuente antes de inscribirte.
+          </p>
+          <div className="space-y-3">
+            {(report.externalFestivals ?? []).map((f, i) => (
+              <div key={`f${i}`} className="border border-dashed border-cinema-gold/30 rounded-lg p-4">
+                <div className="flex flex-wrap items-center gap-2 mb-1">
+                  <span className="font-semibold text-sm text-cinema-text">{f.name}</span>
+                  <span className="text-[10px] font-semibold uppercase tracking-wide text-cinema-gold bg-cinema-gold/10 border border-cinema-gold/30 rounded-full px-2 py-0.5">Sugerencia externa · verificar</span>
+                </div>
+                <div className="text-xs text-cinema-text-dim mb-2">
+                  {[f.country, f.city, f.dates].filter(Boolean).join(' · ')}
+                  <span className="mx-2">|</span>Plazo: {f.deadline}<span className="mx-2">|</span>Tasa: {f.submissionFee}
+                </div>
+                <p className="text-xs text-cinema-text-dim leading-relaxed mb-2">{f.reason}</p>
+                {isWebUrl(f.url) && (
+                  <a href={f.url} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-1 text-xs text-cinema-gold hover:underline break-all">
+                    <ExternalLink size={11} className="shrink-0" /> {f.url}
+                  </a>
+                )}
+              </div>
+            ))}
+            {(report.externalPlatforms ?? []).map((p, i) => (
+              <div key={`p${i}`} className="border border-dashed border-blue-400/30 rounded-lg p-4">
+                <div className="flex flex-wrap items-center gap-2 mb-1">
+                  <span className="font-semibold text-sm text-cinema-text">{p.name}</span>
+                  <span className="text-[10px] font-semibold uppercase tracking-wide text-blue-400 bg-blue-400/10 border border-blue-400/30 rounded-full px-2 py-0.5">Plataforma externa · verificar</span>
+                </div>
+                <div className="text-xs text-cinema-text-dim mb-2">{[p.type, p.territory].filter(Boolean).join(' · ')}</div>
+                <p className="text-xs text-cinema-text-dim leading-relaxed mb-2">{p.notes}</p>
+                {isWebUrl(p.url) && (
+                  <a href={p.url} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-1 text-xs text-blue-400 hover:underline break-all">
+                    <ExternalLink size={11} className="shrink-0" /> {p.url}
+                  </a>
+                )}
+              </div>
+            ))}
+          </div>
+        </ReportCard>
+      )}
 
       {/* Hoja de ruta de festivales */}
       {report.festivalRoadmap.length > 0 && (

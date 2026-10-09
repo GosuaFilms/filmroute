@@ -27,7 +27,7 @@ function PageSpinner() {
     </div>
   );
 }
-import { generateStrategyWithAI } from './lib/aiAdvisor';
+import { generateStrategyWithAI, type GenerationStage } from './lib/aiAdvisor';
 import { LegalPage, LegalLinks, legalSlugFromPath } from './pages/LegalPage';
 import { exportReportToPDF } from './utils/pdfExport';
 import { getPosterUrl, loadPosterImage } from './lib/posters';
@@ -41,6 +41,11 @@ const FestivalsAdmin = lazy(() => import('./components/admin/FestivalsAdmin').th
 const SubmissionTracker = lazy(() => import('./components/submissions/SubmissionTracker').then(m => ({ default: m.SubmissionTracker })));
 
 const TOTAL_STEPS = 7;
+
+const STAGE_LABELS: Record<GenerationStage, string> = {
+  research: 'Buscando oportunidades en la web…',
+  writing: 'Redactando la estrategia…',
+};
 const DRAFT_KEY = 'filmroute_draft';
 
 const EMPTY_DATA: FilmData = {
@@ -172,6 +177,7 @@ function AppContent() {
   const [filmData, setFilmData] = useState<FilmData>(EMPTY_DATA);
   const [report, setReport] = useState<StrategyReport | null>(null);
   const [isGenerating, setIsGenerating] = useState(false);
+  const [generationStage, setGenerationStage] = useState<GenerationStage | null>(null);
   const [isSaving, setIsSaving] = useState(false);
   const [isExporting, setIsExporting] = useState(false);
   const [currentStrategyId, setCurrentStrategyId] = useState<string | null>(null);
@@ -303,7 +309,8 @@ function AppContent() {
     setSaveError(null);
     setAiNotice(null);
     setSavedOk(false);
-    const { report: result, aiError } = await generateStrategyWithAI(filmData, festivals.length > 0 ? festivals : undefined);
+    const { report: result, aiError } = await generateStrategyWithAI(filmData, festivals.length > 0 ? festivals : undefined, setGenerationStage);
+    setGenerationStage(null);
     if (aiError) {
       console.error('Asesor IA no disponible:', aiError);
       setAiNotice(aiError.startsWith('Has alcanzado el límite')
@@ -467,6 +474,7 @@ function AppContent() {
               strategyId={currentStrategyId}
               onRegenerate={handleGenerate}
               isRegenerating={isGenerating}
+              progressLabel={STAGE_LABELS[generationStage ?? 'research']}
               posterUrl={posterUrl}
             />
           </Suspense>
@@ -505,6 +513,7 @@ function AppContent() {
               data={filmData}
               onGenerate={handleGenerate}
               isGenerating={isGenerating}
+              progressLabel={STAGE_LABELS[generationStage ?? 'research']}
               onEditStep={step => {
                 setStepErrors({});
                 setCurrentStep(step);

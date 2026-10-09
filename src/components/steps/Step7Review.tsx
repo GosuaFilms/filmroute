@@ -7,6 +7,7 @@ interface Props {
   onGenerate: () => void;
   isGenerating: boolean;
   onEditStep: (step: number) => void;
+  progressLabel?: string;
 }
 
 interface ReviewRowProps {
@@ -51,7 +52,7 @@ function ReviewSection({ icon, title, children, onEdit }: ReviewSectionProps) {
   );
 }
 
-export function Step7Review({ data, onGenerate, isGenerating, onEditStep }: Props) {
+export function Step7Review({ data, onGenerate, isGenerating, onEditStep, progressLabel }: Props) {
   const { basicInfo: b, creativeDetails: c, materials: m, distributionGoals: d, festivalStrategy: f, budgetResources: br } = data;
 
   return (
@@ -128,10 +129,10 @@ export function Step7Review({ data, onGenerate, isGenerating, onEditStep }: Prop
         <div className="text-5xl mb-4">🎬</div>
         <h3 className="text-xl font-display font-bold text-cinema-gold mb-2">Todo listo para generar tu estrategia</h3>
         <p className="text-cinema-text-dim text-sm mb-6 max-w-md mx-auto">
-          Nuestro asesor de distribución con IA analizará tu película y redactará una estrategia personalizada: festivales seleccionados de nuestra base de datos, plan de marketing, ventanas de distribución y próximos pasos.
+          Nuestro asesor de distribución con IA analizará tu película y redactará una estrategia personalizada: festivales de nuestra base de datos y oportunidades encontradas en la web, plan de marketing, ventanas de distribución y próximos pasos.
         </p>
         {isGenerating && (
-          <p className="text-cinema-text-dim text-xs mb-4">Esto puede tardar hasta un minuto.</p>
+          <p className="text-cinema-text-dim text-xs mb-4">El asesor busca oportunidades en la web y redacta la estrategia. Puede tardar entre 2 y 4 minutos.</p>
         )}
         <button
           onClick={onGenerate}
@@ -144,7 +145,7 @@ export function Step7Review({ data, onGenerate, isGenerating, onEditStep }: Prop
                 <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
                 <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
               </svg>
-              El asesor IA está analizando tu película…
+              {progressLabel ?? 'El asesor IA está analizando tu película…'}
             </>
           ) : (
             <>

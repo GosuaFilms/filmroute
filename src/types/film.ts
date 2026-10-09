@@ -133,6 +133,25 @@ export interface RecommendedFestival {
   reason: string;
 }
 
+export interface ExternalFestival {
+  name: string;
+  country: string;
+  city: string;
+  dates: string;
+  deadline: string;
+  submissionFee: string;
+  reason: string;
+  url: string;
+}
+
+export interface ExternalPlatform {
+  name: string;
+  type: string;
+  territory: string;
+  notes: string;
+  url: string;
+}
+
 export interface StrategyPhase {
   phase: string;
   duration: string;
@@ -170,4 +189,6 @@ export interface StrategyReport {
   aiGenerated?: boolean;
   scoreRationale?: string;
   posterAnalysis?: string;
+  externalFestivals?: ExternalFestival[];
+  externalPlatforms?: ExternalPlatform[];
 }
