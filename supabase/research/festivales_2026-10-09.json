@@ -1,0 +1,4557 @@
+[
+ {
+  "name": "DOK Leipzig",
+  "country": "Alemania",
+  "city": "Leipzig",
+  "tier": "tier_b",
+  "month": "Octubre-Noviembre",
+  "deadline": "Febrero-Julio",
+  "submission_fee": "35-60€ (+IVA)",
+  "platform": "Directo",
+  "url": "https://www.dok-leipzig.de/en",
+  "genres": [
+   "documental_social",
+   "documental_historico",
+   "experimental",
+   "animacion"
+  ],
+  "accepts_types": [
+   "documental",
+   "cortometraje",
+   "mediometraje",
+   "largometraje"
+  ],
+  "prestige": 78,
+  "reason": "Referencia europea para documental de autor y animación de todas las duraciones. La competición internacional de documental exige al menos estreno europeo (preferible mundial o internacional); los cortos de hasta 40 min y la animación, al menos estreno en Alemania.",
+  "verified_url": "https://www.dok-leipzig.de/en/film-submission-regulations"
+ },
+ {
+  "name": "Thessaloniki Documentary Festival",
+  "country": "Grecia",
+  "city": "Tesalónica",
+  "tier": "tier_b",
+  "month": "Marzo",
+  "deadline": "Julio-Noviembre",
+  "submission_fee": "40-60€",
+  "platform": "Directo",
+  "url": "https://www.filmfestival.gr/en/",
+  "genres": [
+   "documental_social",
+   "documental_historico",
+   "experimental"
+  ],
+  "accepts_types": [
+   "documental",
+   "mediometraje",
+   "largometraje"
+  ],
+  "prestige": 72,
+  "reason": "Largos documentales (más de 70 min en la competición principal), óperas primas y segundas obras (Newcomers) y documental experimental (Film Forward). Exige estreno mundial, internacional o europeo, sin pase previo en Grecia; el Golden Alexander clasifica para los Oscar.",
+  "verified_url": "https://www.moderntimes.review/thessaloniki-documentary-festival-submissions-2027/"
+ },
+ {
+  "name": "Cinéma du Réel (París)",
+  "country": "Francia",
+  "city": "París",
+  "tier": "tier_b",
+  "month": "Marzo",
+  "deadline": "Septiembre-Noviembre",
+  "submission_fee": "15-50€",
+  "platform": "Directo",
+  "url": "https://www.cinemadureel.org/en/",
+  "genres": [
+   "documental_social",
+   "documental_historico",
+   "experimental"
+  ],
+  "accepts_types": [
+   "documental",
+   "cortometraje",
+   "mediometraje",
+   "largometraje"
+  ],
+  "prestige": 76,
+  "reason": "Documental de creación y cine de lo real de cualquier duración. La selección internacional exige estreno en Francia y la francesa, estreno mundial; las películas deben haberse terminado después de mediados de enero del año anterior.",
+  "verified_url": "https://www.cinemadureel.org/en/call-for-entry-for-the-49th-edition-of-cinema-du-reel/"
+ },
+ {
+  "name": "Doclisboa",
+  "country": "Portugal",
+  "city": "Lisboa",
+  "tier": "tier_b",
+  "month": "Octubre",
+  "deadline": "Febrero-Mayo",
+  "submission_fee": "15-50€",
+  "platform": "Directo",
+  "url": "https://www.doclisboa.org/en/",
+  "genres": [
+   "documental_social",
+   "documental_historico",
+   "experimental"
+  ],
+  "accepts_types": [
+   "documental",
+   "cortometraje",
+   "mediometraje",
+   "largometraje"
+  ],
+  "prestige": 72,
+  "reason": "Cine documental de autor y formas híbridas, de cualquier duración. Exige que la película sea inédita en Portugal (cine, TV o streaming) y prefiere estrenos mundiales, internacionales o europeos; la sección Green Years, para óperas primas europeas, exige estreno mundial, internacional o europeo.",
+  "verified_url": "https://www.doclisboa.org/en/regulations/"
+ },
+ {
+  "name": "DokuFest (Prizren)",
+  "country": "Kosovo",
+  "city": "Prizren",
+  "tier": "tier_c",
+  "month": "Agosto",
+  "deadline": "Noviembre-Marzo",
+  "submission_fee": "9-35€",
+  "platform": "FilmFreeway",
+  "url": "https://dokufest.com/en",
+  "genres": [
+   "documental_social",
+   "documental_historico",
+   "experimental",
+   "animacion"
+  ],
+  "accepts_types": [
+   "documental",
+   "cortometraje",
+   "largometraje"
+  ],
+  "prestige": 64,
+  "reason": "Festival de documental y cortometraje con mucho ambiente. Admite largos documentales sin límite de duración, cortos documentales de hasta 45 min y cortos de ficción de hasta 30 min, terminados después del 1 de enero del año anterior. Las fuentes consultadas no publican un requisito estricto de estreno: hay que consultar las bases.",
+  "verified_url": "https://dokufest.com/en/news/dokufest-opens-submissions-for-its-25th-edition"
+ },
+ {
+  "name": "Ji.hlava IDFF",
+  "country": "Chequia",
+  "city": "Jihlava",
+  "tier": "tier_b",
+  "month": "Octubre-Noviembre",
+  "deadline": "Enero-Junio",
+  "submission_fee": "25€",
+  "platform": "Directo",
+  "url": "https://www.ji-hlava.com",
+  "genres": [
+   "documental_social",
+   "documental_historico",
+   "experimental"
+  ],
+  "accepts_types": [
+   "documental",
+   "cortometraje",
+   "mediometraje",
+   "largometraje"
+  ],
+  "prestige": 74,
+  "reason": "El mayor festival de documental de Europa central y del este, con fuerte apuesta por el documental experimental y de autor. Prefiere estrenos mundiales, internacionales o europeos; los plazos dependen de si la película ya se ha estrenado (en junio solo montajes provisionales e inéditos).",
+  "verified_url": "https://www.ji-hlava.com/prihlaseni-filmu"
+ },
+ {
+  "name": "Docaviv (Tel Aviv)",
+  "country": "Israel",
+  "city": "Tel Aviv",
+  "tier": "tier_c",
+  "month": "Mayo-Junio",
+  "deadline": "Hasta Enero",
+  "submission_fee": "15-25€",
+  "platform": "Directo",
+  "url": "https://www.docaviv.co.il",
+  "genres": [
+   "documental_social",
+   "documental_historico"
+  ],
+  "accepts_types": [
+   "documental",
+   "cortometraje",
+   "largometraje"
+  ],
+  "prestige": 62,
+  "reason": "Principal festival de documental de Israel; la competición internacional es para largos de más de 40 min. Exige estreno en Israel: la película no puede haberse proyectado, emitido ni estado disponible online allí.",
+  "verified_url": "https://www.docaviv.co.il/org-en/call-for-entries-2026/"
+ },
+ {
+  "name": "Millennium Docs Against Gravity (Varsovia)",
+  "country": "Polonia",
+  "city": "Varsovia",
+  "tier": "tier_c",
+  "month": "Mayo",
+  "deadline": "Hasta Enero",
+  "submission_fee": "20€",
+  "platform": "Directo",
+  "url": "https://mdag.pl",
+  "genres": [
+   "documental_social",
+   "documental_historico",
+   "biopic"
+  ],
+  "accepts_types": [
+   "documental",
+   "largometraje"
+  ],
+  "prestige": 66,
+  "reason": "Gran festival de documental en Polonia, de vocación popular, que se celebra en siete ciudades y online; clasifica para los Oscar. La competición exige estreno en Polonia y más de 45 min de duración.",
+  "verified_url": "https://mdag.pl/24/en/lodz/news/Rozpoczal-sie-proces-zglaszania-filmow-na-23-Millennium-Docs-Against"
+ },
+ {
+  "name": "True/False Film Fest (Columbia)",
+  "country": "Estados Unidos",
+  "city": "Columbia (Misuri)",
+  "tier": "tier_b",
+  "month": "Marzo",
+  "deadline": "Agosto-Diciembre",
+  "submission_fee": "20-95 USD",
+  "platform": "Directo",
+  "url": "https://truefalse.org",
+  "genres": [
+   "documental_social",
+   "experimental",
+   "documental_historico"
+  ],
+  "accepts_types": [
+   "documental",
+   "cortometraje",
+   "largometraje"
+  ],
+  "prestige": 74,
+  "reason": "Festival muy curado de no ficción creativa e híbrida, para largos (40 min o más) y cortos. Las bases consultadas no fijan un requisito de estreno; hay que consultar las bases. Tiene tarifa reducida para estudiantes.",
+  "verified_url": "https://truefalse.org/submit/features-shorts/"
+ },
+ {
+  "name": "Full Frame Documentary Film Festival (Durham)",
+  "country": "Estados Unidos",
+  "city": "Durham (Carolina del Norte)",
+  "tier": "tier_c",
+  "month": "Abril",
+  "deadline": "Agosto-Noviembre",
+  "submission_fee": "40-90 USD",
+  "platform": "Directo",
+  "url": "https://www.fullframefest.org",
+  "genres": [
+   "documental_social",
+   "documental_historico"
+  ],
+  "accepts_types": [
+   "documental",
+   "cortometraje",
+   "largometraje"
+  ],
+  "prestige": 66,
+  "reason": "Festival de referencia del documental en EE. UU., para cortos y largos de hasta 180 min. No tiene requisito formal de estreno, aunque tiene en cuenta la exposición previa, sobre todo los pases en Carolina del Norte.",
+  "verified_url": "https://www.fullframefest.org/2026-call-for-entries/"
+ },
+ {
+  "name": "DOC NYC (Nueva York)",
+  "country": "Estados Unidos",
+  "city": "Nueva York",
+  "tier": "tier_b",
+  "month": "Noviembre",
+  "deadline": "Enero-Junio",
+  "submission_fee": "50-75 USD",
+  "platform": "FilmFreeway",
+  "url": "https://docnyc.net",
+  "genres": [
+   "documental_social",
+   "documental_historico",
+   "biopic"
+  ],
+  "accepts_types": [
+   "documental",
+   "cortometraje",
+   "largometraje"
+  ],
+  "prestige": 76,
+  "reason": "El mayor festival de documental de EE. UU., con mucha industria y escaparate de cara a los premios. Exige como mínimo estreno en Nueva York y prefiere estrenos mundiales o estadounidenses; las secciones Short List y Winner's Circle no piden estreno.",
+  "verified_url": "https://docnyc.net/submissions/"
+ },
+ {
+  "name": "Big Sky Documentary Film Festival (Missoula)",
+  "country": "Estados Unidos",
+  "city": "Missoula (Montana)",
+  "tier": "tier_c",
+  "month": "Febrero",
+  "deadline": "Mayo-Octubre",
+  "submission_fee": "5-50 USD",
+  "platform": "FilmFreeway",
+  "url": "https://www.bigskyfilmfest.org",
+  "genres": [
+   "documental_social",
+   "documental_naturaleza",
+   "documental_historico"
+  ],
+  "accepts_types": [
+   "documental",
+   "cortometraje",
+   "mediometraje",
+   "largometraje"
+  ],
+  "prestige": 60,
+  "reason": "Festival de documental de no ficción de todas las duraciones, accesible y cercano con los cineastas. No exige estreno salvo en Montana, aunque da prioridad a obras con poca difusión previa.",
+  "verified_url": "https://filmfreeway.com/BigSkyDocumentaryFilmFestival"
+ },
+ {
+  "name": "Camden International Film Festival",
+  "country": "Estados Unidos",
+  "city": "Camden (Maine)",
+  "tier": "tier_c",
+  "month": "Septiembre",
+  "deadline": "Diciembre-Mayo",
+  "submission_fee": "25-60 USD",
+  "platform": "FilmFreeway",
+  "url": "https://pointsnorthinstitute.org",
+  "genres": [
+   "documental_social",
+   "experimental"
+  ],
+  "accepts_types": [
+   "documental",
+   "cortometraje",
+   "largometraje"
+  ],
+  "prestige": 66,
+  "reason": "Festival de documental creativo muy respetado en la industria estadounidense (Points North Institute) que admite montajes provisionales. Según los listados consultados no exige estreno, aunque la mitad de su programa son estrenos mundiales, en EE. UU. o en Norteamérica.",
+  "verified_url": "https://festagent.com/en/festivals/camden_fest"
+ },
+ {
+  "name": "RIDM (Montreal)",
+  "country": "Canadá",
+  "city": "Montreal",
+  "tier": "tier_b",
+  "month": "Noviembre",
+  "deadline": "Marzo-Junio",
+  "submission_fee": "Consultar bases",
+  "platform": "Directo",
+  "url": "https://ridm.ca/en",
+  "genres": [
+   "documental_social",
+   "documental_historico",
+   "experimental"
+  ],
+  "accepts_types": [
+   "documental",
+   "cortometraje",
+   "mediometraje",
+   "largometraje"
+  ],
+  "prestige": 68,
+  "reason": "Festival de documental de autor de cualquier formato y tema, con mercado propio (Forum RIDM). Exige estreno en Quebec (sin pase, emisión ni difusión online allí) y que la obra se haya producido después del 1 de julio del año anterior.",
+  "verified_url": "https://ridm.ca/uploads/document/en_cmq_ridm_call_for_submissions_20260302.pdf"
+ },
+ {
+  "name": "FIDMarseille (Marsella)",
+  "country": "Francia",
+  "city": "Marsella",
+  "tier": "tier_b",
+  "month": "Julio",
+  "deadline": "Noviembre-Marzo",
+  "submission_fee": "25-50€",
+  "platform": "Directo",
+  "url": "https://fidmarseille.org/en/",
+  "genres": [
+   "experimental",
+   "documental_social",
+   "documental_historico"
+  ],
+  "accepts_types": [
+   "documental",
+   "cortometraje",
+   "mediometraje",
+   "largometraje"
+  ],
+  "prestige": 76,
+  "reason": "Festival de cine de autor arriesgado, en documental y ficción, ideal para propuestas formales y experimentales. Las fuentes consultadas no publican un requisito formal de estreno, pero la mayoría de su competición son estrenos mundiales o internacionales; se admiten obras producidas desde el 1 de enero del año anterior.",
+  "verified_url": "https://fidmarseille.org/en/home/appel-a-films-2026"
+ },
+ {
+  "name": "ZagrebDox",
+  "country": "Croacia",
+  "city": "Zagreb",
+  "tier": "tier_c",
+  "month": "Abril",
+  "deadline": "Junio-Diciembre",
+  "submission_fee": "Consultar bases",
+  "platform": "FilmFreeway",
+  "url": "https://www.zagrebdox.net/en",
+  "genres": [
+   "documental_social",
+   "documental_historico"
+  ],
+  "accepts_types": [
+   "documental",
+   "cortometraje",
+   "mediometraje",
+   "largometraje"
+  ],
+  "prestige": 62,
+  "reason": "Referencia del documental en los Balcanes, con competición internacional y regional; admite todas las duraciones y tiene un premio para cortos de hasta 40 min. La competición exige estreno en Croacia y películas estrenadas después del 1 de enero del año anterior.",
+  "verified_url": "https://www.zagrebdox.net/en/info/pravilnik"
+ },
+ {
+  "name": "Krakow Film Festival (Cracovia)",
+  "country": "Polonia",
+  "city": "Cracovia",
+  "tier": "tier_b",
+  "month": "Mayo-Junio",
+  "deadline": "Octubre-Enero",
+  "submission_fee": "15-30€",
+  "platform": "FilmFreeway / Directo",
+  "url": "https://www.krakowfilmfestival.pl/en/",
+  "genres": [
+   "documental_social",
+   "documental_historico",
+   "animacion",
+   "experimental"
+  ],
+  "accepts_types": [
+   "documental",
+   "cortometraje",
+   "largometraje"
+  ],
+  "prestige": 70,
+  "reason": "Uno de los festivales más antiguos de Europa dedicados al documental, el corto y la animación; la competición internacional de documental es para obras de 50 min o más. Las competiciones internacionales exigen estreno en Polonia y prefieren el estreno mundial.",
+  "verified_url": "https://www.krakowfilmfestival.pl/en/call-for-submissions-opens-for-the-66th-krakow-film-festival/"
+ },
+ {
+  "name": "One World (Praga)",
+  "country": "Chequia",
+  "city": "Praga",
+  "tier": "tier_c",
+  "month": "Marzo",
+  "deadline": "Junio-Noviembre",
+  "submission_fee": "20-30€",
+  "platform": "Directo",
+  "url": "https://www.oneworld.cz",
+  "genres": [
+   "documental_social",
+   "documental_historico"
+  ],
+  "accepts_types": [
+   "documental",
+   "mediometraje",
+   "largometraje"
+  ],
+  "prestige": 64,
+  "reason": "Uno de los mayores festivales de documental sobre derechos humanos del mundo; acepta documentales de 40 min o más y proyectos de realidad virtual. No exige estreno y admite películas que ya han pasado por otros festivales, aunque las competiciones prefieren estrenos mundiales o internacionales.",
+  "verified_url": "https://www.oneworld.cz/news/1074-one-world-opens-applications-for-2027"
+ },
+ {
+  "name": "Movies that Matter (La Haya)",
+  "country": "Países Bajos",
+  "city": "La Haya",
+  "tier": "tier_c",
+  "month": "Marzo",
+  "deadline": "Junio-Noviembre",
+  "submission_fee": "20-35€",
+  "platform": "Directo",
+  "url": "https://moviesthatmatter.nl/en/",
+  "genres": [
+   "documental_social",
+   "drama"
+  ],
+  "accepts_types": [
+   "documental",
+   "cortometraje",
+   "mediometraje",
+   "largometraje"
+  ],
+  "prestige": 60,
+  "reason": "Festival de derechos humanos para documentales y ficción de cualquier duración y de temática social. No exige estreno pero lo valora; excluye películas ya estrenadas en cines o TV de los Países Bajos o disponibles gratis online.",
+  "verified_url": "https://moviesthatmatter.nl/en/festival/industry/film-submissions/rules-regulations-submissions/"
+ },
+ {
+  "name": "Beldocs (Belgrado)",
+  "country": "Serbia",
+  "city": "Belgrado",
+  "tier": "tier_c",
+  "month": "Mayo",
+  "deadline": "Octubre-Enero",
+  "submission_fee": "25-35 USD",
+  "platform": "FilmFreeway",
+  "url": "https://www.beldocs.rs/en/",
+  "genres": [
+   "documental_social",
+   "documental_historico",
+   "experimental"
+  ],
+  "accepts_types": [
+   "documental",
+   "cortometraje",
+   "largometraje"
+  ],
+  "prestige": 56,
+  "reason": "Principal festival de documental de Serbia, abierto a documentales e híbridos recientes. Exige como mínimo estreno en Serbia y da preferencia a los estrenos mundiales, internacionales o europeos.",
+  "verified_url": "https://asianfilmfestivals.com/2025/10/24/beldocs-international-documentary-film-festival-call-for-entry-2026/"
+ },
+ {
+  "name": "DMZ Docs (Goyang/Paju)",
+  "country": "Corea del Sur",
+  "city": "Goyang / Paju",
+  "tier": "tier_c",
+  "month": "Septiembre",
+  "deadline": "Marzo-Abril",
+  "submission_fee": "Gratuito",
+  "platform": "Directo",
+  "url": "https://www.dmzdocs.com",
+  "genres": [
+   "documental_social",
+   "documental_historico"
+  ],
+  "accepts_types": [
+   "documental",
+   "largometraje"
+  ],
+  "prestige": 60,
+  "reason": "Festival de documental de temática de paz, convivencia y sociedad; la inscripción es gratuita. La competición internacional es para largos de más de 60 min y exige estreno asiático.",
+  "verified_url": "https://asianfilmfestivals.com/2026/02/27/dmz-docs-international-documentary-film-festival-call-for-entry-2026/"
+ },
+ {
+  "name": "EIDF - EBS International Documentary Festival",
+  "country": "Corea del Sur",
+  "city": "Goyang / Seúl",
+  "tier": "tier_c",
+  "month": "Agosto",
+  "deadline": "Marzo-Mayo",
+  "submission_fee": "Gratuito",
+  "platform": "Directo",
+  "url": "https://www.eidf.co.kr",
+  "genres": [
+   "documental_social",
+   "documental_naturaleza",
+   "documental_historico"
+  ],
+  "accepts_types": [
+   "documental",
+   "cortometraje",
+   "largometraje"
+  ],
+  "prestige": 56,
+  "reason": "Festival de la televisión pública coreana EBS que también emite las películas por TV; la inscripción es gratuita y se hace por email. Requiere que la obra no se haya estrenado comercialmente ni emitido en Corea (ediciones anteriores pedían estreno en Corea).",
+  "verified_url": "https://asianfilmfestivals.com/2026/03/09/ebs-international-documentary-festival-call-for-entry-2026/"
+ },
+ {
+  "name": "Yamagata IDFF",
+  "country": "Japón",
+  "city": "Yamagata",
+  "tier": "tier_b",
+  "month": "Octubre",
+  "deadline": "Septiembre-Abril",
+  "submission_fee": "1.000 JPY",
+  "platform": "Directo",
+  "url": "https://www.yidff.jp",
+  "genres": [
+   "documental_social",
+   "documental_historico",
+   "experimental"
+  ],
+  "accepts_types": [
+   "documental",
+   "largometraje"
+  ],
+  "prestige": 72,
+  "reason": "Festival bienal (años impares) de gran prestigio en Asia, con competición internacional y la sección New Asian Currents. Según ediciones anteriores no admite cortos y exige que la obra no se haya estrenado públicamente en Japón; hay que confirmarlo en las bases de 2027.",
+  "verified_url": "https://yidff.jp/2027/entry/27entry1-e.html"
+ },
+ {
+  "name": "Hot Springs Documentary Film Festival",
+  "country": "Estados Unidos",
+  "city": "Hot Springs (Arkansas)",
+  "tier": "tier_c",
+  "month": "Octubre",
+  "deadline": "Diciembre-Julio",
+  "submission_fee": "50-65 USD",
+  "platform": "FilmFreeway",
+  "url": "https://www.hsdfi.org",
+  "genres": [
+   "documental_social",
+   "documental_historico",
+   "biopic"
+  ],
+  "accepts_types": [
+   "documental",
+   "cortometraje",
+   "largometraje"
+  ],
+  "prestige": 56,
+  "reason": "Uno de los festivales de documental más antiguos de EE. UU.; admite cortos, largos y series documentales. Según los listados consultados exige estreno en EE. UU., y las obras ya disponibles en VOD pueden quedar fuera de competición.",
+  "verified_url": "https://festagent.com/en/festivals/hot_springs"
+ },
+ {
+  "name": "Docudays UA (Kiev)",
+  "country": "Ucrania",
+  "city": "Kiev",
+  "tier": "tier_c",
+  "month": "Junio",
+  "deadline": "Agosto-Diciembre",
+  "submission_fee": "10-30 USD",
+  "platform": "FilmFreeway",
+  "url": "https://docudays.ua/eng/",
+  "genres": [
+   "documental_social",
+   "documental_historico"
+  ],
+  "accepts_types": [
+   "documental",
+   "cortometraje",
+   "largometraje"
+  ],
+  "prestige": 54,
+  "reason": "Festival de documental sobre derechos humanos, con competiciones internacionales de largos (DOCU/WORLD) y de cortos (DOCU/SHORT). Ediciones anteriores exigían estreno en Ucrania y excluían títulos ya vistos en competiciones de otros festivales ucranianos.",
+  "verified_url": "https://docudays.ua/eng/2026/news/kino/we-are-opening-the-call-for-films-for-docudays-ua-2026/"
+ },
+ {
+  "name": "DOK.fest München (Múnich)",
+  "country": "Alemania",
+  "city": "Múnich",
+  "tier": "tier_b",
+  "month": "Mayo",
+  "deadline": "Hasta Diciembre",
+  "submission_fee": "40€",
+  "platform": "Directo",
+  "url": "https://www.dokfest-muenchen.de",
+  "genres": [
+   "documental_social",
+   "documental_historico",
+   "biopic"
+  ],
+  "accepts_types": [
+   "documental",
+   "largometraje"
+  ],
+  "prestige": 70,
+  "reason": "Uno de los grandes festivales de documental de Alemania, para largos de 52 min o más. Las competiciones exigen estreno en Alemania y prefieren el estreno mundial; quedan fuera los títulos ya estrenados en cines o TV alemanes o disponibles gratis online.",
+  "verified_url": "https://www.dokfest-muenchen.de/1581?lang=en"
+ },
+ {
+  "name": "Festival dei Popoli (Florencia)",
+  "country": "Italia",
+  "city": "Florencia",
+  "tier": "tier_c",
+  "month": "Octubre-Noviembre",
+  "deadline": "Marzo-Julio",
+  "submission_fee": "20-30€",
+  "platform": "Directo",
+  "url": "https://www.festivaldeipopoli.org",
+  "genres": [
+   "documental_social",
+   "documental_historico",
+   "experimental"
+  ],
+  "accepts_types": [
+   "documental",
+   "largometraje"
+  ],
+  "prestige": 66,
+  "reason": "El festival de documental más antiguo de Europa, orientado a largos de más de 60 min. Exige estreno en Italia (sin pases ni difusión online previa allí) y prefiere estrenos mundiales, internacionales o europeos.",
+  "verified_url": "https://www.festivaldeipopoli.org/67th-festival-dei-popoli-submissions/?lang=en"
+ },
+ {
+  "name": "É Tudo Verdade / It's All True (São Paulo)",
+  "country": "Brasil",
+  "city": "São Paulo / Río de Janeiro",
+  "tier": "tier_c",
+  "month": "Abril",
+  "deadline": "Agosto-Noviembre",
+  "submission_fee": "Gratuito",
+  "platform": "Directo",
+  "url": "https://etudoverdade.com.br",
+  "genres": [
+   "documental_social",
+   "documental_historico",
+   "biopic"
+  ],
+  "accepts_types": [
+   "documental",
+   "cortometraje",
+   "largometraje"
+  ],
+  "prestige": 66,
+  "reason": "Principal festival de documental de Latinoamérica: inscripción gratuita, cortos de menos de 30 min y largos de más de 60, y sus ganadores optan a los Oscar. Exige solo estreno en Brasil, así que encaja tras un estreno mundial en otro festival.",
+  "verified_url": "https://telefilm.ca/en/appel-inscription/31st-its-all-true-international-documentary-film-festival"
+ },
+ {
+  "name": "Docville (Lovaina)",
+  "country": "Bélgica",
+  "city": "Lovaina",
+  "tier": "tier_c",
+  "month": "Marzo",
+  "deadline": "Mayo-Noviembre",
+  "submission_fee": "Consultar bases",
+  "platform": "FilmFreeway",
+  "url": "https://www.docville.be/en/",
+  "genres": [
+   "documental_social",
+   "documental_historico"
+  ],
+  "accepts_types": [
+   "documental",
+   "largometraje"
+  ],
+  "prestige": 54,
+  "reason": "Festival belga de documental orientado a largos de más de 50 min; el premio internacional clasifica para los Oscar. Las competiciones internacionales exigen estreno en Bélgica.",
+  "verified_url": "https://www.docville.be/en/docville-2027-coming-soon/"
+ },
+ {
+  "name": "Verzió (Budapest)",
+  "country": "Hungría",
+  "city": "Budapest",
+  "tier": "tier_c",
+  "month": "Noviembre",
+  "deadline": "Marzo-Mayo",
+  "submission_fee": "Gratuito",
+  "platform": "Directo",
+  "url": "https://www.verzio.org/en",
+  "genres": [
+   "documental_social"
+  ],
+  "accepts_types": [
+   "documental",
+   "cortometraje",
+   "largometraje"
+  ],
+  "prestige": 50,
+  "reason": "Festival de documental sobre derechos humanos con inscripción gratuita, para títulos de los dos últimos años. Las fuentes consultadas no publican requisito de estreno; hay que consultar las bases.",
+  "verified_url": "https://www.verzio.org/en/2026/submission"
+ },
+ {
+  "name": "FIDOCS (Santiago de Chile)",
+  "country": "Chile",
+  "city": "Santiago de Chile",
+  "tier": "tier_c",
+  "month": "Noviembre",
+  "deadline": "Abril-Julio",
+  "submission_fee": "Consultar bases",
+  "platform": "FilmFreeway",
+  "url": "https://fidocs.cl",
+  "genres": [
+   "documental_social",
+   "documental_historico",
+   "experimental"
+  ],
+  "accepts_types": [
+   "documental",
+   "largometraje"
+  ],
+  "prestige": 56,
+  "reason": "Festival de documental de referencia en Latinoamérica, para largos de más de 40 min hablados o subtitulados en español; buen escaparate para documental iberoamericano. La competición internacional exige estreno en Chile.",
+  "verified_url": "https://asianfilmfestivals.com/2026/05/10/fidocs-santiago-international-documentary-festival-call-for-entry-2026/"
+ },
+ {
+  "name": "Punto de Vista (Pamplona)",
+  "country": "España",
+  "city": "Pamplona",
+  "tier": "nacional",
+  "month": "Marzo",
+  "deadline": "Julio-Octubre",
+  "submission_fee": "5€",
+  "platform": "Directo",
+  "url": "https://www.puntodevistafestival.com",
+  "genres": [
+   "documental_social",
+   "documental_historico",
+   "experimental"
+  ],
+  "accepts_types": [
+   "documental",
+   "largometraje",
+   "mediometraje",
+   "cortometraje"
+  ],
+  "prestige": 70,
+  "reason": "Referente del documental de creación y el cine de no ficción experimental, sin límite de duración. Solo documentales terminados en el último año y no estrenados comercialmente en salas, TV ni edición en España antes del festival.",
+  "verified_url": "https://www.puntodevistafestival.com/en/rules-2027"
+ },
+ {
+  "name": "Documenta Madrid",
+  "country": "España",
+  "city": "Madrid",
+  "tier": "nacional",
+  "month": "Mayo",
+  "deadline": "Enero-Febrero",
+  "submission_fee": "Gratuito",
+  "platform": "Directo",
+  "url": "https://www.documentamadrid.com",
+  "genres": [
+   "documental_social",
+   "documental_historico",
+   "experimental"
+  ],
+  "accepts_types": [
+   "documental",
+   "largometraje",
+   "mediometraje",
+   "cortometraje"
+  ],
+  "prestige": 66,
+  "reason": "Festival de no ficción y nuevas formas audiovisuales con competiciones internacional y nacional (10.000€) y la sección Corte Final para documentales españoles en montaje. Las películas no pueden haberse exhibido en la Comunidad de Madrid ni estrenado, comercializado o emitido en España; prioriza estrenos en España.",
+  "verified_url": "https://www.documentamadrid.com/download-bases"
+ },
+ {
+  "name": "DocsBarcelona",
+  "country": "España",
+  "city": "Barcelona",
+  "tier": "nacional",
+  "month": "Mayo",
+  "deadline": "Septiembre-Noviembre",
+  "submission_fee": "30-40€",
+  "platform": "Festhome / Directo (Fiona)",
+  "url": "https://docsbarcelona.com",
+  "genres": [
+   "documental_social",
+   "documental_historico",
+   "documental_naturaleza"
+  ],
+  "accepts_types": [
+   "documental",
+   "largometraje",
+   "mediometraje"
+  ],
+  "prestige": 65,
+  "reason": "Festival de documental de autor con secciones para largos internacionales (Docs&Pearls) y producción catalana (Docs&Cat). Exige como mínimo estreno en Cataluña y que la película no se haya estrenado comercialmente ni emitido en TV o VOD en España.",
+  "verified_url": "https://filmmakers.festhome.com/f/docsbarcelona"
+ },
+ {
+  "name": "D'A Festival de Cinema d'Autor de Barcelona",
+  "country": "España",
+  "city": "Barcelona",
+  "tier": "nacional",
+  "month": "Marzo-Abril",
+  "deadline": "Octubre-Diciembre",
+  "submission_fee": "Consultar bases",
+  "platform": "Directo",
+  "url": "https://dafilmfestival.com",
+  "genres": [
+   "drama",
+   "experimental",
+   "documental_social",
+   "comedia"
+  ],
+  "accepts_types": [
+   "largometraje",
+   "documental",
+   "cortometraje"
+  ],
+  "prestige": 68,
+  "reason": "Cine de autor contemporáneo: Talents para nuevos cineastas y Un Impulso Colectivo para el cine español más reciente. Talents exige estreno en España; el resto de secciones, estreno en Cataluña.",
+  "verified_url": "https://dafilmfestival.com/call-for-entries-da-2027/"
+ },
+ {
+  "name": "L'Alternativa (Barcelona)",
+  "country": "España",
+  "city": "Barcelona",
+  "tier": "nacional",
+  "month": "Noviembre",
+  "deadline": "Febrero-Junio",
+  "submission_fee": "12-24€",
+  "platform": "Directo",
+  "url": "https://alternativa.cccb.org",
+  "genres": [
+   "experimental",
+   "drama",
+   "documental_social"
+  ],
+  "accepts_types": [
+   "largometraje",
+   "documental",
+   "cortometraje"
+  ],
+  "prestige": 60,
+  "reason": "Festival de cine independiente del CCCB con competición de largometrajes españoles e internacionales (mínimo 60 min) y edición online en Filmin. Películas terminadas en el último año; da preferencia a obras no proyectadas en Cataluña.",
+  "verified_url": "https://alternativa.cccb.org/2026/en/official-call-for-films/festival-regulations"
+ },
+ {
+  "name": "Festival de Cine Iberoamericano de Huelva",
+  "country": "España",
+  "city": "Huelva",
+  "tier": "nacional",
+  "month": "Noviembre",
+  "deadline": "Abril-Julio",
+  "submission_fee": "Gratuito",
+  "platform": "Directo",
+  "url": "https://festicinehuelva.com",
+  "genres": [
+   "drama",
+   "comedia",
+   "documental_social",
+   "animacion"
+  ],
+  "accepts_types": [
+   "largometraje",
+   "documental"
+  ],
+  "prestige": 66,
+  "reason": "Largometrajes iberoamericanos de ficción, animación y documental (mínimo 60 min) que optan al Colón de Oro (20.000€); secciones Acento y Talento Andaluz para producción española y andaluza. No pueden haberse distribuido en salas, festivales, TV ni plataformas en España.",
+  "verified_url": "https://festicinehuelva.com/regulations-for-the-official-feature-film-section-52ed"
+ },
+ {
+  "name": "Atlàntida Mallorca Film Fest",
+  "country": "España",
+  "city": "Palma de Mallorca",
+  "tier": "nacional",
+  "month": "Julio-Agosto",
+  "deadline": "Abril-Mayo",
+  "submission_fee": "Gratuito",
+  "platform": "Festhome",
+  "url": "https://filmmakers.festhome.com/festival/7125",
+  "genres": [
+   "drama",
+   "documental_social",
+   "comedia"
+  ],
+  "accepts_types": [
+   "largometraje",
+   "documental",
+   "cortometraje"
+  ],
+  "prestige": 60,
+  "reason": "Festival híbrido presencial y en Filmin, con sección oficial nacional e internacional (premio de 10.000€ y distribución). Las películas no pueden haberse estrenado en ningún festival balear ni en salas comerciales de España.",
+  "verified_url": "https://filmmakers.festhome.com/festival/7125"
+ },
+ {
+  "name": "Festival de Cine de Alicante",
+  "country": "España",
+  "city": "Alicante",
+  "tier": "regional",
+  "month": "Mayo",
+  "deadline": "Octubre-Abril",
+  "submission_fee": "Consultar bases",
+  "platform": "Movibeta",
+  "url": "https://festivaldealicante.com",
+  "genres": [
+   "drama",
+   "comedia",
+   "thriller"
+  ],
+  "accepts_types": [
+   "largometraje",
+   "cortometraje"
+  ],
+  "prestige": 45,
+  "reason": "Sección oficial de largometrajes españoles de ficción (no documentales) que compiten por la Tesela de Oro. Pueden haber pasado por otros festivales, pero no por salas comerciales ni plataformas de streaming.",
+  "verified_url": "https://festivaldealicante.com/wp-content/uploads/2024/10/BASES-LARGOMETRAJES-2025.pdf"
+ },
+ {
+  "name": "Ourense Film Festival (OUFF)",
+  "country": "España",
+  "city": "Ourense",
+  "tier": "regional",
+  "month": "Septiembre-Octubre",
+  "deadline": "Marzo-Julio",
+  "submission_fee": "Gratuito",
+  "platform": "Festhome / Click for Festivals",
+  "url": "https://ouffestival.gal",
+  "genres": [
+   "drama",
+   "comedia",
+   "documental_social",
+   "animacion"
+  ],
+  "accepts_types": [
+   "largometraje",
+   "documental",
+   "cortometraje"
+  ],
+  "prestige": 52,
+  "reason": "Sección oficial internacional de largometrajes de ficción, animación y documental (más de 60 min) y sección gallega. No pueden haberse estrenado comercialmente en salas, TV, vídeo ni VOD en España ni estar libres en internet.",
+  "verified_url": "https://filmmakers.festhome.com/festival/631"
+ },
+ {
+  "name": "Abycine (Albacete)",
+  "country": "España",
+  "city": "Albacete",
+  "tier": "nacional",
+  "month": "Octubre",
+  "deadline": "Junio-Julio",
+  "submission_fee": "15-17€",
+  "platform": "Festhome",
+  "url": "https://www.abycine.com",
+  "genres": [
+   "drama",
+   "comedia",
+   "experimental",
+   "documental_social"
+  ],
+  "accepts_types": [
+   "largometraje",
+   "documental",
+   "cortometraje"
+  ],
+  "prestige": 55,
+  "reason": "Festival y mercado de cine independiente español; Abycine Indie acepta largos de dirección o producción española. Calificador para los Goya. No exige estreno, pero las películas deben ser recientes (producidas tras noviembre del año anterior).",
+  "verified_url": "https://filmmakers.festhome.com/festival/2080"
+ },
+ {
+  "name": "Novos Cinemas (Pontevedra)",
+  "country": "España",
+  "city": "Pontevedra",
+  "tier": "nacional",
+  "month": "Diciembre",
+  "deadline": "Abril-Septiembre",
+  "submission_fee": "Gratuito",
+  "platform": "Directo",
+  "url": "https://novoscinemas.com",
+  "genres": [
+   "drama",
+   "experimental",
+   "documental_social"
+  ],
+  "accepts_types": [
+   "largometraje",
+   "documental"
+  ],
+  "prestige": 55,
+  "reason": "Festival de óperas primas y segundas obras (más de 60 min): Sección Oficial para propuestas arriesgadas y Latexos para obras íntimas. Prioriza estrenos en Galicia o España y no admite películas estrenadas comercialmente en España.",
+  "verified_url": "https://novoscinemas.com/callxentries-so-latexos/"
+ },
+ {
+  "name": "Cinema Jove (Valencia)",
+  "country": "España",
+  "city": "Valencia",
+  "tier": "nacional",
+  "month": "Junio",
+  "deadline": "Marzo-Abril",
+  "submission_fee": "Gratuito",
+  "platform": "Directo / Movibeta",
+  "url": "https://www.cinemajove.com",
+  "genres": [
+   "drama",
+   "comedia",
+   "thriller",
+   "documental_social"
+  ],
+  "accepts_types": [
+   "largometraje",
+   "documental",
+   "cortometraje"
+  ],
+  "prestige": 62,
+  "reason": "Festival de cineastas jóvenes: largometrajes de más de 60 min dirigidos por menores de 40 años en el momento del rodaje. No pueden haberse estrenado en salas comerciales en España ni en otros festivales españoles.",
+  "verified_url": "https://www.cinemajove.com/wp-content/uploads/2026/07/Bases_Largometrajes_Cinema_Jove_2_2026-CAS-act.pdf"
+ },
+ {
+  "name": "Mostra de València - Cinema del Mediterrani",
+  "country": "España",
+  "city": "Valencia",
+  "tier": "nacional",
+  "month": "Noviembre",
+  "deadline": "Mayo-Junio",
+  "submission_fee": "Gratuito",
+  "platform": "Festhome / FilmFreeway",
+  "url": "https://lamostradevalencia.com",
+  "genres": [
+   "drama",
+   "comedia",
+   "documental_social",
+   "thriller"
+  ],
+  "accepts_types": [
+   "largometraje",
+   "documental",
+   "mediometraje"
+  ],
+  "prestige": 62,
+  "reason": "Largometrajes de ficción y no ficción de países mediterráneos (Palmera de Oro, 30.000€), más La Cabina para mediometrajes y Xaloc. Exige estreno en España: sin paso por salas, TV, VOD ni festivales españoles.",
+  "verified_url": "https://lamostradevalencia.com/wp-content/uploads/2026/05/REGLAMENTO_2026.pdf"
+ },
+ {
+  "name": "Festival de Cine y Derechos Humanos de Donostia",
+  "country": "España",
+  "city": "San Sebastián",
+  "tier": "regional",
+  "month": "Abril",
+  "deadline": "Noviembre-Enero",
+  "submission_fee": "Consultar bases",
+  "platform": "Directo",
+  "url": "https://www.zinemaetagizaeskubideak.eus",
+  "genres": [
+   "documental_social",
+   "drama",
+   "documental_historico"
+  ],
+  "accepts_types": [
+   "largometraje",
+   "documental",
+   "cortometraje"
+  ],
+  "prestige": 50,
+  "reason": "Cine de temática social y de derechos humanos, ficción o documental, con premio del público y premio Amnistía Internacional. Programa películas inéditas en Donostia; consultar bases para otros requisitos.",
+  "verified_url": "https://www.zinemaetagizaeskubideak.eus/eu/izen-ematea/jaialdirako-filmak"
+ },
+ {
+  "name": "FICAL - Festival Internacional de Cine de Almería",
+  "country": "España",
+  "city": "Almería",
+  "tier": "regional",
+  "month": "Noviembre",
+  "deadline": "Julio-Octubre",
+  "submission_fee": "Gratuito",
+  "platform": "Festhome",
+  "url": "https://www.festivaldealmeria.com",
+  "genres": [
+   "drama",
+   "comedia",
+   "thriller",
+   "documental_social"
+  ],
+  "accepts_types": [
+   "largometraje",
+   "cortometraje"
+  ],
+  "prestige": 52,
+  "reason": "Certamen Nacional de Óperas Primas para primeros largometrajes españoles, con 42.000€ en premios; festival calificador para los Goya. Consultar bases para posibles requisitos de estreno.",
+  "verified_url": "https://filmmakers.festhome.com/en/festival/4282"
+ },
+ {
+  "name": "Filmadrid",
+  "country": "España",
+  "city": "Madrid",
+  "tier": "nacional",
+  "month": "Junio",
+  "deadline": "Abril-Mayo",
+  "submission_fee": "Gratuito",
+  "platform": "Directo",
+  "url": "https://filmadrid.com",
+  "genres": [
+   "experimental",
+   "drama",
+   "documental_social"
+  ],
+  "accepts_types": [
+   "largometraje",
+   "mediometraje",
+   "cortometraje",
+   "documental"
+  ],
+  "prestige": 56,
+  "reason": "Festival de cine arriesgado y original de cualquier duración, género y formato, con secciones como El Ensayo Audiovisual. Exige estreno en Madrid, prioriza estrenos en España y estreno mundial posterior a enero del año anterior.",
+  "verified_url": "https://filmadrid.com/en/convocatorias"
+ },
+ {
+  "name": "Saraqusta Film Festival (Zaragoza)",
+  "country": "España",
+  "city": "Zaragoza",
+  "tier": "regional",
+  "month": "Abril-Mayo",
+  "deadline": "Octubre-Febrero",
+  "submission_fee": "12€",
+  "platform": "FilmFreeway / Festhome",
+  "url": "https://saraqustafilmfestival.com",
+  "genres": [
+   "documental_historico",
+   "drama",
+   "biopic",
+   "aventura"
+  ],
+  "accepts_types": [
+   "largometraje",
+   "documental",
+   "cortometraje"
+  ],
+  "prestige": 42,
+  "reason": "Festival internacional de cine de historia: largometrajes de ficción o animación (mínimo 60 min) y documentales (mínimo 45 min) de temática histórica. No exige estreno, pero da prioridad a obras sin estreno comercial en España.",
+  "verified_url": "https://saraqustafilmfestival.com/bases/"
+ },
+ {
+  "name": "Festival de Cine de Madrid (FCM-PNR)",
+  "country": "España",
+  "city": "Madrid",
+  "tier": "regional",
+  "month": "Septiembre",
+  "deadline": "Febrero-Abril",
+  "submission_fee": "Gratuito-5€",
+  "platform": "Festhome / Movibeta",
+  "url": "https://festivalcinemadrid.es",
+  "genres": [
+   "drama",
+   "comedia",
+   "documental_social",
+   "thriller"
+  ],
+  "accepts_types": [
+   "largometraje",
+   "cortometraje",
+   "documental"
+  ],
+  "prestige": 45,
+  "reason": "Plataforma de Nuevos Realizadores con Sección Oficial y Panorama de largometrajes, orientada a nuevos talentos. Inscripción gratuita las dos primeras semanas; consultar bases para requisitos de estreno.",
+  "verified_url": "https://festivalcinemadrid.es/bases-35-edicion/"
+ },
+ {
+  "name": "FCAT - Festival de Cine Africano (Tarifa-Tánger)",
+  "country": "España",
+  "city": "Tarifa",
+  "tier": "nacional",
+  "month": "Mayo",
+  "deadline": "Hasta Febrero",
+  "submission_fee": "Consultar bases",
+  "platform": "Directo",
+  "url": "https://fcat.es",
+  "genres": [
+   "drama",
+   "documental_social",
+   "documental_historico"
+  ],
+  "accepts_types": [
+   "largometraje",
+   "documental",
+   "cortometraje"
+  ],
+  "prestige": 55,
+  "reason": "Festival de referencia del cine africano en España, con competición de largometrajes (Hipermetropía) y cortometrajes (En Breve) y sección Miradas Españolas. El formulario pregunta por el estreno previo en España; valora los estrenos.",
+  "verified_url": "https://fcat.es/bases-inscripcion/"
+ },
+ {
+  "name": "In-Edit Barcelona",
+  "country": "España",
+  "city": "Barcelona",
+  "tier": "nacional",
+  "month": "Octubre-Noviembre",
+  "deadline": "Febrero-Junio",
+  "submission_fee": "Consultar bases",
+  "platform": "Directo",
+  "url": "https://es.in-edit.org",
+  "genres": [
+   "musical",
+   "documental_social",
+   "documental_historico"
+  ],
+  "accepts_types": [
+   "documental",
+   "largometraje",
+   "cortometraje"
+  ],
+  "prestige": 58,
+  "reason": "Festival internacional de documental musical, con la música como eje del relato, y red de sedes en otras ciudades. Largos de más de 50 min producidos en el último año, sin estreno en Cataluña y con prioridad para los no estrenados en España.",
+  "verified_url": "https://es.in-edit.org/convocatoria-in-edit-2026-2/"
+ },
+ {
+  "name": "IBAFF (Murcia)",
+  "country": "España",
+  "city": "Murcia",
+  "tier": "regional",
+  "month": "Octubre",
+  "deadline": "Agosto-Septiembre",
+  "submission_fee": "Gratuito",
+  "platform": "Directo",
+  "url": "https://ibaff.es",
+  "genres": [
+   "experimental",
+   "drama",
+   "documental_social"
+  ],
+  "accepts_types": [
+   "largometraje",
+   "cortometraje",
+   "documental"
+  ],
+  "prestige": 50,
+  "reason": "Festival de cine contemporáneo y de vanguardia con premio de 10.000€ al mejor largometraje. Admite películas producidas en los dos años anteriores; plazo breve de 15 días hábiles tras publicarse la convocatoria en el BORM.",
+  "verified_url": "https://www.borm.es/services/anuncio/ano/2026/numero/4104/pdf"
+ },
+ {
+  "name": "LesGaiCineMad / QueerCineMad (Madrid)",
+  "country": "España",
+  "city": "Madrid",
+  "tier": "regional",
+  "month": "Noviembre",
+  "deadline": "Abril-Consultar bases (cierre no publicado)",
+  "submission_fee": "Consultar bases",
+  "platform": "Festhome / FilmFreeway",
+  "url": "https://www.lesgaicinemad.com",
+  "genres": [
+   "drama",
+   "documental_social",
+   "comedia",
+   "romance"
+  ],
+  "accepts_types": [
+   "largometraje",
+   "documental",
+   "cortometraje"
+  ],
+  "prestige": 45,
+  "reason": "Festival de cine LGTBIQ+ con Sección Oficial, Panorama y Documentales, calificador para los Goya. Adecuado para películas de temática queer; consultar bases para requisitos de estreno.",
+  "verified_url": "https://www.lesgaicinemad.com/actualidad/69efd3e92b82548b0431b6ba"
+ },
+ {
+  "name": "Animac (Lleida)",
+  "country": "España",
+  "city": "Lleida",
+  "tier": "regional",
+  "month": "Febrero",
+  "deadline": "Junio-Octubre",
+  "submission_fee": "Gratuito",
+  "platform": "Directo",
+  "url": "https://animac.paeria.cat",
+  "genres": [
+   "animacion"
+  ],
+  "accepts_types": [
+   "largometraje",
+   "cortometraje"
+  ],
+  "prestige": 50,
+  "reason": "Muestra internacional de cine de animación de Cataluña, sin límite de duración ni de año de producción. Los premios son solo para cortometrajes, pero programa largos de animación; no exige estreno.",
+  "verified_url": "https://animac.paeria.cat/media/2026/05/BASES-INSCRIPCION_ANIMAC-2027_ESP.pdf"
+ },
+ {
+  "name": "Festival Internacional de Cine de Las Palmas de Gran Canaria",
+  "country": "España",
+  "city": "Las Palmas de Gran Canaria",
+  "tier": "nacional",
+  "month": "Abril-Mayo",
+  "deadline": "Consultar bases",
+  "submission_fee": "Consultar bases",
+  "platform": "Directo",
+  "url": "https://www.lpafilmfestival.com",
+  "genres": [
+   "drama",
+   "experimental",
+   "documental_social"
+  ],
+  "accepts_types": [
+   "largometraje",
+   "documental",
+   "cortometraje"
+  ],
+  "prestige": 62,
+  "reason": "Sección oficial internacional de ficción y no ficción (Lady Harimaguada de Oro, 20.000€), Panorama España para nuevos talentos y Canarias Cinema. Exige estreno en España: sin paso previo por festivales, salas, TV ni plataformas españolas.",
+  "verified_url": "https://www.lpafilmfestival.com/download/reglamento-2026/?wpdmdl=23105"
+ },
+ {
+  "name": "DocsValència",
+  "country": "España",
+  "city": "Valencia",
+  "tier": "regional",
+  "month": "Mayo",
+  "deadline": "Consultar bases",
+  "submission_fee": "Consultar bases",
+  "platform": "Directo",
+  "url": "https://docsvalencia.com",
+  "genres": [
+   "documental_social",
+   "documental_historico",
+   "documental_naturaleza"
+  ],
+  "accepts_types": [
+   "documental",
+   "largometraje"
+  ],
+  "prestige": 50,
+  "reason": "Festival de documental con secciones competitivas Global Docs, Panorama, Mirades y Fragments, más DocsLab para montajes de autores valencianos. El formulario valora el estreno (internacional, nacional o local) en València.",
+  "verified_url": "https://docsvalencia.com"
+ },
+ {
+  "name": "Evolution Mallorca International Film Festival",
+  "country": "España",
+  "city": "Palma de Mallorca",
+  "tier": "regional",
+  "month": "Octubre-Noviembre",
+  "deadline": "Consultar bases",
+  "submission_fee": "Consultar bases",
+  "platform": "FilmFreeway",
+  "url": "https://www.evolutionfilmfestival.com",
+  "genres": [
+   "drama",
+   "comedia",
+   "documental_social",
+   "thriller"
+  ],
+  "accepts_types": [
+   "largometraje",
+   "documental",
+   "cortometraje"
+  ],
+  "prestige": 35,
+  "reason": "Festival internacional en Palma con sección de largometrajes y actividades de industria (Producers Club, Script Lab). Orientado a producción independiente internacional; consultar requisitos de estreno en FilmFreeway.",
+  "verified_url": "https://www.evolutionfilmfestival.com"
+ },
+ {
+  "name": "Mostra FIRE!! (Barcelona)",
+  "country": "España",
+  "city": "Barcelona",
+  "tier": "regional",
+  "month": "Junio",
+  "deadline": "Consultar bases",
+  "submission_fee": "Consultar bases",
+  "platform": "Consultar bases",
+  "url": "https://www.mostrafire.com",
+  "genres": [
+   "drama",
+   "documental_social",
+   "romance"
+  ],
+  "accepts_types": [
+   "largometraje",
+   "documental",
+   "cortometraje"
+  ],
+  "prestige": 42,
+  "reason": "Muestra internacional de cine LGTBIQ+ de Casal Lambda con secciones oficiales de largometraje, documental y corto, además de FIRE!! Lab. Consultar bases para plazos y requisitos de estreno.",
+  "verified_url": "https://www.mostrafire.com"
+ },
+ {
+  "name": "Premios Feroz",
+  "country": "España",
+  "city": "Variable (España)",
+  "tier": "nacional",
+  "month": "Enero-Febrero",
+  "deadline": "Consultar bases",
+  "submission_fee": "Consultar bases",
+  "platform": "Inscripción en la web de la AICE (feroz.es)",
+  "url": "https://www.feroz.es",
+  "genres": [
+   "drama",
+   "comedia",
+   "thriller",
+   "documental_social"
+  ],
+  "accepts_types": [
+   "largometraje",
+   "documental"
+  ],
+  "prestige": 76,
+  "reason": "Premios de la Asociación de Informadores Cinematográficos de España con categorías separadas de drama, comedia y documental. Para películas españolas estrenadas en el año; los académicos las ven en la plataforma VEOFEROZ.",
+  "verified_url": "https://www.veoferoz.com"
+ },
+ {
+  "name": "Premios Forqué",
+  "country": "España",
+  "city": "Madrid",
+  "tier": "nacional",
+  "month": "Diciembre",
+  "deadline": "Consultar bases",
+  "submission_fee": "Consultar bases",
+  "platform": "Inscripción en la web de EGEDA (premiojosemariaforque.com)",
+  "url": "https://www.premiojosemariaforque.com",
+  "genres": [
+   "drama",
+   "comedia",
+   "animacion",
+   "documental_social"
+  ],
+  "accepts_types": [
+   "largometraje",
+   "documental",
+   "cortometraje"
+  ],
+  "prestige": 72,
+  "reason": "Premios de los productores (EGEDA) con categorías de largometraje de ficción, animación, documental, cortometraje y cine en educación y valores. Para producciones españolas estrenadas en el periodo fijado en las bases; la inscripción cierra antes de la votación en otoño.",
+  "verified_url": "https://www.egeda.es/EGEDA_Noticia.aspx?ID=2325"
+ },
+ {
+  "name": "Premios Gaudí",
+  "country": "España",
+  "city": "Barcelona",
+  "tier": "nacional",
+  "month": "Enero-Febrero",
+  "deadline": "Julio-Septiembre",
+  "submission_fee": "Consultar bases",
+  "platform": "Inscripción en la web de la Acadèmia del Cinema Català",
+  "url": "https://www.academiadelcinema.cat",
+  "genres": [
+   "drama",
+   "comedia",
+   "animacion",
+   "documental_social"
+  ],
+  "accepts_types": [
+   "largometraje",
+   "documental",
+   "cortometraje"
+  ],
+  "prestige": 74,
+  "reason": "Premios de la Acadèmia del Cinema Català con categorías de película, película en lengua no catalana, documental y animación. Solo para películas catalanas estrenadas oficialmente en Cataluña dentro del periodo de elegibilidad (aprox. octubre a octubre).",
+  "verified_url": "https://www.academiadelcinema.cat/ca/premis-gaudi/xviii-premis-gaudi"
+ },
+ {
+  "name": "Premios Platino",
+  "country": "España",
+  "city": "Variable (Madrid / Riviera Maya)",
+  "tier": "nacional",
+  "month": "Abril-Mayo",
+  "deadline": "Consultar bases",
+  "submission_fee": "Consultar bases",
+  "platform": "Inscripción en la web de los Premios Platino (EGEDA/FIPCA)",
+  "url": "https://www.premiosplatino.com",
+  "genres": [
+   "drama",
+   "comedia",
+   "animacion",
+   "documental_social"
+  ],
+  "accepts_types": [
+   "largometraje",
+   "documental"
+  ],
+  "prestige": 74,
+  "reason": "Premios del cine iberoamericano organizados por EGEDA y FIPCA, con categorías de ficción, ópera prima, animación y documental. Para producciones iberoamericanas estrenadas en el periodo de las bases; consultar convocatoria de la XIV edición.",
+  "verified_url": "https://www.premiosplatino.com"
+ },
+ {
+  "name": "Premios ASECAN del Audiovisual Andaluz",
+  "country": "España",
+  "city": "Sevilla",
+  "tier": "regional",
+  "month": "Enero-Febrero",
+  "deadline": "Septiembre-Octubre",
+  "submission_fee": "Gratuito",
+  "platform": "Inscripción por email a la asociación (premios@asecan.org)",
+  "url": "https://www.asecan.org",
+  "genres": [
+   "drama",
+   "comedia",
+   "documental_social",
+   "animacion"
+  ],
+  "accepts_types": [
+   "largometraje",
+   "documental",
+   "mediometraje",
+   "cortometraje"
+  ],
+  "prestige": 50,
+  "reason": "Premios de los escritores cinematográficos de Andalucía con categorías de Película Andaluza y No Ficción (largos y mediometrajes). Exigen producción andaluza significativa y estreno entre el 1 de enero y mediados de octubre del año en curso (o previsto antes del 31 de diciembre).",
+  "verified_url": "https://www.asecan.org/seccion.php?cps=169"
+ },
+ {
+  "name": "Premios Mestre Mateo",
+  "country": "España",
+  "city": "Galicia (sede variable)",
+  "tier": "regional",
+  "month": "Marzo-Abril",
+  "deadline": "Septiembre",
+  "submission_fee": "30€ (10€ por obra adicional)",
+  "platform": "Inscripción en la web de la Academia Galega do Audiovisual",
+  "url": "https://premiosmestremateo.gal",
+  "genres": [
+   "drama",
+   "comedia",
+   "animacion",
+   "documental_social"
+  ],
+  "accepts_types": [
+   "largometraje",
+   "documental",
+   "cortometraje"
+  ],
+  "prestige": 55,
+  "reason": "Premios de la Academia Galega do Audiovisual con categorías de longametraxe, longametraxe en lengua no gallega, animación y documental. Solo obras gallegas con primera comunicación pública entre el 1 de diciembre del año anterior y el 31 de diciembre del año en curso.",
+  "verified_url": "https://drive.google.com/file/d/16chR1OqYvTQwSE-YjNoP6tf1YaIXEZEM/view"
+ },
+ {
+  "name": "Festival de Cine Español de Nantes",
+  "country": "Francia",
+  "city": "Nantes",
+  "tier": "tier_c",
+  "month": "Marzo",
+  "deadline": "Octubre-Noviembre (envíos antes del 1 de diciembre)",
+  "submission_fee": "Consultar bases",
+  "platform": "Directo",
+  "url": "https://www.cinespagnol-nantes.com",
+  "genres": [
+   "drama",
+   "comedia",
+   "thriller",
+   "documental_social",
+   "otro"
+  ],
+  "accepts_types": [
+   "cortometraje",
+   "largometraje",
+   "documental"
+  ],
+  "prestige": 45,
+  "reason": "Escaparate clave del cine español en Francia, con competiciones de ficción, documental, ópera prima y cortometraje. Solo películas con director o parte de la producción española, del año en curso y con subtítulos en francés; se envía un enlace por email antes del 1 de diciembre.",
+  "verified_url": "https://www.cinespagnol-nantes.com/inscrire-un-film/"
+ },
+ {
+  "name": "Cinespaña (Toulouse)",
+  "country": "Francia",
+  "city": "Toulouse",
+  "tier": "tier_c",
+  "month": "Octubre",
+  "deadline": "Mayo-Julio",
+  "submission_fee": "Gratuito",
+  "platform": "Festhome",
+  "url": "https://www.cinespagnol.com",
+  "genres": [
+   "drama",
+   "comedia",
+   "thriller",
+   "documental_social",
+   "documental_historico",
+   "otro"
+  ],
+  "accepts_types": [
+   "largometraje",
+   "documental"
+  ],
+  "prestige": 45,
+  "reason": "Festival de cine español y portugués con competición de largometrajes de ficción y documental (más de 60 min) y 5.000 € en premios. Solo producciones españolas o portuguesas (o coproducciones con participación representativa) de los dos últimos años, inéditas en Francia y sin pasar por otro festival francés en las semanas del certamen.",
+  "verified_url": "https://filmmakers.festhome.com/festival/2716"
+ },
+ {
+  "name": "Cinélatino, Rencontres de Toulouse",
+  "country": "Francia",
+  "city": "Toulouse",
+  "tier": "tier_b",
+  "month": "Marzo",
+  "deadline": "Septiembre (cierre 1 de octubre)",
+  "submission_fee": "Gratuito",
+  "platform": "Directo",
+  "url": "https://www.cinelatino.fr",
+  "genres": [
+   "drama",
+   "comedia",
+   "thriller",
+   "documental_social",
+   "animacion",
+   "otro"
+  ],
+  "accepts_types": [
+   "cortometraje",
+   "largometraje",
+   "documental"
+  ],
+  "prestige": 62,
+  "reason": "Referencia europea del cine latinoamericano, con competiciones de largos de ficción y documental y de cortos (máx. 25 min), además de Cine en Construcción. Las competiciones exigen director latinoamericano y producción de los dos últimos años; los largos en competición deben ser estreno en Francia (los cortos no). Los directores no latinoamericanos solo optan a secciones paralelas.",
+  "verified_url": "https://www.recursosculturales.com/festival-cinelatino-rencontres-de-toulouse/"
+ },
+ {
+  "name": "Festival Biarritz Amérique Latine",
+  "country": "Francia",
+  "city": "Biarritz",
+  "tier": "tier_c",
+  "month": "Septiembre-Octubre",
+  "deadline": "Febrero-Junio",
+  "submission_fee": "10-20 EUR (referencia bases 2023; consultar bases)",
+  "platform": "Directo",
+  "url": "https://www.festivaldebiarritz.com",
+  "genres": [
+   "drama",
+   "comedia",
+   "documental_social",
+   "thriller",
+   "otro"
+  ],
+  "accepts_types": [
+   "cortometraje",
+   "largometraje",
+   "documental"
+  ],
+  "prestige": 55,
+  "reason": "Festival francés dedicado a América Latina con competiciones de ficción, documental y cortometraje. Según bases anteriores exige director latinoamericano o residente en América Latina, película terminada en los últimos 10-12 meses e inédita en Francia; inscripción online desde febrero.",
+  "verified_url": "https://www.festivaldebiarritz.com/actualites/lappel-a-film-est-ouvert/"
+ },
+ {
+  "name": "Chicago Latino Film Festival",
+  "country": "Estados Unidos",
+  "city": "Chicago",
+  "tier": "tier_c",
+  "month": "Abril",
+  "deadline": "Agosto-Diciembre",
+  "submission_fee": "30-70 USD",
+  "platform": "FilmFreeway",
+  "url": "https://chicagolatinofilmfestival.org",
+  "genres": [
+   "drama",
+   "comedia",
+   "thriller",
+   "documental_social",
+   "animacion",
+   "otro"
+  ],
+  "accepts_types": [
+   "cortometraje",
+   "largometraje",
+   "documental"
+  ],
+  "prestige": 50,
+  "reason": "Gran escaparate del cine iberoamericano en EE. UU.; acepta largos y cortos de Latinoamérica, España y Portugal o de directores de origen latino. Exige como mínimo estreno en Chicago y sin distribución previa en TV/online en EE. UU.; subtítulos en inglés obligatorios.",
+  "verified_url": "https://chicagolatinofilmfestival.org/film-submission-process"
+ },
+ {
+  "name": "LALIFF (Los Angeles Latino International Film Festival)",
+  "country": "Estados Unidos",
+  "city": "Los Ángeles",
+  "tier": "tier_c",
+  "month": "Mayo-Junio",
+  "deadline": "Octubre-Febrero",
+  "submission_fee": "Consultar bases",
+  "platform": "FilmFreeway",
+  "url": "https://laliff.org",
+  "genres": [
+   "drama",
+   "comedia",
+   "documental_social",
+   "animacion",
+   "thriller",
+   "otro"
+  ],
+  "accepts_types": [
+   "cortometraje",
+   "largometraje",
+   "documental"
+  ],
+  "prestige": 55,
+  "reason": "Festival clasificatorio para los Oscar en cortometraje. Los largos solo para cineastas latinos residentes en EE. UU.; los cortos (menos de 30 min) admiten cineastas latinos de Latinoamérica y la diáspora. Exige como mínimo estreno en Los Ángeles y sin distribución comercial en EE. UU.",
+  "verified_url": "https://laliff.org/laliff-2026-submissions/"
+ },
+ {
+  "name": "Miami Film Festival",
+  "country": "Estados Unidos",
+  "city": "Miami",
+  "tier": "tier_b",
+  "month": "Abril",
+  "deadline": "Julio-Enero",
+  "submission_fee": "Consultar bases",
+  "platform": "FilmFreeway",
+  "url": "https://www.miamifilmfestival.org",
+  "genres": [
+   "drama",
+   "comedia",
+   "thriller",
+   "documental_social",
+   "otro"
+  ],
+  "accepts_types": [
+   "cortometraje",
+   "largometraje",
+   "documental"
+  ],
+  "prestige": 62,
+  "reason": "Festival de referencia para el cine iberoamericano en EE. UU., con fuerte presencia de cine español y latino. Largos de competición: como mínimo estreno en Florida (preferencia por estreno mundial, internacional o en EE. UU.); estreno mundial posterior al 1 de enero del año anterior y sin circulación comercial en EE. UU.",
+  "verified_url": "https://asianfilmfestivals.com/2026/07/21/miami-film-festival-call-for-entry-2027/"
+ },
+ {
+  "name": "San Diego Latino Film Festival",
+  "country": "Estados Unidos",
+  "city": "San Diego",
+  "tier": "tier_c",
+  "month": "Marzo",
+  "deadline": "Otoño (convocatoria abierta en octubre; consultar FilmFreeway)",
+  "submission_fee": "Consultar bases",
+  "platform": "FilmFreeway",
+  "url": "https://www.sdlatinofilm.com",
+  "genres": [
+   "drama",
+   "comedia",
+   "documental_social",
+   "animacion",
+   "otro"
+  ],
+  "accepts_types": [
+   "cortometraje",
+   "largometraje",
+   "documental"
+  ],
+  "prestige": 42,
+  "reason": "Festival de cine hecho por, sobre o para la comunidad latina, con premios a largo (60 min o más), corto (30 min o menos), cine de frontera y juvenil. Obras terminadas en los dos últimos años; sin requisito de estreno publicado.",
+  "verified_url": "https://www.sdlatinofilm.com/"
+ },
+ {
+  "name": "Festival Internacional del Nuevo Cine Latinoamericano de La Habana",
+  "country": "Cuba",
+  "city": "La Habana",
+  "tier": "tier_b",
+  "month": "Diciembre",
+  "deadline": "Mayo-Agosto",
+  "submission_fee": "Consultar bases",
+  "platform": "Directo",
+  "url": "https://www.habanafilmfestival.com",
+  "genres": [
+   "drama",
+   "comedia",
+   "documental_social",
+   "documental_historico",
+   "animacion",
+   "otro"
+  ],
+  "accepts_types": [
+   "cortometraje",
+   "largometraje",
+   "documental"
+  ],
+  "prestige": 72,
+  "reason": "Festival histórico del cine latinoamericano, con concursos de ficción, ópera prima, documental, corto y animación, además de guion inédito y cartel. Solo producciones de temática latinoamericana terminadas en los dos últimos años, en español o con subtítulos; inscripción en la web del festival hasta el 15 de agosto.",
+  "verified_url": "https://newsinamerica.com/pdcc/boletin/2026/abre-convocatoria-la-edicion-47-del-festival-internacional-del-nuevo-cine-latinoamericano/"
+ },
+ {
+  "name": "FICCI (Cartagena de Indias)",
+  "country": "Colombia",
+  "city": "Cartagena de Indias",
+  "tier": "tier_b",
+  "month": "Abril",
+  "deadline": "Septiembre-Noviembre",
+  "submission_fee": "10-70 USD (algunas secciones gratuitas)",
+  "platform": "Festhome",
+  "url": "https://ficcifestival.com",
+  "genres": [
+   "drama",
+   "documental_social",
+   "experimental",
+   "animacion",
+   "comedia",
+   "otro"
+  ],
+  "accepts_types": [
+   "cortometraje",
+   "largometraje",
+   "documental"
+  ],
+  "prestige": 70,
+  "reason": "El festival más antiguo de Latinoamérica, con competencias Colombia e Iberoamérica, secciones de cines afros e indígenas y WIP; clasificatorio de los Oscar para cortos iberoamericanos. Obras producidas o estrenadas mundialmente en el año en curso o el siguiente y sin exhibición previa en Colombia. Tarifa reducida hasta el 31 de octubre.",
+  "verified_url": "https://ficcifestival.com/sites/default/files/2026-08/FICCI66%20_%20Bases_de_Participaci%C3%B3n_ESP.pdf"
+ },
+ {
+  "name": "Festival de Cine de Bogotá",
+  "country": "Colombia",
+  "city": "Bogotá",
+  "tier": "tier_c",
+  "month": "Septiembre",
+  "deadline": "Enero-Julio",
+  "submission_fee": "Gratuito",
+  "platform": "Festhome",
+  "url": "https://www.bogocine.co",
+  "genres": [
+   "drama",
+   "comedia",
+   "documental_social",
+   "documental_naturaleza",
+   "animacion",
+   "otro"
+  ],
+  "accepts_types": [
+   "cortometraje",
+   "largometraje",
+   "documental"
+  ],
+  "prestige": 40,
+  "reason": "Festival veterano (Círculo Precolombino) con competencia internacional para primeras a terceras películas, competencia colombiana y premios documentales (social, arte, medio ambiente). Sin estreno mundial exigido, pero las películas invitadas no pueden proyectarse fuera del festival antes de su presentación; versión original con subtítulos en español.",
+  "verified_url": "https://filmmakers.festhome.com/festival/2557"
+ },
+ {
+  "name": "Festival Internacional de Cine de Morelia (FICM)",
+  "country": "México",
+  "city": "Morelia",
+  "tier": "tier_b",
+  "month": "Octubre",
+  "deadline": "Mayo-Junio",
+  "submission_fee": "Consultar bases",
+  "platform": "Directo",
+  "url": "https://moreliafilmfest.com",
+  "genres": [
+   "drama",
+   "documental_social",
+   "animacion",
+   "comedia",
+   "otro"
+  ],
+  "accepts_types": [
+   "cortometraje",
+   "largometraje",
+   "documental"
+  ],
+  "prestige": 72,
+  "reason": "Principal vitrina del cine mexicano emergente, con secciones de cortometraje (máx. 40 min), documental y largometraje mexicano. Solo producciones mexicanas recientes; los largos de ficción no pueden haberse estrenado comercialmente ni en festivales nacionales mexicanos, y en documental se prioriza el estreno en México.",
+  "verified_url": "https://www.recursosculturales.com/festival-cine-de-morelia/"
+ },
+ {
+  "name": "FICUNAM (Ciudad de México)",
+  "country": "México",
+  "city": "Ciudad de México",
+  "tier": "tier_b",
+  "month": "Mayo-Junio",
+  "deadline": "Septiembre-Noviembre",
+  "submission_fee": "Consultar bases",
+  "platform": "Directo",
+  "url": "https://ficunam.unam.mx",
+  "genres": [
+   "experimental",
+   "drama",
+   "documental_social",
+   "otro"
+  ],
+  "accepts_types": [
+   "mediometraje",
+   "largometraje",
+   "documental"
+  ],
+  "prestige": 62,
+  "reason": "Festival de la UNAM centrado en cine de autor y búsquedas formales (competencia internacional, Ahora México, Umbrales). Acepta obras de más de 25 minutos producidas desde el año anterior; las películas en competencia deben estrenarse en México dentro del festival. Las fechas de la edición pueden variar: comprobar en la web.",
+  "verified_url": "https://ficunam.unam.mx/wp-content/uploads/2024/10/Convocatoria_Internacional_ESP.pdf"
+ },
+ {
+  "name": "DocsMX (Ciudad de México)",
+  "country": "México",
+  "city": "Ciudad de México",
+  "tier": "tier_c",
+  "month": "Octubre",
+  "deadline": "Abril-Junio",
+  "submission_fee": "6-12 USD",
+  "platform": "Directo",
+  "url": "https://docsmx.org",
+  "genres": [
+   "documental_social",
+   "documental_historico",
+   "documental_naturaleza",
+   "experimental"
+  ],
+  "accepts_types": [
+   "cortometraje",
+   "largometraje",
+   "documental"
+  ],
+  "prestige": 50,
+  "reason": "Festival de documental con competencias internacional, latinoamericana, mexicana e infantil iberoamericana (cortos hasta 30 min). Exige estreno en Ciudad de México y no haber pasado por plataformas o festivales en México; producciones recientes de los dos últimos años.",
+  "verified_url": "https://www.recursosculturales.com/docsmx-festival-de-documental-mexico/"
+ },
+ {
+  "name": "FICValdivia (Valdivia)",
+  "country": "Chile",
+  "city": "Valdivia",
+  "tier": "tier_b",
+  "month": "Octubre",
+  "deadline": "Marzo-Abril",
+  "submission_fee": "Gratuito (Chile) / 15-30 USD (internacional)",
+  "platform": "Festhome",
+  "url": "https://www.ficvaldivia.cl",
+  "genres": [
+   "drama",
+   "experimental",
+   "documental_social",
+   "animacion",
+   "otro"
+  ],
+  "accepts_types": [
+   "cortometraje",
+   "largometraje",
+   "documental"
+  ],
+  "prestige": 64,
+  "reason": "Festival de autor de referencia en el Cono Sur, con competencias de largometraje internacional (mín. 40 min), juvenil y cortometraje latinoamericano y caribeño (máx. 30 min). Exige estreno en Chile (sin exhibición previa en ningún formato) y obras terminadas desde marzo del año anterior.",
+  "verified_url": "https://filmmakers.festhome.com/festival/616"
+ },
+ {
+  "name": "SANFIC (Santiago Festival Internacional de Cine)",
+  "country": "Chile",
+  "city": "Santiago de Chile",
+  "tier": "tier_c",
+  "month": "Noviembre",
+  "deadline": "Julio-Agosto",
+  "submission_fee": "Gratuito (Chile) / 30 USD (internacional)",
+  "platform": "Festhome",
+  "url": "https://sanfic.com",
+  "genres": [
+   "drama",
+   "comedia",
+   "thriller",
+   "documental_social",
+   "otro"
+  ],
+  "accepts_types": [
+   "cortometraje",
+   "largometraje",
+   "documental"
+  ],
+  "prestige": 58,
+  "reason": "Competencia internacional para primeras a quintas películas y competencias de cine chileno y de cortos chilenos (máx. 30 min). Largos de más de 60 minutos terminados en el último año y medio; sin exhibición previa en Chile (ni online) y prioridad a estrenos nacionales e internacionales.",
+  "verified_url": "https://filmmakers.festhome.com/f/624/1"
+ },
+ {
+  "name": "Festival de Cine de Lima PUCP",
+  "country": "Perú",
+  "city": "Lima",
+  "tier": "tier_b",
+  "month": "Agosto",
+  "deadline": "Enero-Marzo",
+  "submission_fee": "Gratuito (20 USD en plazo extendido)",
+  "platform": "Festhome",
+  "url": "https://festivaldelima.com",
+  "genres": [
+   "drama",
+   "comedia",
+   "documental_social",
+   "thriller",
+   "otro"
+  ],
+  "accepts_types": [
+   "largometraje",
+   "documental"
+  ],
+  "prestige": 62,
+  "reason": "Gran festival peruano con competencias latinoamericanas de ficción (mín. 60 min) y documental (mín. 45 min) y competencia peruana. Directores latinoamericanos (o documentales sobre temas latinoamericanos), obras de los dos últimos años y sin exhibición previa en Perú.",
+  "verified_url": "https://filmmakers.festhome.com/festival/festival-de-cine-de-lima"
+ },
+ {
+  "name": "Festival Internacional de Cine de Mar del Plata",
+  "country": "Argentina",
+  "city": "Mar del Plata",
+  "tier": "tier_b",
+  "month": "Noviembre",
+  "deadline": "Mayo-Julio",
+  "submission_fee": "30-60 USD (internacional)",
+  "platform": "Directo",
+  "url": "https://mardelplatafilmfest.com",
+  "genres": [
+   "drama",
+   "comedia",
+   "thriller",
+   "terror",
+   "documental_social",
+   "experimental",
+   "otro"
+  ],
+  "accepts_types": [
+   "cortometraje",
+   "mediometraje",
+   "largometraje",
+   "documental"
+  ],
+  "prestige": 78,
+  "reason": "Único festival competitivo de categoría A (FIAPF) de Latinoamérica, con competencias internacional, latinoamericana y argentina (cortos hasta 20 min). Obras terminadas en los 12 meses previos, estreno en Argentina dentro del festival y sin exhibición pública previa en el país.",
+  "verified_url": "https://mardelplatafilmfest.com/41/wp-content/uploads/2026/04/REGLAMENTO-OFICIAL-41FESTIVAL-INTERNACIONAL-DE-CINE-DE-MAR-DEL-PLATA.pdf"
+ },
+ {
+  "name": "Festival Internacional de Cine de Punta del Este",
+  "country": "Uruguay",
+  "city": "Punta del Este",
+  "tier": "tier_c",
+  "month": "Febrero",
+  "deadline": "Septiembre-Noviembre",
+  "submission_fee": "Gratuito",
+  "platform": "Directo",
+  "url": "https://cinepunta.uy",
+  "genres": [
+   "drama",
+   "comedia",
+   "thriller",
+   "documental_social",
+   "otro"
+  ],
+  "accepts_types": [
+   "largometraje",
+   "documental"
+  ],
+  "prestige": 45,
+  "reason": "Competencia Iberoamericana para largos de ficción o documental (más de 60 min) de Latinoamérica, España y Portugal, más un Panorama Internacional no competitivo. Obras terminadas desde el 1 de enero del año anterior y sin exhibición previa en Uruguay.",
+  "verified_url": "https://www.gub.uy/tramites/festival-internacional-cine-punta-este-2027-inscripciones-maldonado"
+ },
+ {
+  "name": "Festival Cinematográfico Internacional del Uruguay (Cinemateca Uruguaya)",
+  "country": "Uruguay",
+  "city": "Montevideo",
+  "tier": "tier_c",
+  "month": "Marzo-Abril",
+  "deadline": "Hasta finales de Octubre",
+  "submission_fee": "Consultar bases",
+  "platform": "Directo",
+  "url": "https://festival.cinemateca.org.uy",
+  "genres": [
+   "drama",
+   "documental_social",
+   "animacion",
+   "experimental",
+   "otro"
+  ],
+  "accepts_types": [
+   "cortometraje",
+   "largometraje",
+   "documental"
+  ],
+  "prestige": 50,
+  "reason": "Festival histórico de la Cinemateca Uruguaya con competencias internacional, iberoamericana, nuevos realizadores, derechos humanos y cortometraje. Acepta cortos y largos de cualquier género mediante formulario online; requisitos de estreno en el reglamento de cada edición.",
+  "verified_url": "https://festival.cinemateca.org.uy/en/45/submissions"
+ },
+ {
+  "name": "Festival de Cine Latinoamericano de Trieste",
+  "country": "Italia",
+  "city": "Trieste",
+  "tier": "tier_c",
+  "month": "Octubre-Noviembre",
+  "deadline": "Hasta Julio (15 de julio)",
+  "submission_fee": "Consultar bases",
+  "platform": "Directo",
+  "url": "https://www.cinelatinotrieste.org",
+  "genres": [
+   "drama",
+   "documental_social",
+   "documental_historico",
+   "otro"
+  ],
+  "accepts_types": [
+   "cortometraje",
+   "largometraje",
+   "documental"
+  ],
+  "prestige": 40,
+  "reason": "Veterano festival italiano de cine iberoamericano, con Concurso Oficial, Contemporánea y un Salón España. Películas recientes (terminadas en los 23 meses previos) e inéditas en Italia; el reglamento no cita tasa de inscripción, solo gastos de envío.",
+  "verified_url": "https://www.cinelatinotrieste.org/regolamento"
+ },
+ {
+  "name": "London Spanish Film Festival",
+  "country": "Reino Unido",
+  "city": "Londres",
+  "tier": "tier_c",
+  "month": "Septiembre",
+  "deadline": "Consultar bases",
+  "submission_fee": "Consultar bases",
+  "platform": "Directo",
+  "url": "https://londonspanishfilmfestival.com",
+  "genres": [
+   "drama",
+   "comedia",
+   "documental_social",
+   "otro"
+  ],
+  "accepts_types": [
+   "cortometraje",
+   "largometraje",
+   "documental"
+  ],
+  "prestige": 40,
+  "reason": "Principal muestra de cine español en el Reino Unido (más un fin de semana de primavera), con estrenos, documentales, coproducciones, cortos y ventanas vasca, catalana y gallega. Programación curada; las propuestas se envían por el formulario de contacto del festival.",
+  "verified_url": "https://londonspanishfilmfestival.com"
+ },
+ {
+  "name": "FIDOCS (Santiago de Chile)",
+  "country": "Chile",
+  "city": "Santiago de Chile",
+  "tier": "tier_c",
+  "month": "Noviembre",
+  "deadline": "Abril-Julio",
+  "submission_fee": "Gratuito-30 USD",
+  "platform": "Festhome, FilmFreeway",
+  "url": "https://fidocs.cl",
+  "genres": [
+   "documental_social",
+   "documental_historico",
+   "documental_naturaleza",
+   "experimental"
+  ],
+  "accepts_types": [
+   "cortometraje",
+   "largometraje",
+   "documental"
+  ],
+  "prestige": 52,
+  "reason": "Festival de documental de referencia en Chile con competencias internacional (mín. 40 min), nacional y de cortos chilenos emergentes. La competencia internacional exige estreno en Chile y la nacional estreno en Santiago; obras terminadas en el último año.",
+  "verified_url": "https://filmmakers.festhome.com/festival/festival-internacional-de-documentales-de-santiago-fidocs"
+ },
+ {
+  "name": "MIDBO, Muestra Internacional Documental de Bogotá",
+  "country": "Colombia",
+  "city": "Bogotá",
+  "tier": "tier_c",
+  "month": "Octubre-Noviembre",
+  "deadline": "Febrero-Mayo",
+  "submission_fee": "3-10 USD",
+  "platform": "Festhome",
+  "url": "https://midbo.co",
+  "genres": [
+   "documental_social",
+   "documental_historico",
+   "documental_naturaleza",
+   "experimental"
+  ],
+  "accepts_types": [
+   "cortometraje",
+   "largometraje",
+   "documental"
+  ],
+  "prestige": 45,
+  "reason": "Muestra de documental con competencias iberoamericana y nacional de largo (más de 60 min) y corto (más de 7 min). Obras terminadas desde enero del año anterior, con subtítulos en español; prioriza estrenos internacionales, nacionales o en Bogotá.",
+  "verified_url": "https://filmmakers.festhome.com/festival/muestra-internacional-documental-de-bogota"
+ },
+ {
+  "name": "GIFF, Festival Internacional de Cine Guanajuato",
+  "country": "México",
+  "city": "Guanajuato / San Miguel de Allende",
+  "tier": "tier_c",
+  "month": "Julio-Agosto",
+  "deadline": "Enero-Abril",
+  "submission_fee": "Gratuito-40 USD",
+  "platform": "FilmFreeway",
+  "url": "https://giff.mx",
+  "genres": [
+   "drama",
+   "comedia",
+   "documental_social",
+   "animacion",
+   "experimental",
+   "terror",
+   "otro"
+  ],
+  "accepts_types": [
+   "cortometraje",
+   "largometraje",
+   "documental"
+  ],
+  "prestige": 55,
+  "reason": "Festival amplio con cortos (máx. 30 min) de ficción, animación, documental, experimental y VR, y largos internacionales y mexicanos; sus cortos ganadores pueden optar a los Oscar. Producción posterior al 1 de enero del año anterior; los largos no pueden tener distribución en salas en México.",
+  "verified_url": "https://www.recursosculturales.com/festival-internacional-de-cine-guanajuato/"
+ },
+ {
+  "name": "Ventana Sur (mercado)",
+  "country": "Uruguay",
+  "city": "Montevideo (alterna con Buenos Aires)",
+  "tier": "tier_b",
+  "month": "Noviembre-Diciembre",
+  "deadline": "Hasta Septiembre (cierre 6 de septiembre en 2026)",
+  "submission_fee": "Consultar bases",
+  "platform": "Directo",
+  "url": "https://ventana-sur.com",
+  "genres": [
+   "drama",
+   "terror",
+   "fantasia",
+   "animacion",
+   "documental_social",
+   "otro"
+  ],
+  "accepts_types": [
+   "cortometraje",
+   "largometraje",
+   "documental"
+  ],
+  "prestige": 70,
+  "reason": "Principal mercado audiovisual latinoamericano (con el Marché du Film de Cannes): Primer Corte y Copia Final para largos de ficción latinoamericanos en posproducción, además de VS Docs, VS Cortos, VS Fantastic! y VS Animation!. No es festival: busca agentes de ventas, distribución y fondos de finalización; la edición 2026 es en Montevideo.",
+  "verified_url": "https://www.uruguayxxi.gub.uy/en/events/article/ventana-sur-2026-en/"
+ },
+ {
+  "name": "Festival Internacional de Cine de Los Cabos",
+  "country": "México",
+  "city": "Los Cabos",
+  "tier": "tier_c",
+  "month": "Diciembre",
+  "deadline": "Consultar bases",
+  "submission_fee": "Consultar bases",
+  "platform": "FilmFreeway",
+  "url": "https://cabosfilmfestival.com",
+  "genres": [
+   "drama",
+   "comedia",
+   "documental_social",
+   "otro"
+  ],
+  "accepts_types": [
+   "cortometraje",
+   "largometraje",
+   "documental"
+  ],
+  "prestige": 50,
+  "reason": "Festival e industria con foco en México, Norteamérica y la región de Baja California (sección La Baja Inspira para obras ligadas a Baja California). Convocatoria vía FilmFreeway (cerrada a fecha de revisión); requisitos de estreno no publicados, consultar bases de cada edición.",
+  "verified_url": "https://filmfreeway.com/ficloscabos/photos"
+ },
+ {
+  "name": "Festival Internacional de Cine de Huesca",
+  "country": "España",
+  "city": "Huesca",
+  "tier": "nacional",
+  "month": "Junio",
+  "deadline": "Diciembre-Febrero",
+  "submission_fee": "3€ (más coste de plataforma)",
+  "platform": "Festhome",
+  "url": "https://www.huesca-filmfestival.com",
+  "genres": [
+   "drama",
+   "comedia",
+   "animacion",
+   "documental_social",
+   "experimental",
+   "thriller",
+   "fantasia"
+  ],
+  "accepts_types": [
+   "cortometraje",
+   "documental"
+  ],
+  "prestige": 72,
+  "reason": "Uno de los festivales de cortometraje más antiguos y prestigiosos de España, con competiciones iberoamericana, internacional y documental (máx. 30 min, documentales hasta 40). Califica para los Goya y los Oscar (el Danzante de cada competición da acceso directo al Oscar); no exige estreno, solo obras terminadas el año anterior y no presentadas antes.",
+  "verified_url": "https://www.huesca-filmfestival.com/bases-de-la-54a-edicion-2026/"
+ },
+ {
+  "name": "ALCINE - Festival de Cine de Alcalá de Henares",
+  "country": "España",
+  "city": "Alcalá de Henares",
+  "tier": "nacional",
+  "month": "Noviembre",
+  "deadline": "Mayo-Julio",
+  "submission_fee": "Gratuito",
+  "platform": "Directo",
+  "url": "https://alcine.org",
+  "genres": [
+   "drama",
+   "comedia",
+   "animacion",
+   "documental_social",
+   "experimental",
+   "terror",
+   "fantasia"
+  ],
+  "accepts_types": [
+   "cortometraje",
+   "documental",
+   "mediometraje"
+  ],
+  "prestige": 70,
+  "reason": "Festival de referencia del corto español con Certamen Nacional y Certamen Europeo, más secciones de comedia, fantástico/terror e infantil. Califica para los Goya y el primer Diamante de cada certamen califica para los Oscar; inscripción gratuita y sin requisito de estreno publicado (duración máxima de 40 min en bases anteriores; consultar bases).",
+  "verified_url": "https://alcine.org/noticias/669/inscripciones-abiertas-para-alcine-55/"
+ },
+ {
+  "name": "Semana de Cine de Medina del Campo (SECIME)",
+  "country": "España",
+  "city": "Medina del Campo",
+  "tier": "nacional",
+  "month": "Abril",
+  "deadline": "Noviembre-Febrero",
+  "submission_fee": "Consultar bases",
+  "platform": "FilmFreeway, Festhome",
+  "url": "https://medinafilmfestival.com",
+  "genres": [
+   "drama",
+   "comedia",
+   "animacion",
+   "documental_social",
+   "experimental",
+   "thriller"
+  ],
+  "accepts_types": [
+   "cortometraje"
+  ],
+  "prestige": 62,
+  "reason": "Veterano festival castellano centrado en el cortometraje, con certamen nacional e internacional (máx. 30 min). Preseleccionador oficial de los Goya; no exige estreno pero sí obras recientes no inscritas en ediciones anteriores y rechaza obras hechas con IA generativa.",
+  "verified_url": "https://medinafilmfestival.com/"
+ },
+ {
+  "name": "Curtocircuíto (Santiago de Compostela)",
+  "country": "España",
+  "city": "Santiago de Compostela",
+  "tier": "nacional",
+  "month": "Junio-Julio",
+  "deadline": "Primavera (consultar bases)",
+  "submission_fee": "Gratuito",
+  "platform": "Directo, Shortfilmdepot",
+  "url": "https://www.curtocircuito.org",
+  "genres": [
+   "experimental",
+   "drama",
+   "documental_social",
+   "animacion",
+   "fantasia"
+  ],
+  "accepts_types": [
+   "cortometraje",
+   "documental",
+   "mediometraje"
+  ],
+  "prestige": 62,
+  "reason": "Festival internacional de cine corto con línea autoral y de vanguardia, ideal para piezas experimentales, híbridas o de no ficción creativa; premio específico a mejor película gallega. Inscripción gratuita; no exige estreno mundial pero valora obras inéditas en España, y es socio de los Premios Goya.",
+  "verified_url": "https://www.curtocircuito.org/premios-y-bases"
+ },
+ {
+  "name": "Aguilar Film Festival (Aguilar de Campoo)",
+  "country": "España",
+  "city": "Aguilar de Campoo",
+  "tier": "nacional",
+  "month": "Diciembre",
+  "deadline": "Marzo-Septiembre",
+  "submission_fee": "5-10€",
+  "platform": "Festhome",
+  "url": "https://www.aguilarfilmfestival.es",
+  "genres": [
+   "drama",
+   "comedia",
+   "animacion",
+   "documental_social",
+   "experimental",
+   "thriller",
+   "terror"
+  ],
+  "accepts_types": [
+   "cortometraje",
+   "documental",
+   "mediometraje"
+  ],
+  "prestige": 55,
+  "reason": "Festival internacional de cortometrajes abierto a todos los géneros (máx. 35 min). Califica para los Goya: el Mejor Cortometraje Español queda preseleccionado; no exige estreno, aunque el estreno nacional se valora como criterio diferencial.",
+  "verified_url": "https://filmmakers.festhome.com/f/1019"
+ },
+ {
+  "name": "Certamen Internacional de Cortos Ciudad de Soria (SOIFF)",
+  "country": "España",
+  "city": "Soria",
+  "tier": "nacional",
+  "month": "Noviembre",
+  "deadline": "Marzo-Junio",
+  "submission_fee": "3-9€",
+  "platform": "Movibeta, Festhome",
+  "url": "https://certamendecortossoria.org",
+  "genres": [
+   "drama",
+   "comedia",
+   "animacion",
+   "documental_social",
+   "thriller",
+   "fantasia"
+  ],
+  "accepts_types": [
+   "cortometraje"
+  ],
+  "prestige": 50,
+  "reason": "Certamen con secciones nacional e internacional para cortos de hasta 20 minutos, más videoclips y microcortos de 90 segundos; buena dotación de premios. Sus premiados acceden a los Goya; no exige estreno, solo producción reciente y no haber participado antes.",
+  "verified_url": "https://certamendecortossoria.org/bases/863-bases-2026.html"
+ },
+ {
+  "name": "Cortogenia (Madrid)",
+  "country": "España",
+  "city": "Madrid",
+  "tier": "nacional",
+  "month": "Diciembre",
+  "deadline": "Febrero-Septiembre",
+  "submission_fee": "Gratuito (nacionales) / 2€ (internacionales)",
+  "platform": "Festhome",
+  "url": "https://cortogenia.es",
+  "genres": [
+   "drama",
+   "comedia",
+   "animacion",
+   "documental_social",
+   "thriller",
+   "terror",
+   "fantasia"
+  ],
+  "accepts_types": [
+   "cortometraje",
+   "mediometraje"
+  ],
+  "prestige": 48,
+  "reason": "Festival madrileño de cortometrajes con proyecciones en Cines Paz a lo largo del año y gala final en diciembre; admite piezas de hasta 45 minutos. Calificador para los Goya, gratuito para cortos españoles y sin requisito de estreno.",
+  "verified_url": "https://filmmakers.festhome.com/en/festival/2550"
+ },
+ {
+  "name": "Festival de Cine de Elche",
+  "country": "España",
+  "city": "Elche",
+  "tier": "nacional",
+  "month": "Julio",
+  "deadline": "Enero-Marzo",
+  "submission_fee": "Consultar bases",
+  "platform": "Movibeta, Festhome",
+  "url": "https://festivaldecine.fundacionmediterraneo.es",
+  "genres": [
+   "drama",
+   "comedia",
+   "animacion",
+   "documental_social",
+   "thriller",
+   "fantasia"
+  ],
+  "accepts_types": [
+   "cortometraje",
+   "documental"
+  ],
+  "prestige": 55,
+  "reason": "Festival de cortometrajes al aire libre con premios para ficción, animación y documental (máx. 30 min). Preseleccionador de los Goya en ficción, documental y animación; no exige estreno, solo producción reciente.",
+  "verified_url": "https://festivaldecine.fundacionmediterraneo.es/"
+ },
+ {
+  "name": "Mecal Pro - Festival Internacional de Cortometrajes y Animación de Barcelona",
+  "country": "España",
+  "city": "Barcelona",
+  "tier": "nacional",
+  "month": "Mayo",
+  "deadline": "Junio-Febrero",
+  "submission_fee": "12-18€",
+  "platform": "Festhome, Shortfilmdepot, Movibeta",
+  "url": "https://www.mecalbcn.org",
+  "genres": [
+   "drama",
+   "comedia",
+   "animacion",
+   "documental_social",
+   "experimental",
+   "fantasia",
+   "terror"
+  ],
+  "accepts_types": [
+   "cortometraje",
+   "documental"
+  ],
+  "prestige": 55,
+  "reason": "Festival internacional de cortometrajes y animación con varias competiciones temáticas (máx. 30 min). Calificador para los Goya; no se publica requisito de estreno, solo obras producidas recientemente.",
+  "verified_url": "https://filmmakers.festhome.com/festival/38"
+ },
+ {
+  "name": "FICCAB - Festival Internacional de Cortometrajes y Cine Alternativo de Benalmádena",
+  "country": "España",
+  "city": "Benalmádena",
+  "tier": "regional",
+  "month": "Octubre",
+  "deadline": "Junio-Agosto",
+  "submission_fee": "5€",
+  "platform": "Festhome",
+  "url": "https://ficcab.org",
+  "genres": [
+   "drama",
+   "comedia",
+   "documental_social",
+   "experimental",
+   "thriller",
+   "terror",
+   "fantasia"
+  ],
+  "accepts_types": [
+   "cortometraje",
+   "documental"
+  ],
+  "prestige": 30,
+  "reason": "Festival andaluz de cortometrajes de cualquier género y temática (máx. 30 min), con premios específicos al mejor corto malagueño y andaluz. Buena opción para primeros cortos; sin requisito de estreno ni calificación a premios.",
+  "verified_url": "https://filmmakers.festhome.com/en/festival/4981"
+ },
+ {
+  "name": "Almería en Corto - Festival Internacional de Cine de Almería (FICAL)",
+  "country": "España",
+  "city": "Almería",
+  "tier": "nacional",
+  "month": "Noviembre",
+  "deadline": "Junio-Agosto",
+  "submission_fee": "Consultar bases",
+  "platform": "Movibeta, Festhome",
+  "url": "https://www.festivaldealmeria.com",
+  "genres": [
+   "drama",
+   "comedia",
+   "animacion",
+   "documental_social",
+   "thriller",
+   "fantasia"
+  ],
+  "accepts_types": [
+   "cortometraje",
+   "documental"
+  ],
+  "prestige": 45,
+  "reason": "Certamen internacional de cortometrajes del FICAL (máx. 30 min), abierto a producciones nacionales e internacionales y con dotación económica relevante. En ediciones anteriores el mejor corto nacional quedaba preseleccionado para los Goya (confirmar en bases); sin requisito de estreno.",
+  "verified_url": "https://www.festivaldealmeria.com/informacion/certamen-internacional-almeria-en-corto-2026"
+ },
+ {
+  "name": "Festival de Cine de L'Alfàs del Pi",
+  "country": "España",
+  "city": "L'Alfàs del Pi",
+  "tier": "nacional",
+  "month": "Julio",
+  "deadline": "Febrero-Mayo",
+  "submission_fee": "Gratuito",
+  "platform": "Festhome",
+  "url": "https://www.festivaldelalfas.es",
+  "genres": [
+   "drama",
+   "comedia",
+   "animacion",
+   "thriller",
+   "fantasia",
+   "terror"
+  ],
+  "accepts_types": [
+   "cortometraje"
+  ],
+  "prestige": 50,
+  "reason": "Certamen Nacional de Cortometrajes de ficción (dirección o producción española, máx. 30 min; no admite documentales). Preseleccionador de los Goya al mejor cortometraje de ficción; inscripción gratuita y sin requisito de estreno.",
+  "verified_url": "https://filmmakers.festhome.com/festival/1770"
+ },
+ {
+  "name": "interfilm - Festival Internacional de Cortometrajes de Berlín",
+  "country": "Alemania",
+  "city": "Berlín",
+  "tier": "tier_b",
+  "month": "Noviembre",
+  "deadline": "Enero-Mayo",
+  "submission_fee": "8€",
+  "platform": "Shortfilmdepot",
+  "url": "https://www.interfilm.de",
+  "genres": [
+   "drama",
+   "comedia",
+   "animacion",
+   "documental_social",
+   "experimental",
+   "thriller"
+  ],
+  "accepts_types": [
+   "cortometraje",
+   "documental"
+  ],
+  "prestige": 70,
+  "reason": "Gran festival de cortos de Berlín abierto a todas las formas (máx. 20 min), con sección infantil KUKI. Calificador para los Oscar (ganadores de Mejor Acción Real y Mejor Animación de la competición internacional); no exige estreno.",
+  "verified_url": "https://www.interfilm.de/en/service/submit-films-at-interfilm/"
+ },
+ {
+  "name": "VIENNA SHORTS (Viena)",
+  "country": "Austria",
+  "city": "Viena",
+  "tier": "tier_b",
+  "month": "Mayo",
+  "deadline": "Agosto-Enero",
+  "submission_fee": "5-18€",
+  "platform": "FilmFreeway",
+  "url": "https://www.viennashorts.com",
+  "genres": [
+   "drama",
+   "comedia",
+   "animacion",
+   "documental_social",
+   "experimental",
+   "musical"
+  ],
+  "accepts_types": [
+   "cortometraje",
+   "documental"
+  ],
+  "prestige": 72,
+  "reason": "Principal festival de cortometraje de Austria, con competiciones de ficción/documental, animación, videoclip y austriaca (máx. 30 min). Califica para Oscar, BAFTA y Premios del Cine Europeo (EFA); da preferencia a obras no exhibidas antes en Viena ni online en Austria.",
+  "verified_url": "https://www.viennashorts.com/en/submissions"
+ },
+ {
+  "name": "REGARD - Festival Internacional de Cortometrajes de Saguenay",
+  "country": "Canadá",
+  "city": "Saguenay",
+  "tier": "tier_b",
+  "month": "Marzo",
+  "deadline": "Julio-Noviembre",
+  "submission_fee": "40-55 CAD",
+  "platform": "Directo",
+  "url": "https://www.festivalregard.com",
+  "genres": [
+   "drama",
+   "comedia",
+   "animacion",
+   "documental_social",
+   "experimental",
+   "fantasia"
+  ],
+  "accepts_types": [
+   "cortometraje",
+   "documental",
+   "mediometraje"
+  ],
+  "prestige": 68,
+  "reason": "Festival de referencia del cortometraje en Norteamérica francófona (máx. 40 min), con mercado de cortos. Calificador para los Oscar; para optar al Gran Premio se exige estreno mundial, norteamericano o canadiense y subtítulos en inglés o francés.",
+  "verified_url": "https://www.festivalregard.com/en/call-for-entries"
+ },
+ {
+  "name": "Uppsala Short Film Festival (Upsala)",
+  "country": "Suecia",
+  "city": "Upsala",
+  "tier": "tier_b",
+  "month": "Octubre",
+  "deadline": "Enero-Mayo",
+  "submission_fee": "Consultar bases",
+  "platform": "FilmFreeway, Shortfilmdepot",
+  "url": "https://www.shortfilmfestival.com",
+  "genres": [
+   "drama",
+   "comedia",
+   "animacion",
+   "documental_social",
+   "experimental"
+  ],
+  "accepts_types": [
+   "cortometraje",
+   "documental",
+   "mediometraje"
+  ],
+  "prestige": 68,
+  "reason": "Mayor festival de cortometrajes de Suecia, abierto a ficción, documental, experimental y animación de menos de 40 min producidos en los dos últimos años. Calificador para los Oscar (Gran Premio internacional y mejor corto sueco); sin requisito de estreno.",
+  "verified_url": "https://www.shortfilmfestival.com/"
+ },
+ {
+  "name": "Go Short (Nimega)",
+  "country": "Países Bajos",
+  "city": "Nimega",
+  "tier": "tier_b",
+  "month": "Abril",
+  "deadline": "Julio-Diciembre",
+  "submission_fee": "12,50-20€",
+  "platform": "Directo (Filmchief), FilmFreeway, Shortfilmdepot",
+  "url": "https://www.goshort.nl",
+  "genres": [
+   "drama",
+   "comedia",
+   "animacion",
+   "documental_social",
+   "experimental",
+   "musical"
+  ],
+  "accepts_types": [
+   "cortometraje",
+   "documental"
+  ],
+  "prestige": 72,
+  "reason": "Gran festival europeo de cortos, solo para obras (co)producidas en Europa de hasta 30 min, con competición de estudiantes. Califica para Oscar (ficción, documental y animación), BAFTA y candidatura a los Premios del Cine Europeo (EFA); sin requisito de estreno publicado.",
+  "verified_url": "https://www.goshort.nl/en/news-overview/call-for-entry-go-short-2027"
+ },
+ {
+  "name": "Kurzfilm Festival Hamburg (Festival Internacional de Cortometrajes de Hamburgo)",
+  "country": "Alemania",
+  "city": "Hamburgo",
+  "tier": "tier_b",
+  "month": "Junio",
+  "deadline": "Octubre-Enero",
+  "submission_fee": "7-10€",
+  "platform": "Shortfilmdepot, FilmFreeway",
+  "url": "https://festival.shortfilm.com",
+  "genres": [
+   "experimental",
+   "drama",
+   "comedia",
+   "animacion",
+   "documental_social"
+  ],
+  "accepts_types": [
+   "cortometraje",
+   "documental"
+  ],
+  "prestige": 68,
+  "reason": "Festival de cortos de perfil arriesgado y experimental, con competición internacional, alemana, Mo&Friese (infantil) y de piezas de 3 minutos (máx. 30 min). No se publica requisito de estreno; buena plataforma para propuestas de autor y formatos libres.",
+  "verified_url": "https://festival.shortfilm.com/media/pages/medialibrary/8ece7b3846-1756987234/42.regulations-kurzfilm-festival-hamburg.pdf"
+ },
+ {
+  "name": "Kurzfilmtage Winterthur",
+  "country": "Suiza",
+  "city": "Winterthur",
+  "tier": "tier_b",
+  "month": "Noviembre",
+  "deadline": "Febrero-Julio",
+  "submission_fee": "Consultar bases",
+  "platform": "FilmFreeway, Shortfilmdepot",
+  "url": "https://www.kurzfilmtage.ch",
+  "genres": [
+   "drama",
+   "experimental",
+   "animacion",
+   "documental_social",
+   "comedia"
+  ],
+  "accepts_types": [
+   "cortometraje",
+   "documental"
+  ],
+  "prestige": 72,
+  "reason": "Principal festival de cortos de Suiza, de línea autoral (máx. 30 min en la competición internacional). Sus competiciones califican para Oscar, BAFTA y candidatura EFA bajo condiciones; exige estreno suizo y excluye obras publicitarias.",
+  "verified_url": "https://www.kurzfilmtage.ch/en/industry/film-submissions"
+ },
+ {
+  "name": "Leuven International Short Film Festival (Lovaina)",
+  "country": "Bélgica",
+  "city": "Lovaina",
+  "tier": "tier_b",
+  "month": "Noviembre-Diciembre",
+  "deadline": "Febrero-Agosto",
+  "submission_fee": "Consultar bases",
+  "platform": "FilmFreeway",
+  "url": "https://www.kortfilmfestival.be",
+  "genres": [
+   "drama",
+   "comedia",
+   "animacion",
+   "documental_social",
+   "experimental"
+  ],
+  "accepts_types": [
+   "cortometraje",
+   "documental"
+  ],
+  "prestige": 66,
+  "reason": "Festival belga con competición europea y flamenca (menos de 35 min). Califica para los Oscar, reconocido por BAFTA y nominador a los Premios del Cine Europeo (EFA), pero la competición calificadora es solo para producciones europeas; no exige estreno.",
+  "verified_url": "https://www.kortfilmfestival.be/"
+ },
+ {
+  "name": "Aspen Shortsfest",
+  "country": "Estados Unidos",
+  "city": "Aspen",
+  "tier": "tier_b",
+  "month": "Abril",
+  "deadline": "Junio-Noviembre",
+  "submission_fee": "65-95 USD",
+  "platform": "FilmFreeway",
+  "url": "https://aspenfilm.org",
+  "genres": [
+   "drama",
+   "comedia",
+   "animacion",
+   "documental_social"
+  ],
+  "accepts_types": [
+   "cortometraje",
+   "documental",
+   "mediometraje"
+  ],
+  "prestige": 74,
+  "reason": "Uno de los festivales de cortos más influyentes de EE. UU., con categorías de animación, comedia, documental y drama (máx. 40 min). Calificador para los Oscar; exige obras recientes no emitidas ni disponibles online en EE. UU.",
+  "verified_url": "https://filmfreeway.com/AspenShortsfest"
+ },
+ {
+  "name": "Flickers' Rhode Island International Film Festival (Providence)",
+  "country": "Estados Unidos",
+  "city": "Providence",
+  "tier": "tier_c",
+  "month": "Agosto",
+  "deadline": "Enero-Junio",
+  "submission_fee": "Consultar bases",
+  "platform": "FilmFreeway, Festhome",
+  "url": "https://www.film-festival.org",
+  "genres": [
+   "drama",
+   "comedia",
+   "animacion",
+   "documental_social",
+   "terror",
+   "ciencia_ficcion",
+   "fantasia"
+  ],
+  "accepts_types": [
+   "cortometraje",
+   "documental",
+   "largometraje"
+  ],
+  "prestige": 50,
+  "reason": "Festival generalista con fuerte apuesta por el corto y sección de género Vortex (ciencia ficción, fantasía y terror). Calificador para los Oscar en cortometraje de ficción y documental (Gran Premio, máx. 40 min); sin requisito de estreno publicado.",
+  "verified_url": "https://www.film-festival.org/"
+ },
+ {
+  "name": "Glasgow Short Film Festival",
+  "country": "Reino Unido",
+  "city": "Glasgow",
+  "tier": "tier_b",
+  "month": "Marzo",
+  "deadline": "Junio-Octubre",
+  "submission_fee": "Consultar bases (aprox. 14-20€ en 2025)",
+  "platform": "FilmFreeway, Directo",
+  "url": "https://glasgowshort.org",
+  "genres": [
+   "experimental",
+   "drama",
+   "comedia",
+   "animacion",
+   "documental_social"
+  ],
+  "accepts_types": [
+   "cortometraje",
+   "documental",
+   "mediometraje"
+  ],
+  "prestige": 62,
+  "reason": "Festival escocés de cortos de programación audaz (máx. 40 min). Califica para los BAFTA y BIFA en el caso de películas británicas; no exige estreno y admite obras ya disponibles online.",
+  "verified_url": "https://glasgowshort.org/submissions/"
+ },
+ {
+  "name": "Filmfest Dresden (Dresde)",
+  "country": "Alemania",
+  "city": "Dresde",
+  "tier": "tier_b",
+  "month": "Abril",
+  "deadline": "Septiembre-Diciembre",
+  "submission_fee": "6€",
+  "platform": "Shortfilmdepot",
+  "url": "https://www.filmfest-dresden.de",
+  "genres": [
+   "drama",
+   "comedia",
+   "animacion",
+   "experimental",
+   "fantasia"
+  ],
+  "accepts_types": [
+   "cortometraje"
+  ],
+  "prestige": 64,
+  "reason": "Uno de los grandes festivales alemanes de cortometraje, con competición internacional de ficción y animación (máx. 30 min) y fuertes premios en metálico. Festival de referencia para las ayudas alemanas FFA; no exige estreno.",
+  "verified_url": "https://www.filmfest-dresden.de/en/news/details/call-for-entry-for-ffdd26-is-now-open"
+ },
+ {
+  "name": "Short Shorts Film Festival & Asia (Tokio)",
+  "country": "Japón",
+  "city": "Tokio",
+  "tier": "tier_b",
+  "month": "Junio",
+  "deadline": "Agosto-Enero",
+  "submission_fee": "Consultar bases",
+  "platform": "FilmFreeway, Directo",
+  "url": "https://www.shortshorts.org",
+  "genres": [
+   "drama",
+   "comedia",
+   "animacion",
+   "documental_social",
+   "fantasia"
+  ],
+  "accepts_types": [
+   "cortometraje",
+   "documental"
+  ],
+  "prestige": 66,
+  "reason": "Mayor festival de cortos de Asia, con competiciones de acción real, animación y no ficción (máx. 25 min, sin excepciones). Calificador para los Oscar (Best Short de cada competición); sin requisito de estreno publicado, solo producción reciente.",
+  "verified_url": "https://www.shortshorts.org/"
+ },
+ {
+  "name": "Festival Europeo de Cortometrajes de Brest",
+  "country": "Francia",
+  "city": "Brest",
+  "tier": "tier_b",
+  "month": "Noviembre",
+  "deadline": "Febrero-Junio",
+  "submission_fee": "Gratuito",
+  "platform": "Shortfilmdepot",
+  "url": "https://www.filmcourt.fr",
+  "genres": [
+   "drama",
+   "comedia",
+   "thriller",
+   "fantasia",
+   "romance"
+  ],
+  "accepts_types": [
+   "cortometraje"
+  ],
+  "prestige": 64,
+  "reason": "Festival de referencia para primeras obras: solo admite primeros cortos europeos de ficción en imagen real (máx. 30 min), incluidos cortos de escuela. Ideal para el debut de un cineasta español; sin requisito de estreno, solo no haber sido inscrito antes.",
+  "verified_url": "https://www.filmcourt.fr/IMG/pdf/reglement-2026-en.pdf"
+ },
+ {
+  "name": "Curtas Vila do Conde",
+  "country": "Portugal",
+  "city": "Vila do Conde",
+  "tier": "tier_b",
+  "month": "Julio",
+  "deadline": "Septiembre-Abril",
+  "submission_fee": "20-30€",
+  "platform": "FilmFreeway, Shortfilmdepot, Festhome",
+  "url": "https://festival.curtas.pt",
+  "genres": [
+   "drama",
+   "experimental",
+   "animacion",
+   "documental_social",
+   "comedia"
+  ],
+  "accepts_types": [
+   "cortometraje",
+   "documental",
+   "mediometraje"
+  ],
+  "prestige": 74,
+  "reason": "Gran festival ibérico de cortometraje, de línea autoral, que admite obras de hasta 60 min. El Gran Premio internacional califica para los Oscar y uno de sus ganadores es candidato a los Premios del Cine Europeo (EFA); exige al menos estreno en Portugal y prioriza estrenos mundiales.",
+  "verified_url": "https://festival.curtas.pt/en/info/call-for-entries/"
+ },
+ {
+  "name": "Festival Internacional de Cortometrajes de Drama",
+  "country": "Grecia",
+  "city": "Drama",
+  "tier": "tier_b",
+  "month": "Septiembre",
+  "deadline": "Enero-Abril",
+  "submission_fee": "25-30€",
+  "platform": "FilmFreeway",
+  "url": "https://www.dramafilmfestival.gr",
+  "genres": [
+   "drama",
+   "comedia",
+   "animacion",
+   "documental_social",
+   "experimental"
+  ],
+  "accepts_types": [
+   "cortometraje",
+   "documental",
+   "mediometraje"
+  ],
+  "prestige": 64,
+  "reason": "Principal festival de cortos de Grecia, con competiciones internacional, de estudiantes y documental (máx. 40 min; documental 30). Califica para los Oscar y los Premios del Cine Europeo (EFA); exige estreno en Grecia.",
+  "verified_url": "https://www.dramafilmfestival.gr/en/submissions/"
+ },
+ {
+  "name": "Cork International Film Festival",
+  "country": "Irlanda",
+  "city": "Cork",
+  "tier": "tier_b",
+  "month": "Noviembre",
+  "deadline": "Enero-Julio",
+  "submission_fee": "Consultar bases",
+  "platform": "FilmFreeway",
+  "url": "https://www.corkfilmfest.org",
+  "genres": [
+   "drama",
+   "comedia",
+   "animacion",
+   "documental_social",
+   "experimental"
+  ],
+  "accepts_types": [
+   "cortometraje",
+   "documental",
+   "mediometraje",
+   "largometraje"
+  ],
+  "prestige": 66,
+  "reason": "Festival histórico irlandés con fuerte programa de cortos internacionales y documentales cortos (máx. 40 min). Tres premios califican para los Oscar (corto internacional, irlandés y documental) y nomina un corto a los Premios del Cine Europeo (EFA); sin requisito de estreno publicado.",
+  "verified_url": "https://www.corkfilmfest.org/submissions-open-for-ciff2026/"
+ },
+ {
+  "name": "PÖFF Shorts (Tallin)",
+  "country": "Estonia",
+  "city": "Tallin",
+  "tier": "tier_b",
+  "month": "Noviembre",
+  "deadline": "Marzo-Agosto",
+  "submission_fee": "Consultar bases",
+  "platform": "FilmFreeway, Shortfilmdepot",
+  "url": "https://shorts.poff.ee",
+  "genres": [
+   "drama",
+   "comedia",
+   "animacion",
+   "experimental",
+   "fantasia",
+   "terror"
+  ],
+  "accepts_types": [
+   "cortometraje",
+   "mediometraje"
+  ],
+  "prestige": 64,
+  "reason": "Sección de cortos del Festival Black Nights de Tallin (máx. 45 min). Califica para los Oscar (Grand Prix de acción real y animación) y los BAFTA, y es miembro de la Academia de Cine Europeo; prioriza al menos el estreno en Estonia.",
+  "verified_url": "https://shorts.poff.ee/en/about/regulations-2026"
+ },
+ {
+  "name": "Busan International Short Film Festival (Busan)",
+  "country": "Corea del Sur",
+  "city": "Busan",
+  "tier": "tier_b",
+  "month": "Abril",
+  "deadline": "Octubre-Enero",
+  "submission_fee": "11-15€",
+  "platform": "Festhome, Shortfilmdepot, FilmFreeway",
+  "url": "https://www.bisff.org",
+  "genres": [
+   "drama",
+   "comedia",
+   "animacion",
+   "documental_social",
+   "experimental"
+  ],
+  "accepts_types": [
+   "cortometraje",
+   "documental"
+  ],
+  "prestige": 62,
+  "reason": "Festival de cortometrajes más antiguo de Asia, con competición internacional y coreana. Los Grand Prix califican para los Oscar en acción real y animación; no se publica requisito de estreno obligatorio, solo obras terminadas el año anterior.",
+  "verified_url": "https://filmmakers.festhome.com/festival/12"
+ },
+ {
+  "name": "Ottawa International Animation Festival",
+  "country": "Canadá",
+  "city": "Ottawa",
+  "tier": "tier_b",
+  "month": "Septiembre",
+  "deadline": "Marzo - Mayo",
+  "submission_fee": "Gratuito",
+  "platform": "Directo",
+  "url": "https://www.animationfestival.ca",
+  "genres": [
+   "animacion",
+   "experimental",
+   "otro"
+  ],
+  "accepts_types": [
+   "cortometraje",
+   "largometraje"
+  ],
+  "prestige": 88,
+  "reason": "Gran referencia norteamericana de la animación de autor: cortos, largos, estudiantes, encargos y series, con envío gratuito por el formulario de Eventival. Su Gran Premio de cortometraje es calificador para el Oscar y no exige estreno: solo hay que informar del estatus.",
+  "verified_url": "https://www.animationfestival.ca/?p=237134"
+ },
+ {
+  "name": "Animafest Zagreb",
+  "country": "Croacia",
+  "city": "Zagreb",
+  "tier": "tier_b",
+  "month": "Junio",
+  "deadline": "Hasta febrero (cortos) / marzo (largos)",
+  "submission_fee": "Gratuito",
+  "platform": "Directo",
+  "url": "https://animafest.hr",
+  "genres": [
+   "animacion",
+   "experimental",
+   "otro"
+  ],
+  "accepts_types": [
+   "cortometraje",
+   "largometraje"
+  ],
+  "prestige": 87,
+  "reason": "Uno de los festivales de animación más antiguos y prestigiosos de Europa, con competiciones de cortos (hasta 40 min), estudiantes, infantil y largos. La inscripción es gratuita por Filmchief y su Gran Premio de cortometraje califica para el Oscar. Exige obras terminadas en los dos últimos años, sin requisito de estreno publicado.",
+  "verified_url": "https://animafest.hr/en/vijesti/otvorene-su-prijave-za-animafest-zagreb-2026"
+ },
+ {
+  "name": "ITFS Stuttgart (Internationales Trickfilm-Festival)",
+  "country": "Alemania",
+  "city": "Stuttgart",
+  "tier": "tier_b",
+  "month": "Abril - Mayo",
+  "deadline": "Septiembre - Noviembre (cortos) / Enero (largos)",
+  "submission_fee": "10-15€",
+  "platform": "Directo",
+  "url": "https://www.itfs.de",
+  "genres": [
+   "animacion",
+   "experimental",
+   "documental_naturaleza",
+   "otro"
+  ],
+  "accepts_types": [
+   "cortometraje",
+   "largometraje"
+  ],
+  "prestige": 85,
+  "reason": "Gran festival europeo de animación con competición internacional (cortos de hasta 30 min), estudiantes, infantil, premio de naturaleza y AniMovie para largos. Se inscribe por Shortfilmdepot y el Grand Prix califica para el Oscar. En AniMovie, el largo no puede estar estrenado comercialmente en Alemania.",
+  "verified_url": "https://digitalproduction.com/2026/09/09/itfs-2027-opens-for-entries/"
+ },
+ {
+  "name": "Anima (Bruselas)",
+  "country": "Bélgica",
+  "city": "Bruselas",
+  "tier": "tier_b",
+  "month": "Febrero",
+  "deadline": "Junio - Octubre",
+  "submission_fee": "Gratuito",
+  "platform": "Directo",
+  "url": "https://animafestival.be",
+  "genres": [
+   "animacion",
+   "experimental",
+   "otro"
+  ],
+  "accepts_types": [
+   "cortometraje",
+   "largometraje"
+  ],
+  "prestige": 78,
+  "reason": "Festival de animación de referencia en el Benelux, con cortos y largos de cualquier técnica. La inscripción es gratuita por su plataforma propia (Festicine), y el Gran Premio de cortometraje es calificador para el Oscar. Pide obras terminadas en los 18 meses anteriores; las bases no publican requisito de estreno.",
+  "verified_url": "https://submission-animafestival.festicine.pro/fr"
+ },
+ {
+  "name": "Animac (Lleida)",
+  "country": "España",
+  "city": "Lleida",
+  "tier": "nacional",
+  "month": "Febrero",
+  "deadline": "Junio - Octubre",
+  "submission_fee": "Gratuito",
+  "platform": "Directo",
+  "url": "https://animac.paeria.cat",
+  "genres": [
+   "animacion",
+   "experimental",
+   "otro"
+  ],
+  "accepts_types": [
+   "cortometraje",
+   "largometraje"
+  ],
+  "prestige": 62,
+  "reason": "Muestra internacional de animación de autor de Cataluña, con secciones de cortos profesionales, de estudiante (Futur Talent, Talent.cat) e infantil (Petit Animac). Se inscribe por formulario web con enlace de visionado y sin límite de duración ni de año de producción. No es calificador ni exige estreno.",
+  "verified_url": "https://animac.paeria.cat/media/2026/05/BASES-INSCRIPCION_ANIMAC-2027_ESP.pdf"
+ },
+ {
+  "name": "Animayo (Gran Canaria)",
+  "country": "España",
+  "city": "Las Palmas de Gran Canaria",
+  "tier": "nacional",
+  "month": "Mayo",
+  "deadline": "Septiembre - Enero",
+  "submission_fee": "Gratuito",
+  "platform": "Directo",
+  "url": "https://www.animayo.com",
+  "genres": [
+   "animacion",
+   "otro"
+  ],
+  "accepts_types": [
+   "cortometraje"
+  ],
+  "prestige": 72,
+  "reason": "Es el único festival de animación español calificador para el Oscar al mejor cortometraje de animación, tanto en la competición internacional como en la de habla hispana. Ideal para cortos de animación; la inscripción es gratuita en su web y piden obras no presentadas en ediciones anteriores.",
+  "verified_url": "https://www.animayo.com/?accion=inscripcion_concurso"
+ },
+ {
+  "name": "Monstra (Lisboa)",
+  "country": "Portugal",
+  "city": "Lisboa",
+  "tier": "tier_b",
+  "month": "Marzo",
+  "deadline": "Junio - Octubre (internacional) / Diciembre (cortos portugueses)",
+  "submission_fee": "Consultar bases",
+  "platform": "FilmFreeway",
+  "url": "https://www.monstrafestival.com",
+  "genres": [
+   "animacion",
+   "experimental",
+   "otro"
+  ],
+  "accepts_types": [
+   "cortometraje",
+   "mediometraje",
+   "largometraje"
+  ],
+  "prestige": 75,
+  "reason": "Gran festival de animación del sur de Europa, con competiciones de largos, cortos largos, cortos, supercortos, estudiantes e infantil (Monstrinha). La animación debe ocupar al menos el 60% del metraje y hay que declarar si se usó IA. Piden obras terminadas en los dos últimos años y no presentadas antes.",
+  "verified_url": "https://monstrafestival.com/en/submissions/"
+ },
+ {
+  "name": "Fantoche (Baden)",
+  "country": "Suiza",
+  "city": "Baden",
+  "tier": "tier_b",
+  "month": "Septiembre",
+  "deadline": "Invierno - Mayo",
+  "submission_fee": "Gratuito",
+  "platform": "FilmFreeway",
+  "url": "https://www.fantoche.ch",
+  "genres": [
+   "animacion",
+   "experimental",
+   "otro"
+  ],
+  "accepts_types": [
+   "cortometraje",
+   "largometraje"
+  ],
+  "prestige": 80,
+  "reason": "Festival suizo de animación de autor y experimental; acepta cortos de hasta 40 minutos terminados en los dos últimos años. Desde 2025 su mejor film de la competición internacional es calificador para el Oscar. Inscripción gratuita, preferentemente por FilmFreeway.",
+  "verified_url": "https://www.fantoche.ch/en"
+ },
+ {
+  "name": "Animest (Bucarest)",
+  "country": "Rumanía",
+  "city": "Bucarest",
+  "tier": "tier_c",
+  "month": "Octubre",
+  "deadline": "Primavera - Julio",
+  "submission_fee": "Gratuito",
+  "platform": "Directo",
+  "url": "https://www.animest.ro",
+  "genres": [
+   "animacion",
+   "documental_social",
+   "experimental",
+   "musical",
+   "otro"
+  ],
+  "accepts_types": [
+   "cortometraje",
+   "largometraje",
+   "documental"
+  ],
+  "prestige": 68,
+  "reason": "Principal festival de animación de Europa del Este, con competiciones de cortos, largos, anidocs, estudiantes, infantil, videoclip y VR. La inscripción es gratuita por formulario web. Exige estreno en Rumanía y obras terminadas en los dos últimos años.",
+  "verified_url": "https://www.animest.ro/en/rules--regulations"
+ },
+ {
+  "name": "GLAS Animation Festival",
+  "country": "Estados Unidos",
+  "city": "Los Ángeles",
+  "tier": "tier_c",
+  "month": "Diciembre",
+  "deadline": "Mayo - Agosto",
+  "submission_fee": "Gratuito-45 USD",
+  "platform": "FilmFreeway",
+  "url": "https://www.glasanimation.com",
+  "genres": [
+   "animacion",
+   "experimental",
+   "otro"
+  ],
+  "accepts_types": [
+   "cortometraje"
+  ],
+  "prestige": 70,
+  "reason": "Festival independiente de animación de autor, nacido en Berkeley y celebrado ahora en Los Ángeles, con cortos narrativos, experimentales, de estudiantes y de encargo. El primer plazo es gratuito y luego cuesta entre 25 y 45 USD. No publica requisito de estreno ni estatus calificador.",
+  "verified_url": "https://www.glasanimation.com/submit"
+ },
+ {
+  "name": "New Chitose Airport International Animation Festival",
+  "country": "Japón",
+  "city": "Chitose (Hokkaido)",
+  "tier": "tier_c",
+  "month": "Noviembre",
+  "deadline": "Primavera - Julio",
+  "submission_fee": "Gratuito",
+  "platform": "FilmFreeway",
+  "url": "https://www.airport-anifes.jp/en/",
+  "genres": [
+   "animacion",
+   "musical",
+   "otro"
+  ],
+  "accepts_types": [
+   "cortometraje",
+   "largometraje"
+  ],
+  "prestige": 68,
+  "reason": "Original festival de animación celebrado en la terminal del aeropuerto de Nuevo Chitose, con competiciones de cortos (menos de 30 min), largos, videoclips y piezas de 15/30 segundos para pantallas. Buena ventana a Asia para la animación independiente. No admite obras presentadas en ediciones anteriores.",
+  "verified_url": "https://www.airport-anifes.jp/en/competition/"
+ },
+ {
+  "name": "Premios Quirino de la Animación Iberoamericana",
+  "country": "España",
+  "city": "Santa Cruz de Tenerife",
+  "tier": "nacional",
+  "month": "Abril",
+  "deadline": "Otoño - 1 de diciembre",
+  "submission_fee": "Consultar bases",
+  "platform": "Festhome",
+  "url": "https://premiosquirino.org",
+  "genres": [
+   "animacion",
+   "musical",
+   "otro"
+  ],
+  "accepts_types": [
+   "cortometraje",
+   "largometraje"
+  ],
+  "prestige": 74,
+  "reason": "Premios de referencia de la animación iberoamericana, con categorías de largo, serie, corto, corto de escuela, videoclip, encargo y videojuego. Al revés que un festival, exige que la obra ya esté estrenada (en cine, festival, TV o internet) dentro del periodo de elegibilidad. La inscripción va solo por Festhome, que cobra su propia tasa.",
+  "verified_url": "https://premiosquirino.org/download/Premios_Quirino_Bases_2026.pdf"
+ },
+ {
+  "name": "Fantasia (Montreal)",
+  "country": "Canadá",
+  "city": "Montreal",
+  "tier": "tier_b",
+  "month": "Julio - Agosto",
+  "deadline": "Otoño - Abril",
+  "submission_fee": "Consultar bases",
+  "platform": "FilmFreeway",
+  "url": "https://fantasiafestival.com",
+  "genres": [
+   "terror",
+   "ciencia_ficcion",
+   "fantasia",
+   "thriller",
+   "comedia",
+   "animacion",
+   "experimental"
+  ],
+  "accepts_types": [
+   "cortometraje",
+   "largometraje",
+   "documental"
+  ],
+  "prestige": 84,
+  "reason": "Mayor festival de cine de género de Norteamérica, con fantástico, terror, acción y ciencia ficción, aunque también programa drama, documental y animación. Hay varios plazos con tarifas crecientes en FilmFreeway. Pide obras de los últimos 18 meses que no estén disponibles en línea en abierto.",
+  "verified_url": "https://fantasiafestival.com/en/submissions"
+ },
+ {
+  "name": "Fantastic Fest (Austin)",
+  "country": "Estados Unidos",
+  "city": "Austin",
+  "tier": "tier_b",
+  "month": "Septiembre",
+  "deadline": "Enero - Mayo",
+  "submission_fee": "40-70 USD",
+  "platform": "FilmFreeway",
+  "url": "https://fantasticfest.com",
+  "genres": [
+   "terror",
+   "ciencia_ficcion",
+   "fantasia",
+   "thriller",
+   "comedia"
+  ],
+  "accepts_types": [
+   "cortometraje",
+   "largometraje"
+  ],
+  "prestige": 82,
+  "reason": "Mayor festival de género de Estados Unidos, centrado en terror, ciencia ficción y acción. Acepta largos de 70 minutos o más y cortos de menos de 25. Exige como mínimo estreno en EE. UU. (prefiere el mundial) y que la película no haya estado disponible en línea.",
+  "verified_url": "https://fantasticfest.com/film-submission"
+ },
+ {
+  "name": "NIFFF (Neuchâtel International Fantastic Film Festival)",
+  "country": "Suiza",
+  "city": "Neuchâtel",
+  "tier": "tier_b",
+  "month": "Julio",
+  "deadline": "Noviembre - Abril",
+  "submission_fee": "Consultar bases",
+  "platform": "Directo",
+  "url": "https://nifff.ch",
+  "genres": [
+   "terror",
+   "ciencia_ficcion",
+   "fantasia",
+   "thriller",
+   "animacion"
+  ],
+  "accepts_types": [
+   "cortometraje",
+   "largometraje"
+  ],
+  "prestige": 80,
+  "reason": "Principal festival fantástico suizo y miembro de la Federación Méliès, con largos (más de 60 min) y cortos (menos de 25). Exige estreno en Suiza, da prioridad a estrenos mundiales, internacionales o europeos y pide obras de los últimos 18 meses. La inscripción va por Eventival.",
+  "verified_url": "https://nifff.ch/en/professionals/industry-corner/"
+ },
+ {
+  "name": "BIFFF (Brussels International Fantastic Film Festival)",
+  "country": "Bélgica",
+  "city": "Bruselas",
+  "tier": "tier_b",
+  "month": "Marzo - Abril",
+  "deadline": "Septiembre - Enero (cortos) / Febrero (largos)",
+  "submission_fee": "Gratuito-20€",
+  "platform": "Festhome, FilmFreeway",
+  "url": "https://www.bifff.net",
+  "genres": [
+   "terror",
+   "ciencia_ficcion",
+   "fantasia",
+   "thriller"
+  ],
+  "accepts_types": [
+   "cortometraje",
+   "largometraje"
+  ],
+  "prestige": 76,
+  "reason": "Histórico festival fantástico europeo y calificador Méliès: su competición europea de cortos da el Méliès d'Argent, que pasa a competir por el Méliès d'Or. Los cortos de hasta 25 min cuestan unos 20€ (los belgas son gratis) y no pueden estar disponibles en abierto en internet.",
+  "verified_url": "https://filmmakers.festhome.com/festival/880/0/255"
+ },
+ {
+  "name": "Fantasporto (Oporto)",
+  "country": "Portugal",
+  "city": "Oporto",
+  "tier": "tier_b",
+  "month": "Febrero - Marzo",
+  "deadline": "Hasta noviembre",
+  "submission_fee": "Gratuito",
+  "platform": "Directo",
+  "url": "https://fantasporto.com",
+  "genres": [
+   "fantasia",
+   "terror",
+   "ciencia_ficcion",
+   "thriller",
+   "drama"
+  ],
+  "accepts_types": [
+   "cortometraje",
+   "largometraje"
+  ],
+  "prestige": 74,
+  "reason": "Veterano festival fantástico portugués, con competición fantástica de largos y de cortos (máx. 15 min), Semana de los Realizadores para largos de cualquier género y Orient Express para cine asiático. Las películas deben ser del año en curso y estar inéditas en Portugal. Se envían gratis por email con formulario firmado.",
+  "verified_url": "https://fantasporto.com/pt-pt/?p=17657"
+ },
+ {
+  "name": "Imagine Fantastic Film Festival (Ámsterdam)",
+  "country": "Países Bajos",
+  "city": "Ámsterdam",
+  "tier": "tier_c",
+  "month": "Octubre - Noviembre",
+  "deadline": "Primavera - Julio (cortos) / Agosto (largos)",
+  "submission_fee": "Consultar bases",
+  "platform": "FilmFreeway",
+  "url": "https://www.imaginefilmfestival.nl",
+  "genres": [
+   "terror",
+   "ciencia_ficcion",
+   "fantasia",
+   "thriller"
+  ],
+  "accepts_types": [
+   "cortometraje",
+   "largometraje"
+  ],
+  "prestige": 66,
+  "reason": "Festival fantástico neerlandés y miembro afiliado de la Federación Méliès. Acepta largos (60 min o más) y cortos de los dos últimos años, incluso montajes en curso. Exige estreno en los Países Bajos y que la obra no esté disponible en línea.",
+  "verified_url": "https://www.imaginefilmfestival.nl/en/industry/submissions/"
+ },
+ {
+  "name": "Festival Européen du Film Fantastique de Strasbourg",
+  "country": "Francia",
+  "city": "Estrasburgo",
+  "tier": "tier_c",
+  "month": "Septiembre - Octubre",
+  "deadline": "Febrero - Junio",
+  "submission_fee": "20-30€",
+  "platform": "Festhome, FilmFreeway",
+  "url": "https://strasbourgfestival.com",
+  "genres": [
+   "terror",
+   "ciencia_ficcion",
+   "fantasia",
+   "thriller",
+   "animacion",
+   "comedia"
+  ],
+  "accepts_types": [
+   "cortometraje",
+   "largometraje"
+  ],
+  "prestige": 72,
+  "reason": "Representante francés de la Federación Méliès, con competición internacional, de animación, Made in France y Méliès d'Argent para cortos europeos (máx. 25 min), además de Midnight Shorts. Pide obras de los últimos 24 meses, y en competición los largos deben estar inéditos en Francia. Cuesta 20€ por corto y 30€ por largo.",
+  "verified_url": "https://strasbourgfestival.com/wp-content/uploads/2026/02/2026-CM-En.pdf"
+ },
+ {
+  "name": "Festival International du Film Fantastique de Gérardmer",
+  "country": "Francia",
+  "city": "Gérardmer",
+  "tier": "tier_b",
+  "month": "Enero",
+  "deadline": "Otoño - Diciembre",
+  "submission_fee": "Gratuito",
+  "platform": "Directo",
+  "url": "https://festival-gerardmer.com",
+  "genres": [
+   "terror",
+   "ciencia_ficcion",
+   "fantasia",
+   "thriller"
+  ],
+  "accepts_types": [
+   "cortometraje",
+   "largometraje"
+  ],
+  "prestige": 78,
+  "reason": "Principal festival fantástico de Francia. Acepta largos de 75 minutos o más; en cortos solo admite ficción francesa o de mayoría francesa (máx. 30 min, sin animación ni documental). Las obras deben ser del año en curso. Los largos no pueden haberse visto en un gran evento francés y los cortos no pueden haberse emitido en TV o internet.",
+  "verified_url": "https://film-hopscotch.festicine.fr/"
+ },
+ {
+  "name": "Trieste Science+Fiction Festival",
+  "country": "Italia",
+  "city": "Trieste",
+  "tier": "tier_c",
+  "month": "Octubre - Noviembre",
+  "deadline": "Enero - Agosto",
+  "submission_fee": "Consultar bases",
+  "platform": "FilmFreeway",
+  "url": "https://www.sciencefictionfestival.org",
+  "genres": [
+   "ciencia_ficcion",
+   "fantasia",
+   "terror",
+   "documental_social"
+  ],
+  "accepts_types": [
+   "cortometraje",
+   "largometraje",
+   "documental"
+  ],
+  "prestige": 66,
+  "reason": "Principal festival italiano de ciencia ficción y miembro de la Federación Méliès, con el premio Asteroide (óperas primas a terceras) y el Méliès d'Argent para largos y cortos europeos (máx. 25 min). En competición exige obras inéditas en Italia y de los últimos 18 meses.",
+  "verified_url": "https://www.sciencefictionfestival.org/en/?p=46047"
+ },
+ {
+  "name": "Screamfest (Los Ángeles)",
+  "country": "Estados Unidos",
+  "city": "Los Ángeles",
+  "tier": "tier_c",
+  "month": "Octubre",
+  "deadline": "Abril - Agosto",
+  "submission_fee": "32-82 USD",
+  "platform": "FilmFreeway, Directo",
+  "url": "https://www.screamfestla.com",
+  "genres": [
+   "terror",
+   "thriller"
+  ],
+  "accepts_types": [
+   "cortometraje",
+   "mediometraje",
+   "largometraje"
+  ],
+  "prestige": 68,
+  "reason": "Veterano festival de terror de Hollywood que se celebra en los TCL Chinese Theatres. Acepta supercortos, cortos, cortos largos y largos terminados el último año. Exige que no haya habido ninguna proyección pública previa en el condado de Los Ángeles y que la obra no esté distribuida ni emitida.",
+  "verified_url": "https://www.screamfestla.com/submissions/submit-film"
+ },
+ {
+  "name": "Fantaspoa (Porto Alegre)",
+  "country": "Brasil",
+  "city": "Porto Alegre",
+  "tier": "tier_c",
+  "month": "Abril",
+  "deadline": "Otoño - Enero",
+  "submission_fee": "Consultar bases",
+  "platform": "FilmFreeway",
+  "url": "https://fantaspoa.com",
+  "genres": [
+   "terror",
+   "ciencia_ficcion",
+   "fantasia",
+   "thriller"
+  ],
+  "accepts_types": [
+   "cortometraje",
+   "largometraje"
+  ],
+  "prestige": 64,
+  "reason": "Mayor festival fantástico de Latinoamérica, con largos (60 min o más) y cortos (máx. 30 min) terminados en los dos últimos años. Exige que no se hayan proyectado en Porto Alegre. La inscripción va solo por FilmFreeway, sin exenciones de tasa.",
+  "verified_url": "https://filmfreeway.com/Fantaspoa"
+ },
+ {
+  "name": "Molins Horror Film Festival (Molins de Rei)",
+  "country": "España",
+  "city": "Molins de Rei",
+  "tier": "nacional",
+  "month": "Noviembre",
+  "deadline": "Febrero - Agosto (cortos) / Septiembre (largos)",
+  "submission_fee": "8-40€",
+  "platform": "Festhome, FilmFreeway",
+  "url": "https://www.molinsfilmfestival.com",
+  "genres": [
+   "terror",
+   "thriller",
+   "comedia"
+  ],
+  "accepts_types": [
+   "cortometraje",
+   "largometraje"
+  ],
+  "prestige": 60,
+  "reason": "Festival de cine de terror veterano y calificador Méliès, que entrega el Méliès d'Argent al mejor cortometraje europeo. Solo acepta terror: cortos de hasta 18 min y largos de más de 60, producidos desde enero del año anterior. Tiene sección Ç-Trencada para obras catalanas y TerrorKids.",
+  "verified_url": "https://filmmakers.festhome.com/es/festival/570"
+ },
+ {
+  "name": "Fancine (Festival de Cine Fantástico de Málaga)",
+  "country": "España",
+  "city": "Málaga",
+  "tier": "nacional",
+  "month": "Noviembre",
+  "deadline": "Hasta julio",
+  "submission_fee": "1€",
+  "platform": "FilmFreeway",
+  "url": "https://www.fancine.org",
+  "genres": [
+   "fantasia",
+   "terror",
+   "ciencia_ficcion",
+   "thriller",
+   "animacion"
+  ],
+  "accepts_types": [
+   "cortometraje",
+   "largometraje"
+  ],
+  "prestige": 55,
+  "reason": "Festival fantástico de la Universidad de Málaga, con competición de cortos de imagen real y de animación (máx. 15 min) por inscripción abierta en FilmFreeway, a 1€. Los largos van solo por invitación. Las obras deben ser posteriores al 1 de enero del año anterior y no haberse proyectado en la provincia de Málaga.",
+  "verified_url": "https://fancine.org/bases/"
+ },
+ {
+  "name": "Karlovy Vary IFF",
+  "country": "Chequia",
+  "city": "Karlovy Vary",
+  "tier": "tier_a",
+  "month": "Julio",
+  "deadline": "Octubre-Marzo",
+  "submission_fee": "60-100 EUR",
+  "platform": "Directo",
+  "url": "https://www.kviff.com",
+  "genres": [
+   "drama",
+   "comedia",
+   "thriller",
+   "romance",
+   "experimental",
+   "documental_social"
+  ],
+  "accepts_types": [
+   "largometraje",
+   "documental"
+  ],
+  "prestige": 82,
+  "reason": "Festival FIAPF de categoría A, referencia del cine de autor en Europa Central y del Este; solo largos de más de 60 minutos. Exige estreno mundial (las bases anteriores admitían estreno internacional o europeo para ficción).",
+  "verified_url": "https://www.kviff.com/en/programme/film-entry"
+ },
+ {
+  "name": "Thessaloniki IFF",
+  "country": "Grecia",
+  "city": "Tesalónica",
+  "tier": "tier_b",
+  "month": "Noviembre",
+  "deadline": "Mayo-Julio",
+  "submission_fee": "Hasta 60 EUR",
+  "platform": "Directo",
+  "url": "https://www.filmfestival.gr",
+  "genres": [
+   "drama",
+   "comedia",
+   "thriller",
+   "romance",
+   "experimental"
+  ],
+  "accepts_types": [
+   "largometraje"
+  ],
+  "prestige": 72,
+  "reason": "Su competición internacional es para primeras y segundas películas de ficción de más de 60 minutos, producidas en los 15 meses anteriores. Exige estreno en Grecia (sin pases públicos, TV ni online en el país).",
+  "verified_url": "https://filmfestival.gr/newsroom/news/submissions-open-for-the-67th-tiff/"
+ },
+ {
+  "name": "Sarajevo Film Festival",
+  "country": "Bosnia y Herzegovina",
+  "city": "Sarajevo",
+  "tier": "tier_b",
+  "month": "Agosto",
+  "deadline": "Marzo-Mayo",
+  "submission_fee": "Gratuito (competición); 40 EUR otras secciones",
+  "platform": "Directo",
+  "url": "https://www.sff.ba",
+  "genres": [
+   "drama",
+   "comedia",
+   "thriller",
+   "documental_social",
+   "experimental"
+  ],
+  "accepts_types": [
+   "largometraje",
+   "mediometraje",
+   "cortometraje",
+   "documental"
+  ],
+  "prestige": 75,
+  "reason": "Es el principal festival y punto de encuentro de la industria del sudeste de Europa, con competiciones de largo, corto y documental. Los requisitos de estreno dependen de la sección y conviene revisarlos en las bases.",
+  "verified_url": "https://www.sff.ba/en/news/12803/film-submissions-for-the-32nd-sarajevo-film-festival-programmes"
+ },
+ {
+  "name": "Tallinn Black Nights (PÖFF)",
+  "country": "Estonia",
+  "city": "Tallin",
+  "tier": "tier_a",
+  "month": "Noviembre",
+  "deadline": "Marzo-Agosto",
+  "submission_fee": "Consultar bases",
+  "platform": "FilmFreeway",
+  "url": "https://poff.ee",
+  "genres": [
+   "drama",
+   "comedia",
+   "thriller",
+   "terror",
+   "fantasia",
+   "romance",
+   "documental_social",
+   "experimental"
+  ],
+  "accepts_types": [
+   "largometraje",
+   "documental"
+  ],
+  "prestige": 78,
+  "reason": "Festival FIAPF de categoría A con varias competiciones (Oficial, Primera Película, Rebels with a Cause, Doc@PÖFF). Para competir exige estreno mundial y un mínimo de 70 minutos; para otras secciones basta el estreno en Estonia.",
+  "verified_url": "https://www.poff.ee/en/news/submissions-for-poff-30-are-open-now/"
+ },
+ {
+  "name": "Göteborg Film Festival",
+  "country": "Suecia",
+  "city": "Gotemburgo",
+  "tier": "tier_b",
+  "month": "Enero-Febrero",
+  "deadline": "Junio-Octubre",
+  "submission_fee": "35 EUR (gratuito para películas suecas)",
+  "platform": "Directo",
+  "url": "https://goteborgfilmfestival.se",
+  "genres": [
+   "drama",
+   "comedia",
+   "thriller",
+   "romance",
+   "documental_social",
+   "experimental"
+  ],
+  "accepts_types": [
+   "largometraje",
+   "documental"
+  ],
+  "prestige": 72,
+  "reason": "Es el gran festival nórdico y la puerta de entrada al mercado escandinavo; los largos extranjeros deben durar al menos 50 minutos y no admite cortos extranjeros. Exige estreno en Suecia y primer pase público posterior al 1 de enero del año anterior.",
+  "verified_url": "https://www.goteborgfilmfestival.se/en/submissions"
+ },
+ {
+  "name": "Shanghai IFF",
+  "country": "China",
+  "city": "Shanghái",
+  "tier": "tier_a",
+  "month": "Junio",
+  "deadline": "Diciembre-Marzo",
+  "submission_fee": "Consultar bases",
+  "platform": "Directo",
+  "url": "https://www.siff.com",
+  "genres": [
+   "drama",
+   "comedia",
+   "thriller",
+   "romance",
+   "animacion",
+   "documental_social"
+  ],
+  "accepts_types": [
+   "largometraje",
+   "cortometraje",
+   "documental"
+  ],
+  "prestige": 76,
+  "reason": "Único festival FIAPF de categoría A de China, con los Golden Goblet en cinco categorías competitivas; buena vía hacia el mercado chino. Prefiere estrenos mundiales o internacionales y exige que la película no haya competido en otro festival FIAPF no especializado (mínimo 70 minutos en la competición principal).",
+  "verified_url": "https://asianfilmfestivals.com/2025/12/18/shanghai-international-film-festival-call-for-entry-2026/"
+ },
+ {
+  "name": "Tokyo IFF",
+  "country": "Japón",
+  "city": "Tokio",
+  "tier": "tier_a",
+  "month": "Octubre-Noviembre",
+  "deadline": "Marzo-Julio",
+  "submission_fee": "3.300-5.500 JPY",
+  "platform": "Directo",
+  "url": "https://www.tiff-jp.net",
+  "genres": [
+   "drama",
+   "comedia",
+   "thriller",
+   "romance",
+   "animacion",
+   "documental_social"
+  ],
+  "accepts_types": [
+   "largometraje",
+   "documental"
+  ],
+  "prestige": 76,
+  "reason": "Es el principal festival competitivo de Japón y acepta largos de ficción, documental y animación de más de 60 minutos. Exige como mínimo estreno en Japón, con prioridad para estrenos mundiales e internacionales.",
+  "verified_url": "https://asianfilmfestivals.com/2026/04/07/tokyo-international-film-festival-call-for-entry-2026/"
+ },
+ {
+  "name": "Warsaw Film Festival",
+  "country": "Polonia",
+  "city": "Varsovia",
+  "tier": "tier_b",
+  "month": "Octubre",
+  "deadline": "Abril-Julio",
+  "submission_fee": "30-90 USD",
+  "platform": "FilmFreeway, Festhome",
+  "url": "https://wff.pl",
+  "genres": [
+   "drama",
+   "comedia",
+   "thriller",
+   "animacion",
+   "documental_social",
+   "experimental"
+  ],
+  "accepts_types": [
+   "largometraje",
+   "cortometraje",
+   "documental"
+  ],
+  "prestige": 68,
+  "reason": "Festival FIAPF con competición internacional y secciones de óperas primas y documental; admite largos de más de 60 minutos y cortos de menos de 40. Exige estreno en Polonia y da prioridad a estrenos mundiales, internacionales y europeos.",
+  "verified_url": "https://asianfilmfestivals.com/2026/05/11/warsaw-international-film-festival-call-for-entry-2026/"
+ },
+ {
+  "name": "Cairo IFF",
+  "country": "Egipto",
+  "city": "El Cairo",
+  "tier": "tier_b",
+  "month": "Noviembre",
+  "deadline": "Abril-Agosto",
+  "submission_fee": "Consultar bases (cortos 15-30 USD)",
+  "platform": "Directo, FilmFreeway",
+  "url": "https://www.ciff.org.eg",
+  "genres": [
+   "drama",
+   "comedia",
+   "thriller",
+   "romance",
+   "documental_social"
+  ],
+  "accepts_types": [
+   "largometraje",
+   "cortometraje",
+   "documental"
+  ],
+  "prestige": 66,
+  "reason": "Es el festival FIAPF más veterano del mundo árabe y abre puertas a Oriente Medio y el Norte de África. La película no puede haberse proyectado en la región MENA ni emitido en TV o internet antes de su pase en El Cairo.",
+  "verified_url": "https://ciff.org.eg/en/media/news/ciff-announces-the-opening-of-submissions-for-its-47th-edition"
+ },
+ {
+  "name": "Red Sea IFF (Yeda)",
+  "country": "Arabia Saudí",
+  "city": "Yeda",
+  "tier": "tier_b",
+  "month": "Diciembre",
+  "deadline": "Mayo-Agosto",
+  "submission_fee": "Consultar bases",
+  "platform": "Directo",
+  "url": "https://redseafilmfest.com",
+  "genres": [
+   "drama",
+   "comedia",
+   "thriller",
+   "animacion",
+   "documental_social"
+  ],
+  "accepts_types": [
+   "largometraje",
+   "cortometraje",
+   "documental"
+  ],
+  "prestige": 68,
+  "reason": "Sus competiciones están reservadas a cineastas árabes, asiáticos y africanos (residentes en cualquier país) y cuenta con un fuerte fondo y mercado. La película no puede haber estado disponible en TV, internet ni plataformas en la región MENA.",
+  "verified_url": "https://redseafilmfest.com/en/film-submissions/"
+ },
+ {
+  "name": "Marrakech IFF",
+  "country": "Marruecos",
+  "city": "Marrakech",
+  "tier": "tier_b",
+  "month": "Noviembre-Diciembre",
+  "deadline": "Abril-Julio",
+  "submission_fee": "Consultar bases",
+  "platform": "Directo",
+  "url": "https://marrakech-festival.com",
+  "genres": [
+   "drama",
+   "comedia",
+   "thriller",
+   "romance"
+  ],
+  "accepts_types": [
+   "largometraje"
+  ],
+  "prestige": 70,
+  "reason": "Su competición reúne unas 12 primeras y segundas películas de ficción internacionales ante jurados de gran prestigio. En la edición anterior se exigía como mínimo estreno africano.",
+  "verified_url": "https://marrakech-festival.com/wp-content/uploads/2026/04/OKReglement-et-inscription-FIFM-2026-VAVFVUK.pdf"
+ },
+ {
+  "name": "Palm Springs IFF",
+  "country": "Estados Unidos",
+  "city": "Palm Springs",
+  "tier": "tier_b",
+  "month": "Enero",
+  "deadline": "Mayo-Agosto",
+  "submission_fee": "Consultar bases",
+  "platform": "FilmFreeway",
+  "url": "https://www.psfilmfest.org",
+  "genres": [
+   "drama",
+   "comedia",
+   "thriller",
+   "romance",
+   "documental_social"
+  ],
+  "accepts_types": [
+   "largometraje",
+   "documental"
+  ],
+  "prestige": 65,
+  "reason": "Es un escaparate clave del cine internacional en EE. UU., sobre todo para candidatas al Óscar a mejor película internacional; solo largos de 70 minutos o más. No exige estreno mundial, pero la película no puede haberse visto en el Valle de Coachella ni en streaming en EE. UU.",
+  "verified_url": "https://asianfilmfestivals.com/2026/05/12/palm-springs-international-film-festival-call-for-entry-2027/"
+ },
+ {
+  "name": "SXSW Film & TV Festival (Austin)",
+  "country": "Estados Unidos",
+  "city": "Austin",
+  "tier": "tier_b",
+  "month": "Marzo",
+  "deadline": "Julio-Octubre",
+  "submission_fee": "95-125 USD (largos); 55-90 USD (cortos)",
+  "platform": "Directo",
+  "url": "https://www.sxsw.com/film",
+  "genres": [
+   "drama",
+   "comedia",
+   "thriller",
+   "terror",
+   "ciencia_ficcion",
+   "animacion",
+   "documental_social",
+   "experimental"
+  ],
+  "accepts_types": [
+   "largometraje",
+   "cortometraje",
+   "documental"
+  ],
+  "prestige": 78,
+  "reason": "Es el gran escaparate del cine independiente y de género en EE. UU., con mucha presencia de prensa y compradores. El estado de estreno pesa en la selección, pero no es un requisito absoluto; la película no puede haberse estrenado en plataformas online.",
+  "verified_url": "https://www.sxsw.com/film"
+ },
+ {
+  "name": "Telluride Film Festival",
+  "country": "Estados Unidos",
+  "city": "Telluride",
+  "tier": "tier_b",
+  "month": "Septiembre",
+  "deadline": "Abril-Julio",
+  "submission_fee": "35-95 USD",
+  "platform": "Directo",
+  "url": "https://www.telluridefilmfestival.org",
+  "genres": [
+   "drama",
+   "comedia",
+   "biopic",
+   "documental_social",
+   "experimental"
+  ],
+  "accepts_types": [
+   "largometraje",
+   "cortometraje",
+   "documental"
+  ],
+  "prestige": 88,
+  "reason": "Es un festival muy selectivo y decisivo para la temporada de premios en EE. UU.; su programa no se anuncia hasta la víspera. Los largos deben tener allí su primer pase en Norteamérica y solo admite montajes con imagen cerrada.",
+  "verified_url": "https://passes.telluridefilmfestival.org/filmsubmission"
+ },
+ {
+  "name": "Seattle IFF (SIFF)",
+  "country": "Estados Unidos",
+  "city": "Seattle",
+  "tier": "tier_c",
+  "month": "Mayo",
+  "deadline": "Agosto-Enero",
+  "submission_fee": "Consultar bases",
+  "platform": "FilmFreeway",
+  "url": "https://www.siff.net",
+  "genres": [
+   "drama",
+   "comedia",
+   "thriller",
+   "animacion",
+   "documental_social",
+   "experimental"
+  ],
+  "accepts_types": [
+   "largometraje",
+   "cortometraje",
+   "documental"
+  ],
+  "prestige": 60,
+  "reason": "Es uno de los festivales de público más grandes de EE. UU. y una buena plataforma para el lanzamiento en ese país. Basta con un estreno en el oeste del estado de Washington y admite películas ya vistas en otros festivales de EE. UU.",
+  "verified_url": "https://www.siff.net/media/news/pr-festival-2027-call-for-entries"
+ },
+ {
+  "name": "BFI London Film Festival",
+  "country": "Reino Unido",
+  "city": "Londres",
+  "tier": "tier_b",
+  "month": "Octubre",
+  "deadline": "Marzo-Mayo",
+  "submission_fee": "Consultar bases",
+  "platform": "Directo",
+  "url": "https://www.bfi.org.uk/london-film-festival",
+  "genres": [
+   "drama",
+   "comedia",
+   "thriller",
+   "terror",
+   "documental_social",
+   "experimental",
+   "animacion"
+  ],
+  "accepts_types": [
+   "largometraje",
+   "cortometraje",
+   "documental"
+  ],
+  "prestige": 82,
+  "reason": "Es el gran escaparate del cine de autor internacional en Reino Unido. La convocatoria abierta de 2026 se limitó a obras de Reino Unido e Irlanda, así que el cine internacional entra sobre todo por invitación de los programadores.",
+  "verified_url": "https://www.bfi.org.uk/explore-our-festivals/70th-bfi-london-film-festival-submissions"
+ },
+ {
+  "name": "Edinburgh IFF",
+  "country": "Reino Unido",
+  "city": "Edimburgo",
+  "tier": "tier_b",
+  "month": "Agosto",
+  "deadline": "Diciembre-Abril",
+  "submission_fee": "55-125 USD",
+  "platform": "FilmFreeway",
+  "url": "https://www.edfilmfest.org",
+  "genres": [
+   "drama",
+   "comedia",
+   "thriller",
+   "terror",
+   "animacion",
+   "documental_social",
+   "experimental"
+  ],
+  "accepts_types": [
+   "largometraje",
+   "cortometraje",
+   "documental"
+  ],
+  "prestige": 66,
+  "reason": "Es uno de los festivales en activo más antiguos del mundo y ofrece el Sean Connery Prize, dotado con 50.000 libras. Exige como mínimo estreno en Reino Unido, y estreno mundial para optar a los premios.",
+  "verified_url": "https://www.edfilmfest.org/submission"
+ },
+ {
+  "name": "Zurich Film Festival",
+  "country": "Suiza",
+  "city": "Zúrich",
+  "tier": "tier_b",
+  "month": "Septiembre-Octubre",
+  "deadline": "Marzo-Junio",
+  "submission_fee": "Consultar bases",
+  "platform": "FilmFreeway",
+  "url": "https://zff.com",
+  "genres": [
+   "drama",
+   "comedia",
+   "thriller",
+   "romance",
+   "documental_social"
+  ],
+  "accepts_types": [
+   "largometraje",
+   "documental"
+  ],
+  "prestige": 70,
+  "reason": "Sus competiciones internacionales de ficción y documental son para la primera, segunda o tercera película de un director (mínimo 60 minutos). Exige como mínimo estreno en Suiza.",
+  "verified_url": "https://zff.com/en/film-submission"
+ },
+ {
+  "name": "FilmFestival Cottbus",
+  "country": "Alemania",
+  "city": "Cottbus",
+  "tier": "tier_c",
+  "month": "Noviembre",
+  "deadline": "Abril-Julio",
+  "submission_fee": "Consultar bases",
+  "platform": "FilmFreeway",
+  "url": "https://www.filmfestivalcottbus.de",
+  "genres": [
+   "drama",
+   "comedia",
+   "thriller",
+   "documental_social",
+   "experimental"
+  ],
+  "accepts_types": [
+   "largometraje",
+   "cortometraje"
+  ],
+  "prestige": 55,
+  "reason": "Es el festival de referencia del cine de Europa del Este, Centro-Este y Sudeste (también Grecia, Turquía, Finlandia, el Cáucaso y Asia Central); no admite producciones españolas salvo coproducción con esos países. La competición de largos exige estreno en Alemania.",
+  "verified_url": "https://www.filmfestivalcottbus.de/en/program-en/film-submission/regulations.html"
+ },
+ {
+  "name": "Transilvania IFF (Cluj)",
+  "country": "Rumanía",
+  "city": "Cluj-Napoca",
+  "tier": "tier_b",
+  "month": "Junio",
+  "deadline": "Octubre-Febrero",
+  "submission_fee": "30-50 EUR",
+  "platform": "Directo",
+  "url": "https://tiff.ro",
+  "genres": [
+   "drama",
+   "comedia",
+   "thriller",
+   "terror",
+   "fantasia",
+   "documental_social",
+   "experimental"
+  ],
+  "accepts_types": [
+   "largometraje",
+   "documental"
+  ],
+  "prestige": 64,
+  "reason": "Es el principal festival de Rumanía; su Competición Oficial es para primeras y segundas películas de ficción y la sección What's Up, Doc? para documentales. La película no puede haberse proyectado en Rumanía y su estreno mundial debe ser reciente (posterior a mayo del año anterior).",
+  "verified_url": "https://www.tiff.ro/en/submissions-now-open-25th-edition-transilvania-iff"
+ },
+ {
+  "name": "Sofia IFF",
+  "country": "Bulgaria",
+  "city": "Sofía",
+  "tier": "tier_c",
+  "month": "Marzo",
+  "deadline": "Septiembre-Octubre",
+  "submission_fee": "35-45 EUR",
+  "platform": "Directo",
+  "url": "https://siff.bg",
+  "genres": [
+   "drama",
+   "comedia",
+   "thriller",
+   "documental_social"
+  ],
+  "accepts_types": [
+   "largometraje",
+   "documental"
+  ],
+  "prestige": 56,
+  "reason": "Es el mayor festival competitivo de Bulgaria (acreditado por la FIAPF), con competiciones internacional de primeras y segundas películas, balcánica y documental. Las bases publicadas no detallan requisitos de estreno, así que conviene consultarlos.",
+  "verified_url": "https://siff.bg/en"
+ },
+ {
+  "name": "Film Fest Gent",
+  "country": "Bélgica",
+  "city": "Gante",
+  "tier": "tier_b",
+  "month": "Octubre",
+  "deadline": "Marzo-Julio",
+  "submission_fee": "Consultar bases",
+  "platform": "Directo",
+  "url": "https://www.filmfestival.be",
+  "genres": [
+   "drama",
+   "comedia",
+   "musical",
+   "romance",
+   "documental_social"
+  ],
+  "accepts_types": [
+   "largometraje",
+   "mediometraje",
+   "cortometraje"
+  ],
+  "prestige": 62,
+  "reason": "Festival belga de referencia, centrado en el impacto de la música en el cine, con una competición de 12 a 15 largos. Exige como mínimo estreno en Bélgica.",
+  "verified_url": "https://www.filmfestival.be/volumes/general/PDFs/01.-General-rules-2026.pdf"
+ },
+ {
+  "name": "Viennale",
+  "country": "Austria",
+  "city": "Viena",
+  "tier": "tier_b",
+  "month": "Octubre-Noviembre",
+  "deadline": "Abril-Julio",
+  "submission_fee": "Consultar bases",
+  "platform": "Directo",
+  "url": "https://www.viennale.at",
+  "genres": [
+   "drama",
+   "comedia",
+   "experimental",
+   "documental_social",
+   "noir"
+  ],
+  "accepts_types": [
+   "largometraje",
+   "mediometraje",
+   "cortometraje",
+   "documental"
+  ],
+  "prestige": 72,
+  "reason": "Es un festival no competitivo de cine de autor, muy respetado por la crítica, sin límites de duración; el formulario de inscripción abre en abril y la mayoría de películas se seleccionan por invitación. Exige estreno en Austria para todo el cine contemporáneo.",
+  "verified_url": "https://www.viennale.at/en/submission"
+ },
+ {
+  "name": "Torino Film Festival",
+  "country": "Italia",
+  "city": "Turín",
+  "tier": "tier_b",
+  "month": "Noviembre-Diciembre",
+  "deadline": "Mayo-Septiembre",
+  "submission_fee": "15-30 EUR (más caro desde agosto)",
+  "platform": "FilmFreeway",
+  "url": "https://www.torinofilmfest.org",
+  "genres": [
+   "drama",
+   "comedia",
+   "thriller",
+   "terror",
+   "documental_social",
+   "experimental"
+  ],
+  "accepts_types": [
+   "largometraje",
+   "cortometraje",
+   "documental"
+  ],
+  "prestige": 68,
+  "reason": "Es un festival italiano de cine joven e independiente con competiciones internacionales de largo, documental y corto. Los largos requieren estreno mundial o internacional, y los cortos estreno internacional o europeo.",
+  "verified_url": "https://asianfilmfestivals.com/2026/03/21/torino-film-festival-call-for-entry-2026"
+ },
+ {
+  "name": "Rome Film Fest (Festa del Cinema di Roma)",
+  "country": "Italia",
+  "city": "Roma",
+  "tier": "tier_b",
+  "month": "Octubre",
+  "deadline": "Abril-Julio",
+  "submission_fee": "60-150 EUR",
+  "platform": "Directo",
+  "url": "https://www.romacinemafest.it",
+  "genres": [
+   "drama",
+   "comedia",
+   "thriller",
+   "animacion",
+   "documental_social"
+  ],
+  "accepts_types": [
+   "largometraje",
+   "documental"
+  ],
+  "prestige": 68,
+  "reason": "En su competición Progressive Cinema (máximo 18 títulos) compiten juntos ficción, documental y animación; tiene gran eco mediático en Italia. Da prioridad a los estrenos internacionales.",
+  "verified_url": "https://my.romacinemafest.org/media/29809/rules-and-regulations-en-2026.pdf"
+ },
+ {
+  "name": "Mostra Internazionale del Nuovo Cinema (Pesaro)",
+  "country": "Italia",
+  "city": "Pesaro",
+  "tier": "tier_c",
+  "month": "Junio",
+  "deadline": "Febrero-Abril",
+  "submission_fee": "Consultar bases",
+  "platform": "Directo",
+  "url": "https://pesarofilmfest.it",
+  "genres": [
+   "experimental",
+   "drama",
+   "documental_social"
+  ],
+  "accepts_types": [
+   "largometraje",
+   "mediometraje",
+   "cortometraje",
+   "documental"
+  ],
+  "prestige": 58,
+  "reason": "Es un festival histórico de nuevo cine y lenguajes de vanguardia; su Concorso Pesaro Nuovo Cinema no pone límites de formato, género, duración ni idioma. El requisito de estreno no aparece publicado, así que conviene consultarlo en las bases.",
+  "verified_url": "https://pesarofilmfest.it/"
+ },
+ {
+  "name": "Les Arcs Film Festival",
+  "country": "Francia",
+  "city": "Bourg-Saint-Maurice (Les Arcs)",
+  "tier": "tier_b",
+  "month": "Diciembre",
+  "deadline": "Junio-Agosto",
+  "submission_fee": "25-45 EUR",
+  "platform": "Directo",
+  "url": "https://www.lesarcs-filmfest.com",
+  "genres": [
+   "drama",
+   "comedia",
+   "thriller",
+   "animacion",
+   "documental_social"
+  ],
+  "accepts_types": [
+   "largometraje",
+   "cortometraje",
+   "documental"
+  ],
+  "prestige": 62,
+  "reason": "Es un festival de cine europeo (la productora principal debe tener sede en Europa) que se celebra junto al Industry Village, con su Coproduction Village y sus Work in Progress. Exige estreno en Francia, aunque algunos listados hablan de estreno mundial, así que conviene confirmarlo en las bases.",
+  "verified_url": "https://festagent.com/en/festivals/festival_arcs"
+ },
+ {
+  "name": "Premiers Plans (Angers)",
+  "country": "Francia",
+  "city": "Angers",
+  "tier": "tier_b",
+  "month": "Enero",
+  "deadline": "Junio-Septiembre",
+  "submission_fee": "7-30 EUR",
+  "platform": "Directo",
+  "url": "https://www.premiersplans.org",
+  "genres": [
+   "drama",
+   "comedia",
+   "animacion",
+   "documental_social"
+  ],
+  "accepts_types": [
+   "largometraje",
+   "cortometraje",
+   "documental"
+  ],
+  "prestige": 64,
+  "reason": "Es el festival de referencia para primeras y segundas películas europeas (largos de más de 59 minutos, cortos, cine de escuela y animación) y muy influyente en la distribución francesa. La película no puede haberse distribuido comercialmente ni emitido en Francia.",
+  "verified_url": "https://www.premiersplans.org/en/call-for-films-official-selection"
+ },
+ {
+  "name": "IFF Mannheim-Heidelberg",
+  "country": "Alemania",
+  "city": "Mannheim y Heidelberg",
+  "tier": "tier_c",
+  "month": "Noviembre",
+  "deadline": "Marzo-Junio",
+  "submission_fee": "25-40 EUR",
+  "platform": "Directo",
+  "url": "https://www.iffmh.de",
+  "genres": [
+   "drama",
+   "comedia",
+   "thriller"
+  ],
+  "accepts_types": [
+   "largometraje"
+  ],
+  "prestige": 56,
+  "reason": "Su competición On the Rise es para primeras y segundas películas de más de 61 minutos y es un festival veterano en el descubrimiento de nuevos autores. Exige estreno en Alemania, con prioridad para estrenos europeos o internacionales y un estreno mundial reciente.",
+  "verified_url": "https://timetable.iffmh.de/zope60/iffmh_2024/content/e12111/e4016/e11596/IFFMHSubmissionRegulations2026_eng.pdf"
+ },
+ {
+  "name": "Molodist Kyiv IFF",
+  "country": "Ucrania",
+  "city": "Kiev",
+  "tier": "tier_c",
+  "month": "Octubre-Noviembre",
+  "deadline": "Enero-Agosto",
+  "submission_fee": "Consultar bases",
+  "platform": "FilmFreeway",
+  "url": "https://molodist.com",
+  "genres": [
+   "drama",
+   "comedia",
+   "animacion",
+   "documental_social",
+   "experimental"
+  ],
+  "accepts_types": [
+   "largometraje",
+   "cortometraje",
+   "documental"
+  ],
+  "prestige": 54,
+  "reason": "Es el principal festival de Ucrania, acreditado por la FIAPF, con competiciones de largo, corto y cine de escuela. La película no puede haberse proyectado antes en Ucrania y debe llevar subtítulos en inglés.",
+  "verified_url": "https://asianfilmfestivals.com/2026/01/02/molodist-kyiv-international-film-festival-call-for-entry-2026/"
+ },
+ {
+  "name": "Jerusalem Film Festival",
+  "country": "Israel",
+  "city": "Jerusalén",
+  "tier": "tier_b",
+  "month": "Julio",
+  "deadline": "Enero-Abril",
+  "submission_fee": "Consultar bases",
+  "platform": "Directo",
+  "url": "https://www.jff.org.il",
+  "genres": [
+   "drama",
+   "comedia",
+   "documental_social"
+  ],
+  "accepts_types": [
+   "largometraje",
+   "documental"
+  ],
+  "prestige": 60,
+  "reason": "Es el principal festival internacional de Israel y solo admite largos de más de 60 minutos. Exige estreno en Israel, y la película no puede haberse mostrado en ningún lugar más de 12 meses antes del festival.",
+  "verified_url": "https://filmchief.com/festivals/jff/download/JFF-2024-International-Submissions-Regulations.pdf"
+ },
+ {
+  "name": "European Film Market (Berlín)",
+  "country": "Alemania",
+  "city": "Berlín",
+  "tier": "tier_b",
+  "month": "Febrero",
+  "deadline": "Octubre-Febrero",
+  "submission_fee": "Consultar bases",
+  "platform": "Directo",
+  "url": "https://www.efm-berlinale.de",
+  "genres": [
+   "drama",
+   "comedia",
+   "thriller",
+   "terror",
+   "animacion",
+   "documental_social",
+   "otro"
+  ],
+  "accepts_types": [
+   "largometraje",
+   "documental"
+  ],
+  "prestige": 88,
+  "reason": "Es el primer gran mercado del año, junto a la Berlinale, y sirve para vender la película a agentes de ventas y distribuidores, buscar coproducción y organizar pases de mercado. Funciona con acreditación de pago con tarifas Early Bear, Regular y Late (desde octubre); no exige estreno.",
+  "verified_url": "https://www.efm-berlinale.de/media/pdf_word/efm/76_efm/efm2027_pricing-list.pdf"
+ },
+ {
+  "name": "Marché du Film (Cannes)",
+  "country": "Francia",
+  "city": "Cannes",
+  "tier": "tier_b",
+  "month": "Mayo",
+  "deadline": "Febrero-Abril",
+  "submission_fee": "Consultar bases (badge aprox. 530-630 EUR sin IVA en 2026)",
+  "platform": "Directo",
+  "url": "https://www.marchedufilm.com",
+  "genres": [
+   "drama",
+   "comedia",
+   "thriller",
+   "terror",
+   "animacion",
+   "documental_social",
+   "otro"
+  ],
+  "accepts_types": [
+   "largometraje",
+   "documental"
+  ],
+  "prestige": 88,
+  "reason": "Es el mayor mercado de cine del mundo, durante el Festival de Cannes, y sirve para ventas internacionales, búsqueda de financiación y coproducción, pases de mercado y programas como Producers Network o Cannes Docs. La acreditación se tramita de febrero a mediados de abril, con recargo para las solicitudes tardías.",
+  "verified_url": "https://www.festival-cannes.com/en/participate/accreditations"
+ },
+ {
+  "name": "American Film Market (AFM, Los Ángeles)",
+  "country": "Estados Unidos",
+  "city": "Los Ángeles",
+  "tier": "tier_b",
+  "month": "Noviembre",
+  "deadline": "Marzo-Noviembre",
+  "submission_fee": "345-1.295 USD (badges de asistente)",
+  "platform": "Directo",
+  "url": "https://americanfilmmarket.com",
+  "genres": [
+   "thriller",
+   "terror",
+   "comedia",
+   "drama",
+   "aventura",
+   "ciencia_ficcion",
+   "otro"
+  ],
+  "accepts_types": [
+   "largometraje"
+  ],
+  "prestige": 80,
+  "reason": "Es el gran mercado de cine independiente de EE. UU., centrado en adquisiciones, financiación y ventas, especialmente de cine comercial y de género. La inscripción de expositores abre en marzo-abril y la de asistentes en junio; no exige estreno.",
+  "verified_url": "https://americanfilmmarket.com/afm-badges-2026/"
+ },
+ {
+  "name": "Thessaloniki Agora (TIFF Agora)",
+  "country": "Grecia",
+  "city": "Tesalónica",
+  "tier": "tier_b",
+  "month": "Noviembre",
+  "deadline": "Consultar bases",
+  "submission_fee": "Consultar bases",
+  "platform": "Directo",
+  "url": "https://www.filmfestival.gr/en/tiff/tiff-agora/",
+  "genres": [
+   "drama",
+   "comedia",
+   "thriller",
+   "documental_social"
+  ],
+  "accepts_types": [
+   "largometraje"
+  ],
+  "prestige": 62,
+  "reason": "Es el mercado del Festival de Tesalónica, centrado en el sudeste de Europa y el Mediterráneo, y sirve para buscar coproductores (Crossroads Co-production Forum, para ficción en desarrollo), presentar películas en postproducción (Works in Progress) y vender a través de una videoteca online en Cinando.",
+  "verified_url": "https://www.filmfestival.gr/en/tiff/tiff-agora/"
+ }
+]

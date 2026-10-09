@@ -17,6 +17,7 @@ export interface FestivalRow {
   prestige: number;
   reason: string;
   active: boolean;
+  last_verified_at: string | null;
   created_at: string;
   updated_at: string;
 }
@@ -38,6 +39,7 @@ export function rowToFestival(row: FestivalRow): RecommendedFestival {
     acceptsTypes: row.accepts_types as RecommendedFestival['acceptsTypes'],
     prestige: row.prestige,
     reason: row.reason,
+    lastVerified: row.last_verified_at ?? undefined,
   };
 }
 

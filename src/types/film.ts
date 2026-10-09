@@ -131,6 +131,7 @@ export interface RecommendedFestival {
   acceptsTypes: FilmType[];
   prestige: number;
   reason: string;
+  lastVerified?: string;
 }
 
 export interface ExternalFestival {

@@ -12,6 +12,45 @@ function premiereAlreadyDone(data: FilmData): boolean {
   return !fs.worldPremiereAvailable && (fs.currentPremiereStatus ?? '').trim().length > 0;
 }
 
+// Países de cada opción de «Enfoque geográfico» del paso 5
+const REGION_COUNTRIES: Record<string, string[]> = {
+  'Europa Occidental': [
+    'Francia', 'Alemania', 'Italia', 'Portugal', 'Reino Unido', 'Irlanda', 'Países Bajos', 'Bélgica', 'Suiza',
+    'Austria', 'Dinamarca', 'Suecia', 'Noruega', 'Finlandia', 'Islandia', 'Luxemburgo', 'Grecia',
+  ],
+  'Europa del Este': [
+    'Polonia', 'Chequia', 'República Checa', 'Eslovaquia', 'Hungría', 'Rumanía', 'Bulgaria', 'Croacia', 'Serbia',
+    'Eslovenia', 'Bosnia y Herzegovina', 'Kosovo', 'Macedonia del Norte', 'Estonia', 'Letonia', 'Lituania',
+    'Ucrania', 'Georgia', 'Armenia', 'Moldavia',
+  ],
+  'Latinoamérica': [
+    'México', 'Argentina', 'Chile', 'Colombia', 'Perú', 'Cuba', 'Uruguay', 'Brasil', 'Bolivia', 'Ecuador',
+    'Venezuela', 'Paraguay', 'Panamá', 'Costa Rica', 'Guatemala', 'Honduras', 'El Salvador', 'Nicaragua',
+    'República Dominicana', 'Puerto Rico',
+  ],
+  EEUU: ['Estados Unidos', 'Canadá'],
+  Asia: ['Japón', 'Corea del Sur', 'China', 'Taiwán', 'Hong Kong', 'India', 'Tailandia', 'Filipinas', 'Indonesia', 'Singapur', 'Vietnam', 'Malasia'],
+  'Oriente Medio': ['Israel', 'Turquía', 'Emiratos Árabes Unidos', 'Arabia Saudí', 'Catar', 'Egipto', 'Líbano', 'Jordania', 'Irán', 'Marruecos', 'Túnez'],
+};
+
+function inRegion(country: string, focus: string): boolean {
+  const c = country.toLowerCase();
+  const f = focus.toLowerCase();
+  if (f === 'global') return true;
+  if (!c) return false;
+  if (c.includes(f) || f.includes(c)) return true;
+  return (REGION_COUNTRIES[focus] ?? []).some(rc => rc.toLowerCase() === c);
+}
+
+// «Nacionales españoles» y «Regionales» también abarcan festivales españoles marcados con otro tier
+function tierMatches(festival: RecommendedFestival, tier: string): boolean {
+  if (festival.tier === tier) return true;
+  const spanish = festival.country.toLowerCase() === 'españa';
+  if (tier === 'nacional') return spanish && festival.tier !== 'regional';
+  if (tier === 'regional') return spanish && festival.tier === 'tier_c';
+  return false;
+}
+
 function scoreFestivalMatch(festival: RecommendedFestival, data: FilmData): number {
   let score = 0;
   const { basicInfo, festivalStrategy, creativeDetails } = data;
@@ -20,13 +59,10 @@ function scoreFestivalMatch(festival: RecommendedFestival, data: FilmData): numb
   if (basicInfo.genre && festival.genres.includes(basicInfo.genre)) score += 25;
 
   const targetTiers = festivalStrategy.targetTiers ?? [];
-  if (targetTiers.includes(festival.tier)) score += 20;
+  if (targetTiers.some(t => tierMatches(festival, t))) score += 20;
 
   const geoFocus = festivalStrategy.geographicFocus ?? [];
-  if (geoFocus.some(g =>
-    festival.country.toLowerCase().includes(g.toLowerCase()) ||
-    g.toLowerCase().includes(festival.country.toLowerCase())
-  )) score += 15;
+  if (geoFocus.some(g => inRegion(festival.country, g))) score += 15;
 
   if (festivalStrategy.worldPremiereAvailable && festival.prestige > 85) score += 10;
   if (premiereAlreadyDone(data) && festival.tier === 'tier_a') score -= 40;

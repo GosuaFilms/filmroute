@@ -18,6 +18,14 @@ const TIER_COLORS: Record<string, string> = {
   regional: 'text-purple-400 bg-purple-400/10 border-purple-400/30',
 };
 
+// Los datos de un festival (plazos, tasas) cambian cada edición: más de un año sin verificar se marca en rojo
+function VerifiedLabel({ date }: { date: string | null }) {
+  if (!date) return <span className="text-xs text-red-400">Sin verificar</span>;
+  const months = (Date.now() - new Date(date).getTime()) / (1000 * 60 * 60 * 24 * 30.4);
+  const color = months > 12 ? 'text-red-400' : months > 6 ? 'text-amber-400' : 'text-cinema-text-dim';
+  return <span className={`text-xs ${color}`}>{new Date(date).toLocaleDateString('es-ES')}</span>;
+}
+
 interface Props {
   onBack: () => void;
 }
@@ -91,6 +99,7 @@ export function FestivalsAdmin({ onBack }: Props) {
           <h2 className="text-2xl font-display font-bold text-cinema-text">Gestión de festivales</h2>
           <p className="text-cinema-text-dim text-sm mt-0.5">
             {festivals.length} festivales · {festivals.filter(f => f.active).length} activos
+            {' · '}{festivals.filter(f => !f.last_verified_at).length} sin verificar
           </p>
         </div>
         <div className={`flex gap-2 ${tab === 'festivals' ? '' : 'invisible'}`}>
@@ -168,6 +177,7 @@ export function FestivalsAdmin({ onBack }: Props) {
                 <th className="text-left px-4 py-3 text-xs font-semibold text-cinema-text-dim uppercase tracking-wide">Tier</th>
                 <th className="text-left px-4 py-3 text-xs font-semibold text-cinema-text-dim uppercase tracking-wide hidden md:table-cell">Mes</th>
                 <th className="text-left px-4 py-3 text-xs font-semibold text-cinema-text-dim uppercase tracking-wide hidden md:table-cell">Deadline</th>
+                <th className="text-left px-4 py-3 text-xs font-semibold text-cinema-text-dim uppercase tracking-wide hidden lg:table-cell">Verificado</th>
                 <th className="text-center px-4 py-3 text-xs font-semibold text-cinema-text-dim uppercase tracking-wide">Prest.</th>
                 <th className="px-4 py-3" />
               </tr>
@@ -190,6 +200,9 @@ export function FestivalsAdmin({ onBack }: Props) {
                   </td>
                   <td className="px-4 py-3 text-cinema-text-dim hidden md:table-cell">{f.month}</td>
                   <td className="px-4 py-3 text-cinema-text-dim hidden md:table-cell">{f.deadline}</td>
+                  <td className="px-4 py-3 hidden lg:table-cell">
+                    <VerifiedLabel date={f.last_verified_at} />
+                  </td>
                   <td className="px-4 py-3 text-center">
                     <span className="text-cinema-gold font-bold text-sm">{f.prestige}</span>
                   </td>
@@ -216,7 +229,7 @@ export function FestivalsAdmin({ onBack }: Props) {
               ))}
               {filtered.length === 0 && (
                 <tr>
-                  <td colSpan={7} className="px-4 py-12 text-center text-cinema-text-dim text-sm">
+                  <td colSpan={8}className="px-4 py-12 text-center text-cinema-text-dim text-sm">
                     {search ? `Sin resultados para "${search}"` : 'No hay festivales aún.'}
                   </td>
                 </tr>

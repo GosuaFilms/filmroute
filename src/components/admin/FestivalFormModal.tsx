@@ -44,7 +44,9 @@ export function FestivalFormModal({ festival, initial, onSave, onClose }: Props)
     prestige: source?.prestige ?? 70,
     reason: source?.reason ?? '',
     active: source?.active ?? true,
+    last_verified_at: source?.last_verified_at ?? null,
   });
+  const today = new Date().toISOString().slice(0, 10);
 
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -204,6 +206,20 @@ export function FestivalFormModal({ festival, initial, onSave, onClose }: Props)
             <textarea className={`${inputClass} resize-none`} rows={2} value={form.reason}
               onChange={e => set('reason', e.target.value)}
               placeholder="Por qué este festival es relevante para la estrategia..." required />
+          </div>
+
+          {/* Verificación */}
+          <div className="flex flex-col gap-1.5">
+            <label className={labelClass}>Datos verificados en la web oficial el</label>
+            <div className="flex gap-2">
+              <input type="date" className={`${inputClass} sm:max-w-[200px]`} value={form.last_verified_at ?? ''}
+                onChange={e => set('last_verified_at', e.target.value || null)} />
+              <button type="button" onClick={() => set('last_verified_at', today)}
+                className="px-3 text-xs border border-cinema-border rounded-lg text-cinema-text-dim hover:text-cinema-gold hover:border-cinema-gold/40 transition-all whitespace-nowrap">
+                Verificado hoy
+              </button>
+            </div>
+            <p className="text-[11px] text-cinema-muted">Actualízala cada vez que compruebes plazos y tasas en la web del festival.</p>
           </div>
 
           {/* Activo */}
