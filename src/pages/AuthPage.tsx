@@ -1,4 +1,5 @@
 import { useState, type FormEvent } from 'react';
+import { LegalLinks, TERMS_VERSION } from './LegalPage';
 import { Film, Eye, EyeOff, AlertCircle, CheckCircle, Mail } from 'lucide-react';
 import { useAuth } from '../contexts/AuthContext';
 import clsx from 'clsx';
@@ -18,6 +19,7 @@ export function AuthPage() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
+  const [acceptTerms, setAcceptTerms] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -30,6 +32,7 @@ export function AuthPage() {
     setEmail('');
     setPassword('');
     setConfirmPassword('');
+    setAcceptTerms(false);
     setShowPassword(false);
   };
 
@@ -47,6 +50,7 @@ export function AuthPage() {
       if (!fullName.trim()) return setError('Introduce tu nombre completo.');
       if (password !== confirmPassword) return setError('Las contraseñas no coinciden.');
       if (password.length < 8) return setError('La contraseña debe tener al menos 8 caracteres.');
+      if (!acceptTerms) return setError('Debes aceptar los Términos de uso y la Política de privacidad.');
     }
 
     setLoading(true);
@@ -55,7 +59,7 @@ export function AuthPage() {
       const { error } = await signIn(email, password);
       if (error) setError(error);
     } else if (mode === 'register') {
-      const { error } = await signUp(email, password, fullName);
+      const { error } = await signUp(email, password, fullName, TERMS_VERSION);
       if (error) {
         setError(error);
       } else {
@@ -228,6 +232,23 @@ export function AuthPage() {
                   </div>
                 )}
 
+                {mode === 'register' && (
+                  <label className="flex items-start gap-2.5 text-xs text-cinema-text-dim leading-relaxed cursor-pointer">
+                    <input
+                      type="checkbox"
+                      checked={acceptTerms}
+                      onChange={e => setAcceptTerms(e.target.checked)}
+                      className="mt-0.5 accent-cinema-gold shrink-0"
+                    />
+                    <span>
+                      He leído y acepto los{' '}
+                      <a href="/terminos" target="_blank" rel="noopener noreferrer" className="text-cinema-gold hover:underline">Términos de uso</a>
+                      {' '}y la{' '}
+                      <a href="/privacidad" target="_blank" rel="noopener noreferrer" className="text-cinema-gold hover:underline">Política de privacidad</a>.
+                    </span>
+                  </label>
+                )}
+
                 <button
                   type="submit"
                   disabled={loading}
@@ -266,6 +287,9 @@ export function AuthPage() {
 
           <p className="text-center text-cinema-text-dim text-xs mt-6">
             FilmRoute · LUR Atlantik Films · Tus datos son privados
+          </p>
+          <p className="text-center text-cinema-text-dim text-xs mt-2">
+            <LegalLinks />
           </p>
         </div>
       </main>

@@ -28,6 +28,7 @@ function PageSpinner() {
   );
 }
 import { generateStrategyWithAI } from './lib/aiAdvisor';
+import { LegalPage, LegalLinks, legalSlugFromPath } from './pages/LegalPage';
 import { exportReportToPDF } from './utils/pdfExport';
 import { saveStrategy, updateStrategy, type SavedStrategy } from './lib/strategies';
 import { validateStep, hasErrors, type StepErrors } from './utils/validation';
@@ -410,6 +411,7 @@ function AppContent() {
           <p className="text-cinema-text-dim text-xs">
             FilmRoute — Herramienta de distribución para cineastas independientes
           </p>
+          <LegalLinks className="block text-cinema-text-dim text-xs mt-2" />
         </footer>
       </div>
     );
@@ -521,6 +523,8 @@ function AppContent() {
 }
 
 export default function App() {
+  const legalSlug = legalSlugFromPath(window.location.pathname);
+  if (legalSlug) return <LegalPage slug={legalSlug} />;
   return (
     <AuthProvider>
       <AppContent />

@@ -1,3 +1,4 @@
+import { LegalLinks } from './LegalPage';
 import { Film, Sparkles, Trophy, Send, FileDown, ClipboardList, ArrowRight, Check } from 'lucide-react';
 
 interface Props {
@@ -145,6 +146,7 @@ export function LandingPage({ onAccess }: Props) {
 
       <footer className="border-t border-cinema-border py-8 text-center">
         <p className="text-cinema-text-dim text-xs">FilmRoute · Una herramienta de LUR Atlantik Films</p>
+        <LegalLinks className="block text-cinema-text-dim text-xs mt-2" />
       </footer>
     </div>
   );
