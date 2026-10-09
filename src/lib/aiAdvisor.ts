@@ -49,6 +49,7 @@ async function postJson<T>(url: string, token: string, body: unknown): Promise<T
 export interface GenerationResult {
   report: StrategyReport;
   aiError: string | null;
+  researchError: string | null;
 }
 
 // La IA elabora el informe completo a partir de los festivales y plataformas de nuestra base de datos;
@@ -69,14 +70,17 @@ export async function generateStrategyWithAI(
     // Fase 1: investigación web de oportunidades fuera de la base de datos. Si falla, se sigue sin ella.
     onStage?.('research');
     const knownFestivals = (festivalsDb && festivalsDb.length > 0 ? festivalsDb : FESTIVALS_DATABASE).map(f => f.name);
+    let researchError: string | null = null;
     const research = await postJson<WebResearch>('/api/research-opportunities', session.access_token, {
       filmData,
       knownFestivals,
       knownPlatforms: PLATFORMS_DATABASE.map(p => p.name),
     }).catch(e => {
-      console.warn('Investigación web no disponible:', e instanceof Error ? e.message : e);
+      researchError = e instanceof Error ? e.message : 'Error desconocido';
+      console.warn('Investigación web no disponible:', researchError);
       return null;
     });
+    if (research && !research.notes.trim()) researchError = 'la búsqueda no devolvió resultados';
 
     // Fase 2: redacción de la estrategia
     onStage?.('writing');
@@ -112,6 +116,7 @@ export async function generateStrategyWithAI(
 
     return {
       aiError: null,
+      researchError,
       report: {
         ...base,
         overallScore: advice.overallScore,
@@ -139,6 +144,7 @@ export async function generateStrategyWithAI(
     return {
       report: { ...base, aiGenerated: false },
       aiError: e instanceof Error ? e.message : 'Error desconocido',
+      researchError: null,
     };
   }
 }

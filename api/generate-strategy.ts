@@ -105,18 +105,23 @@ interface RequestBody {
   webResearch?: { notes?: string; sources?: string[] };
 }
 
-// Una sugerencia externa solo se acepta si su URL aparece en la investigación web (evita datos inventados)
+// Una sugerencia externa solo se acepta si su dominio aparece en la investigación web (evita webs inventadas)
 function sourcedOnly<T extends { url: string }>(items: T[], research: string, sources: string[]): T[] {
-  const known = new Set(sources.map(normalizeUrl));
+  const researchUrls = research.match(/https?:\/\/[^\s)\]>"'«»,;]+/gi) ?? [];
+  const knownHosts = new Set([...sources, ...researchUrls].map(hostOf).filter(Boolean));
   return items.filter(i => {
     const url = i.url.trim();
     if (!/^https?:\/\//i.test(url)) return false;
-    return research.includes(url) || known.has(normalizeUrl(url));
+    return knownHosts.has(hostOf(url));
   });
 }
 
-function normalizeUrl(url: string): string {
-  return url.trim().toLowerCase().replace(/^https?:\/\/(www\.)?/, '').replace(/[/#?]+$/, '');
+function hostOf(url: string): string {
+  try {
+    return new URL(url.trim()).hostname.toLowerCase().replace(/^www\./, '');
+  } catch {
+    return '';
+  }
 }
 
 // Las partidas deben sumar exactamente el total declarado; los porcentajes se derivan de los importes

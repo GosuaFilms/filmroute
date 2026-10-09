@@ -65,7 +65,7 @@ export function anthropicErrorResponse(error: unknown, route: string): Response 
   }
   if (error instanceof Anthropic.APIError) {
     console.error(`[${route}] Anthropic API error ${error.status}:`, error.message);
-    return json(502, { error: 'Error del servicio de IA' });
+    return json(502, { error: `Error del servicio de IA (${error.status ?? 'sin código'})` });
   }
   console.error(`[${route}] error:`, error);
   return json(500, { error: 'Error interno' });

@@ -55,10 +55,12 @@ export async function POST(request: Request): Promise<Response> {
     });
 
     // El bucle de búsqueda del servidor puede pausarse; se reanuda reenviando lo producido hasta entonces
+    // Sin reanudar si queda poco margen antes del límite de 300 s de la función
+    const startedAt = Date.now();
     const collected: Anthropic.ContentBlock[] = [];
     let response = await request_([{ role: 'user', content: userText }]);
     collected.push(...response.content);
-    for (let i = 0; i < MAX_CONTINUATIONS && response.stop_reason === 'pause_turn'; i++) {
+    for (let i = 0; i < MAX_CONTINUATIONS && response.stop_reason === 'pause_turn' && Date.now() - startedAt < 150_000; i++) {
       response = await request_([
         { role: 'user', content: userText },
         { role: 'assistant', content: collected },

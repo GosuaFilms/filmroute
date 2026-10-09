@@ -309,13 +309,15 @@ function AppContent() {
     setSaveError(null);
     setAiNotice(null);
     setSavedOk(false);
-    const { report: result, aiError } = await generateStrategyWithAI(filmData, festivals.length > 0 ? festivals : undefined, setGenerationStage);
+    const { report: result, aiError, researchError } = await generateStrategyWithAI(filmData, festivals.length > 0 ? festivals : undefined, setGenerationStage);
     setGenerationStage(null);
     if (aiError) {
       console.error('Asesor IA no disponible:', aiError);
       setAiNotice(aiError.startsWith('Has alcanzado el límite')
         ? `${aiError}. Se ha generado un informe estándar; podrás volver a usar el asesor IA más tarde.`
         : `El asesor IA no está disponible ahora mismo (motivo: ${aiError}); se ha generado un informe estándar. Puedes pulsar "Generar análisis con IA" para intentarlo de nuevo.`);
+    } else if (researchError) {
+      setAiNotice(`La búsqueda de oportunidades en la web no ha funcionado esta vez (motivo: ${researchError}); el informe se ha elaborado solo con nuestra base de datos.`);
     }
     setReport(result);
     setView('report');
