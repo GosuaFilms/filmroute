@@ -188,7 +188,7 @@ export async function exportReportToPDF(report: StrategyReport, filmData?: FilmD
   };
 
   let sectionNo = 0;
-  const section = (heading: string, kicker?: string, keepWith = 0) => {
+  const section = (heading: string, kicker?: string, keepWith = 26) => {
     sectionNo += 1;
     ensure(34 + keepWith);
     if (y > TOP + 2) y += 6;
@@ -495,7 +495,7 @@ export async function exportReportToPDF(report: StrategyReport, filmData?: FilmD
   }
 
   // ── 03 FESTIVALES ──────────────────────────────────────────────────────────
-  section('Festivales recomendados', `${report.recommendedFestivals.length} festivales seleccionados para esta película, por orden de prioridad`);
+  section('Festivales recomendados', `${report.recommendedFestivals.length} festivales seleccionados para esta película, por orden de prioridad`, 50);
   report.recommendedFestivals.forEach((f, i) => {
     const textX = ML + 26;
     const textW = CW - 26;
@@ -643,7 +643,7 @@ export async function exportReportToPDF(report: StrategyReport, filmData?: FilmD
 
   // ── 07 PLAN DE LANZAMIENTO ─────────────────────────────────────────────────
   if (report.marketingPhases.length > 0) {
-    section('Plan de lanzamiento', 'Fases, acciones e indicadores de éxito');
+    section('Plan de lanzamiento', 'Fases, acciones e indicadores de éxito', 40);
     report.marketingPhases.forEach((phase, i) => {
       ensure(40);
       const textX = ML + 22;
