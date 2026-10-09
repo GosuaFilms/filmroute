@@ -8,7 +8,7 @@ const TITULAR = {
   domicilio: 'Calle Bailén 1, 3.º 6.ª, 48003 Bilbao (Bizkaia), España',
   registro: 'Inscrita en el Registro Mercantil de Bizkaia, hoja BI-85847, inscripción 1.ª (folio electrónico), de 10 de septiembre de 2025',
   email: 'info@luratlantik.com',
-  regionSupabase: '[PENDIENTE: región del proyecto Supabase, p. ej. UE (Fráncfort)]',
+  regionSupabase: 'Unión Europea (Irlanda)',
 };
 
 export const TERMS_VERSION = '2026-10-09';
@@ -90,6 +90,7 @@ function Privacidad() {
       <UL items={[
         <><strong className="text-cinema-text">Datos de cuenta:</strong> nombre, email y contraseña (almacenada cifrada; nunca tenemos acceso a ella en claro).</>,
         <><strong className="text-cinema-text">Datos de tus proyectos:</strong> la información que introduces sobre tus películas (sinopsis, equipo, materiales, presupuesto, objetivos, festivales) y los informes generados.</>,
+        <><strong className="text-cinema-text">Cartel de la película:</strong> la imagen que subas, guardada en un almacenamiento privado al que solo accede tu cuenta. Evita subir imágenes con datos personales de terceros que no sean necesarios.</>,
         <><strong className="text-cinema-text">Seguimiento de envíos:</strong> festivales, fechas, estados, tasas y notas que registras.</>,
         <><strong className="text-cinema-text">Datos de uso del asesor IA:</strong> fecha de cada análisis generado, para aplicar los límites de uso.</>,
         <><strong className="text-cinema-text">Datos técnicos:</strong> dirección IP, navegador y registros del servidor necesarios para el funcionamiento y la seguridad del servicio.</>,
@@ -110,8 +111,12 @@ function Privacidad() {
 
       <H2>4. Inteligencia artificial</H2>
       <P>
-        Cuando pides un análisis, los datos de tu proyecto se envían al proveedor de IA Anthropic (modelos Claude)
-        para generar la estrategia. Según las condiciones comerciales de Anthropic para su API, estos datos no se
+        Cuando pides un análisis, los datos de tu proyecto y, si lo has subido, el cartel se envían al proveedor de IA
+        Anthropic (modelos Claude) para generar la estrategia. Para encontrar festivales y plataformas que no están en
+        nuestra base de datos, la IA hace búsquedas en internet a partir de las características de la película; esas
+        búsquedas no incluyen tu nombre ni tu email. Las oportunidades encontradas (nombre del festival o plataforma,
+        su web y el tipo y género de la película) se guardan sin vincularlas a tu cuenta para revisar y ampliar la
+        base de datos. Según las condiciones comerciales de Anthropic para su API, estos datos no se
         utilizan para entrenar sus modelos. No se toman decisiones con efectos jurídicos sobre ti basadas únicamente
         en tratamientos automatizados: el informe es una recomendación orientativa que tú decides si sigues.
       </P>
