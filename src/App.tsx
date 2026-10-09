@@ -327,7 +327,7 @@ function AppContent() {
     if (!report) return;
     setIsExporting(true);
     try {
-      await exportReportToPDF(report);
+      await exportReportToPDF(report, filmData);
     } catch (e) {
       console.error('Error exportando PDF:', e);
       alert('Error al exportar el PDF. Por favor, inténtalo de nuevo.');

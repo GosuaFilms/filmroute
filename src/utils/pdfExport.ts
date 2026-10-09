@@ -1,450 +1,784 @@
-import type { StrategyReport } from '../types/film';
-import { formatNumber } from './format';
+import type { jsPDF as JsPDF } from 'jspdf';
+import type { FilmData, StrategyReport } from '../types/film';
+import { formatNumber, genreLabel } from './format';
 
-const GOLD: [number, number, number] = [201, 168, 76];
-const DARK: [number, number, number] = [26, 26, 38];
-const GREY: [number, number, number] = [100, 100, 100];
-const BLACK: [number, number, number] = [50, 50, 50];
-const GREEN: [number, number, number] = [34, 197, 94];
-const RED: [number, number, number] = [239, 68, 68];
-const YELLOW: [number, number, number] = [234, 179, 8];
+type RGB = [number, number, number];
 
-const NOTO_SANS_TTF = 'https://cdn.jsdelivr.net/gh/googlefonts/noto-fonts@main/hinted/ttf/NotoSans/NotoSans-Regular.ttf';
-const NOTO_SANS_BOLD_TTF = 'https://cdn.jsdelivr.net/gh/googlefonts/noto-fonts@main/hinted/ttf/NotoSans/NotoSans-Bold.ttf';
+const C = {
+  ink: [14, 14, 20] as RGB,
+  inkSoft: [30, 29, 38] as RGB,
+  inkLine: [44, 42, 52] as RGB,
+  paper: [250, 247, 240] as RGB,
+  text: [34, 32, 40] as RGB,
+  muted: [112, 106, 100] as RGB,
+  hair: [221, 212, 194] as RGB,
+  gold: [168, 132, 52] as RGB,
+  goldBright: [214, 178, 96] as RGB,
+  goldPale: [241, 231, 205] as RGB,
+  numeral: [226, 210, 168] as RGB,
+  cream: [240, 234, 220] as RGB,
+  green: [56, 120, 86] as RGB,
+  red: [166, 64, 58] as RGB,
+  amber: [178, 128, 36] as RGB,
+  blue: [56, 94, 142] as RGB,
+};
+
+const FONT_BASE = 'https://cdn.jsdelivr.net/gh/googlefonts/noto-fonts@main/hinted/ttf';
+const FONTS = [
+  { file: 'NotoSans-Regular.ttf', url: `${FONT_BASE}/NotoSans/NotoSans-Regular.ttf`, family: 'Sans', style: 'normal' },
+  { file: 'NotoSans-Bold.ttf', url: `${FONT_BASE}/NotoSans/NotoSans-Bold.ttf`, family: 'Sans', style: 'bold' },
+  { file: 'NotoSerifDisplay-Bold.ttf', url: `${FONT_BASE}/NotoSerifDisplay/NotoSerifDisplay-Bold.ttf`, family: 'Serif', style: 'bold' },
+  { file: 'NotoSerifDisplay-Italic.ttf', url: `${FONT_BASE}/NotoSerifDisplay/NotoSerifDisplay-Italic.ttf`, family: 'Serif', style: 'italic' },
+];
+
+let fontCache: Promise<string[]> | null = null;
 
 async function fetchFontBase64(url: string): Promise<string> {
   const res = await fetch(url);
-  const buf = await res.arrayBuffer();
-  const bytes = new Uint8Array(buf);
+  if (!res.ok) throw new Error(`Font ${res.status}`);
+  const bytes = new Uint8Array(await res.arrayBuffer());
   let binary = '';
-  for (let i = 0; i < bytes.byteLength; i++) binary += String.fromCharCode(bytes[i]);
+  for (let i = 0; i < bytes.length; i += 0x8000) {
+    binary += String.fromCharCode(...bytes.subarray(i, i + 0x8000));
+  }
   return btoa(binary);
 }
 
-async function registerUnicodeFonts(doc: InstanceType<Awaited<typeof import('jspdf')>['jsPDF']>) {
+async function registerFonts(doc: JsPDF): Promise<boolean> {
   try {
-    const [regular, bold] = await Promise.all([
-      fetchFontBase64(NOTO_SANS_TTF),
-      fetchFontBase64(NOTO_SANS_BOLD_TTF),
-    ]);
-    doc.addFileToVFS('NotoSans-Regular.ttf', regular);
-    doc.addFileToVFS('NotoSans-Bold.ttf', bold);
-    doc.addFont('NotoSans-Regular.ttf', 'NotoSans', 'normal');
-    doc.addFont('NotoSans-Bold.ttf', 'NotoSans', 'bold');
-    return 'NotoSans';
+    fontCache ??= Promise.all(FONTS.map(f => fetchFontBase64(f.url)));
+    const data = await fontCache;
+    FONTS.forEach((f, i) => {
+      doc.addFileToVFS(f.file, data[i]);
+      doc.addFont(f.file, f.family, f.style);
+    });
+    return true;
   } catch {
-    return 'helvetica';
+    fontCache = null;
+    return false;
   }
 }
 
-// La IA a veces numera las fases ("Fase 2: …", "2. …"); el PDF ya pone su propio "FASE N:"
+const TYPE_LABELS: Record<string, string> = {
+  cortometraje: 'Cortometraje',
+  mediometraje: 'Mediometraje',
+  largometraje: 'Largometraje',
+  documental: 'Documental',
+};
+
+const TIER_LABELS: Record<string, string> = {
+  tier_a: 'TIER A', tier_b: 'TIER B', tier_c: 'TIER C', nacional: 'NACIONAL', regional: 'REGIONAL',
+};
+
+function capitalize(s: string): string {
+  return s ? s[0].toUpperCase() + s.slice(1) : s;
+}
+
+// La IA a veces numera las fases ("Fase 2: …", "2. …"); el documento pone su propia numeración
 function stripPhaseNumber(name: string): string {
   return name.replace(/^(fase\s*)?\d+\s*[:.\-–—)]\s*/i, '');
 }
 
-export async function exportReportToPDF(report: StrategyReport): Promise<void> {
-  const { jsPDF } = await import('jspdf');
-  const autoTable = (await import('jspdf-autotable')).default;
+function splitLead(text: string): [string, string] {
+  const match = text.match(/^(.{40,320}?[.!?])\s+(.*)$/s);
+  return match ? [match[1], match[2]] : [text, ''];
+}
 
+export async function exportReportToPDF(report: StrategyReport, filmData?: FilmData): Promise<void> {
+  const { jsPDF, GState } = await import('jspdf');
   const doc = new jsPDF({ orientation: 'portrait', unit: 'mm', format: 'a4' });
+  const hasFonts = await registerFonts(doc);
 
-  const fontFamily = await registerUnicodeFonts(doc);
-  const setNormal = () => doc.setFont(fontFamily, 'normal');
-  const setBold = () => doc.setFont(fontFamily, 'bold');
-  const pageW = doc.internal.pageSize.getWidth();
-  const pageH = doc.internal.pageSize.getHeight();
-  const margin = 15;
-  const contentW = pageW - margin * 2;
-  let y = 0;
+  const W = doc.internal.pageSize.getWidth();
+  const H = doc.internal.pageSize.getHeight();
+  const ML = 22;
+  const MR = 22;
+  const CW = W - ML - MR;
+  const TOP = 28;
+  const BOTTOM = 24;
+  let y = TOP;
 
-  const addPage = () => {
+  // ── Tipografía ──────────────────────────────────────────────────────────────
+  const sans = (size: number) => { doc.setFont(hasFonts ? 'Sans' : 'helvetica', 'normal'); doc.setFontSize(size); };
+  const sansBold = (size: number) => { doc.setFont(hasFonts ? 'Sans' : 'helvetica', 'bold'); doc.setFontSize(size); };
+  const serif = (size: number) => { doc.setFont(hasFonts ? 'Serif' : 'times', 'bold'); doc.setFontSize(size); };
+  const serifItalic = (size: number) => { doc.setFont(hasFonts ? 'Serif' : 'times', 'italic'); doc.setFontSize(size); };
+  const color = (c: RGB) => doc.setTextColor(c[0], c[1], c[2]);
+  const fill = (c: RGB) => doc.setFillColor(c[0], c[1], c[2]);
+  const stroke = (c: RGB) => doc.setDrawColor(c[0], c[1], c[2]);
+  const lh = (size: number, factor = 1.45) => size * 0.3528 * factor;
+
+  // Texto con espaciado entre letras; jsPDF no lo tiene en cuenta al alinear, así que se calcula aquí
+  const spaced = (text: string, x: number, yy: number, cs: number, align: 'left' | 'right' | 'center' = 'left') => {
+    const w = doc.getTextWidth(text) + cs * Math.max(text.length - 1, 0);
+    const xx = align === 'right' ? x - w : align === 'center' ? x - w / 2 : x;
+    doc.text(text, xx, yy, { charSpace: cs });
+  };
+
+  const film = filmData?.basicInfo ?? {};
+  const title = report.filmTitle || 'Sin título';
+
+  // ── Páginas ────────────────────────────────────────────────────────────────
+  const paintPaper = () => {
+    fill(C.paper);
+    doc.rect(0, 0, W, H, 'F');
+    sansBold(6.5);
+    color(C.gold);
+    spaced('FILMROUTE', ML, 14, 1.4);
+    serifItalic(8.5);
+    color(C.muted);
+    doc.text(title, W - MR, 14, { align: 'right' });
+    stroke(C.hair);
+    doc.setLineWidth(0.2);
+    doc.line(ML, 17, W - MR, 17);
+  };
+
+  const newPage = () => {
     doc.addPage();
-    y = 20;
+    paintPaper();
+    y = TOP;
   };
 
-  const checkSpace = (needed: number) => {
-    if (y + needed > pageH - 18) addPage();
+  const ensure = (h: number) => {
+    if (y + h > H - BOTTOM) newPage();
   };
 
-  const sectionTitle = (title: string) => {
-    checkSpace(20);
-    doc.setTextColor(...GOLD);
-    doc.setFontSize(11);
-    setBold();
-    doc.text(title, margin, y);
-    y += 5;
-    doc.setDrawColor(...GREY);
-    doc.line(margin, y, pageW - margin, y);
-    y += 6;
+  const wrap = (text: string, width: number): string[] => doc.splitTextToSize(text, width) as string[];
+
+  // Escribe líneas pasando de página cuando hace falta; setFont se reaplica tras cada salto
+  const writeLines = (lines: string[], x: number, size: number, setFont: () => void, c: RGB, factor = 1.45) => {
+    const step = lh(size, factor);
+    for (const line of lines) {
+      if (y + step > H - BOTTOM) {
+        newPage();
+      }
+      setFont();
+      color(c);
+      doc.text(line, x, y);
+      y += step;
+    }
   };
 
-  // ── Portada ──────────────────────────────────────────────────────────────
-  doc.setFillColor(10, 10, 15);
-  doc.rect(0, 0, pageW, 50, 'F');
+  const paragraph = (text: string, opts: { x?: number; width?: number; size?: number; c?: RGB; font?: 'sans' | 'italic' | 'serif' } = {}) => {
+    const size = opts.size ?? 9;
+    const setFont = () => (opts.font === 'italic' ? serifItalic(size) : opts.font === 'serif' ? serif(size) : sans(size));
+    setFont();
+    writeLines(wrap(text, opts.width ?? CW), opts.x ?? ML, size, setFont, opts.c ?? C.text);
+  };
 
-  doc.setTextColor(...GOLD);
-  doc.setFontSize(22);
-  setBold();
-  doc.text('FilmRoute', margin, 18);
+  const diamond = (x: number, yy: number, r: number, c: RGB) => {
+    fill(c);
+    doc.triangle(x - r, yy, x, yy - r, x + r, yy, 'F');
+    doc.triangle(x - r, yy, x, yy + r, x + r, yy, 'F');
+  };
 
-  doc.setFontSize(9);
-  doc.setTextColor(156, 163, 175);
-  setNormal();
-  doc.text('Estrategia de Distribución Cinematográfica Independiente', margin, 26);
+  const bullets = (items: string[], opts: { x?: number; width?: number; size?: number; c?: RGB; marker?: RGB; gap?: number } = {}) => {
+    const x = opts.x ?? ML;
+    const width = opts.width ?? CW;
+    const size = opts.size ?? 8.8;
+    for (const item of items) {
+      sans(size);
+      const lines = wrap(item, width - 6);
+      ensure(lh(size) + 1);
+      diamond(x + 1.2, y - lh(size) * 0.32, 0.9, opts.marker ?? C.gold);
+      writeLines(lines, x + 5, size, () => sans(size), opts.c ?? C.text);
+      y += opts.gap ?? 1.4;
+    }
+  };
 
-  doc.setTextColor(229, 231, 235);
-  doc.setFontSize(15);
-  setBold();
-  const titleText = `"${report.filmTitle}"`;
-  doc.text(titleText, margin, 39);
+  let sectionNo = 0;
+  const section = (heading: string, kicker?: string, keepWith = 0) => {
+    sectionNo += 1;
+    ensure(34 + keepWith);
+    if (y > TOP + 2) y += 6;
+    const num = String(sectionNo).padStart(2, '0');
+    serif(30);
+    color(C.numeral);
+    doc.text(num, ML, y + 8);
+    serif(19);
+    color(C.text);
+    doc.text(heading, ML + 19, y + 7);
+    if (kicker) {
+      sans(8);
+      color(C.muted);
+      doc.text(kicker, ML + 19, y + 13);
+    }
+    stroke(C.gold);
+    doc.setLineWidth(0.6);
+    doc.line(ML + 19, y + (kicker ? 16.5 : 11), ML + 37, y + (kicker ? 16.5 : 11));
+    y += kicker ? 25 : 20;
+  };
 
-  doc.setFontSize(7);
-  setNormal();
-  doc.setTextColor(156, 163, 175);
-  doc.text(
-    `Generado: ${report.generatedAt}  |  Índice de distribución: ${report.overallScore}/100`,
-    pageW - margin,
-    39,
-    { align: 'right' }
-  );
+  // ── PORTADA ────────────────────────────────────────────────────────────────
+  fill(C.ink);
+  doc.rect(0, 0, W, H, 'F');
 
-  // Línea dorada decorativa bajo portada
-  doc.setDrawColor(...GOLD);
-  doc.setLineWidth(0.4);
-  doc.line(margin, 49, pageW - margin, 49);
-  doc.setLineWidth(0.2);
+  // Bobina de película como motivo de fondo
+  doc.setGState(new GState({ opacity: 0.45 }));
+  stroke(C.inkLine);
+  doc.setLineWidth(0.5);
+  const reelX = W - 12;
+  const reelY = 104;
+  doc.circle(reelX, reelY, 62, 'S');
+  doc.circle(reelX, reelY, 58, 'S');
+  doc.circle(reelX, reelY, 9, 'S');
+  for (let i = 0; i < 6; i++) {
+    const a = (Math.PI / 3) * i + Math.PI / 6;
+    doc.circle(reelX + Math.cos(a) * 33, reelY + Math.sin(a) * 33, 13, 'S');
+  }
+  doc.setGState(new GState({ opacity: 1 }));
 
-  y = 62;
+  // Perforaciones de película en los márgenes
+  fill(C.inkSoft);
+  for (let py = 6; py < H - 6; py += 7.2) {
+    doc.roundedRect(5, py, 4.2, 3.4, 0.7, 0.7, 'F');
+    doc.roundedRect(W - 9.2, py, 4.2, 3.4, 0.7, 0.7, 'F');
+  }
+  stroke(C.inkLine);
+  doc.setLineWidth(0.3);
+  doc.line(12, 0, 12, H);
+  doc.line(W - 12, 0, W - 12, H);
 
-  // ── Resumen ejecutivo ────────────────────────────────────────────────────
-  sectionTitle('RESUMEN EJECUTIVO');
-  doc.setTextColor(...BLACK);
-  setNormal();
-  doc.setFontSize(8.5);
-  const summaryLines = doc.splitTextToSize(report.executiveSummary, contentW);
-  doc.text(summaryLines, margin, y);
-  y += summaryLines.length * 5 + 4;
+  const CL = 26;
+  const CR = W - 26;
+  sansBold(8.5);
+  color(C.goldBright);
+  spaced('FILMROUTE', CL, 32, 2.2);
+  sans(7);
+  color(C.muted);
+  spaced('ESTRATEGIA DE DISTRIBUCIÓN', CR, 32, 1.2, 'right');
+  stroke(C.goldBright);
+  doc.setLineWidth(0.25);
+  doc.line(CL, 37, CR, 37);
+
+  sansBold(7.5);
+  color(C.goldBright);
+  spaced('DOSSIER DE DISTRIBUCIÓN', CL, 112, 2);
+  stroke(C.goldBright);
+  doc.setLineWidth(0.5);
+  doc.line(CL, 116, CL + 14, 116);
+
+  serif(36);
+  color([246, 241, 229]);
+  const titleLines = wrap(title, CR - CL);
+  let ty = 132;
+  for (const line of titleLines.slice(0, 4)) {
+    doc.text(line, CL, ty);
+    ty += 14;
+  }
+
+  const metaParts = [
+    film.filmType ? TYPE_LABELS[film.filmType] ?? capitalize(film.filmType) : '',
+    film.genre ? capitalize(genreLabel(film.genre)) : '',
+    film.duration ? `${film.duration} min` : '',
+    film.country ?? '',
+    film.productionYear ? String(film.productionYear) : '',
+  ].filter(Boolean);
+  if (metaParts.length > 0) {
+    serifItalic(12.5);
+    color(C.goldBright);
+    doc.text(metaParts.join('  ·  '), CL, ty + 1);
+    ty += 9;
+  }
+  if (film.directorName) {
+    sans(9.5);
+    color([196, 190, 178]);
+    doc.text(`Un film de ${film.directorName}`, CL, ty + 2);
+    ty += 6;
+  }
+  if (film.productionCompany) {
+    sans(8.5);
+    color(C.muted);
+    doc.text(`Producción: ${film.productionCompany}`, CL, ty + 2);
+  }
+
+  // Anillo del índice de distribución
+  const ringX = CL + 21;
+  const ringY = 222;
+  const ringR = 18;
+  stroke(C.inkLine);
+  doc.setLineWidth(1.6);
+  doc.circle(ringX, ringY, ringR, 'S');
+  const score = Math.max(0, Math.min(100, report.overallScore));
+  stroke(C.goldBright);
+  doc.setLineWidth(2.2);
+  doc.setLineCap('round');
+  const start = -Math.PI / 2;
+  const end = start + (Math.PI * 2 * score) / 100;
+  const steps = Math.max(2, Math.ceil((end - start) / 0.05));
+  for (let i = 0; i < steps; i++) {
+    const a1 = start + ((end - start) * i) / steps;
+    const a2 = start + ((end - start) * (i + 1)) / steps;
+    doc.line(ringX + Math.cos(a1) * ringR, ringY + Math.sin(a1) * ringR, ringX + Math.cos(a2) * ringR, ringY + Math.sin(a2) * ringR);
+  }
+  doc.setLineCap('butt');
+  serif(24);
+  color([246, 241, 229]);
+  doc.text(String(score), ringX, ringY + 2.5, { align: 'center' });
+  sans(6.5);
+  color(C.muted);
+  doc.text('/ 100', ringX, ringY + 8, { align: 'center' });
+  sansBold(6);
+  color(C.goldBright);
+  spaced('ÍNDICE DE DISTRIBUCIÓN', ringX, ringY + ringR + 8, 1, 'center');
+
+  // Cifras clave
+  const figures: [string, string][] = [
+    [String(report.recommendedFestivals.length), 'festivales seleccionados'],
+    [String(report.marketingPhases.length), 'fases de lanzamiento'],
+  ];
+  if (report.totalBudgetEstimate > 0) figures.push([`${formatNumber(report.totalBudgetEstimate)} €`, 'presupuesto de distribución']);
+  const figX = CL + 60;
+  stroke(C.inkLine);
+  doc.setLineWidth(0.3);
+  doc.line(figX - 8, ringY - 20, figX - 8, ringY + 20);
+  figures.forEach(([value, text], i) => {
+    const fy = ringY - 12 + i * 14;
+    serif(17);
+    color(C.goldBright);
+    doc.text(value, figX, fy);
+    const vw = doc.getTextWidth(value);
+    sans(8.5);
+    color([196, 190, 178]);
+    doc.text(text, figX + vw + 3, fy);
+  });
+
+  stroke(C.inkLine);
+  doc.setLineWidth(0.25);
+  doc.line(CL, H - 30, CR, H - 30);
+  sans(7.5);
+  color(C.muted);
+  doc.text(`Generado el ${report.generatedAt}`, CL, H - 23);
+  doc.text(report.aiGenerated ? 'Elaborado por el asesor IA de FilmRoute' : 'Elaborado con FilmRoute', CR, H - 23, { align: 'right' });
+  sans(6.5);
+  doc.text('Documento confidencial · Uso exclusivo del equipo del proyecto', CL, H - 18);
+
+  // ── 01 RESUMEN EJECUTIVO ───────────────────────────────────────────────────
+  newPage();
+  section('Resumen ejecutivo', 'La estrategia de un vistazo');
+
+  const [lead, rest] = splitLead(report.executiveSummary);
+  stroke(C.gold);
+  doc.setLineWidth(0.8);
+  const leadStart = y - 4;
+  paragraph(lead, { x: ML + 6, width: CW - 6, size: 13, font: 'italic', c: C.text });
+  doc.line(ML, leadStart, ML, y - 3);
+  y += 3;
+  if (rest) {
+    paragraph(rest, { size: 9.3, c: C.text });
+    y += 3;
+  }
 
   if (report.scoreRationale) {
-    checkSpace(14);
-    doc.setTextColor(...GREY);
-    doc.setFontSize(7.5);
-    const rationaleLines = doc.splitTextToSize(`Sobre el índice de distribución: ${report.scoreRationale}`, contentW);
-    doc.text(rationaleLines, margin, y);
-    y += rationaleLines.length * 4.5 + 2;
+    sans(8.5);
+    const rLines = wrap(report.scoreRationale, CW - 16);
+    const boxH = 13 + rLines.length * lh(8.5);
+    ensure(boxH + 4);
+    fill(C.goldPale);
+    doc.roundedRect(ML, y, CW, boxH, 1.5, 1.5, 'F');
+    fill(C.gold);
+    doc.rect(ML, y, 1.2, boxH, 'F');
+    sansBold(6.8);
+    color(C.gold);
+    spaced(`SOBRE EL ÍNDICE DE DISTRIBUCIÓN · ${score}/100`, ML + 8, y + 7, 1);
+    sans(8.5);
+    color(C.text);
+    let ry = y + 13;
+    for (const line of rLines) {
+      doc.text(line, ML + 8, ry);
+      ry += lh(8.5);
+    }
+    y += boxH + 6;
   }
-  if (report.aiGenerated) {
-    doc.setTextColor(...GOLD);
-    doc.setFontSize(7);
-    doc.text('Estrategia elaborada por el asesor IA de FilmRoute a partir de los datos facilitados.', margin, y);
-    y += 4;
-  }
-  y += 6;
 
-  // ── DAFO ─────────────────────────────────────────────────────────────────
-  sectionTitle('ANÁLISIS DAFO');
-
-  const dafoData = [
-    ['Fortalezas', report.strengths.join('\n') || '-'],
-    ['Debilidades', report.weaknesses.join('\n') || 'Sin debilidades críticas identificadas'],
-    ['Oportunidades', report.opportunities.join('\n') || '-'],
-    ['Riesgos', report.risks.join('\n') || '-'],
+  // Fila de cifras
+  const kpis: [string, string][] = [
+    [`${score}`, 'Índice / 100'],
+    [String(report.recommendedFestivals.length), 'Festivales'],
+    [String(report.marketingPhases.length), 'Fases'],
+    [report.totalBudgetEstimate > 0 ? `${formatNumber(report.totalBudgetEstimate)} €` : '—', 'Presupuesto'],
   ];
-
-  autoTable(doc, {
-    startY: y,
-    head: [],
-    body: dafoData,
-    margin: { left: margin, right: margin },
-    styles: { fontSize: 7.5, cellPadding: 3.5, overflow: 'linebreak', font: fontFamily },
-    columnStyles: {
-      0: { fontStyle: 'bold', cellWidth: 28, textColor: GOLD },
-      1: { textColor: BLACK },
-    },
-    theme: 'grid',
+  ensure(26);
+  const kw = CW / kpis.length;
+  stroke(C.hair);
+  doc.setLineWidth(0.25);
+  doc.line(ML, y, ML + CW, y);
+  doc.line(ML, y + 22, ML + CW, y + 22);
+  kpis.forEach(([value, text], i) => {
+    const kx = ML + kw * i + kw / 2;
+    if (i > 0) doc.line(ML + kw * i, y + 4, ML + kw * i, y + 18);
+    serif(17);
+    color(C.gold);
+    doc.text(value, kx, y + 12, { align: 'center' });
+    sansBold(6.2);
+    color(C.muted);
+    spaced(text.toUpperCase(), kx, y + 17.5, 0.8, 'center');
   });
-  y = (doc as any).lastAutoTable.finalY + 12;
+  y += 30;
 
-  // ── Festivales recomendados ───────────────────────────────────────────────
-  sectionTitle(`FESTIVALES RECOMENDADOS (${report.recommendedFestivals.length})`);
+  // ── 02 DAFO ────────────────────────────────────────────────────────────────
+  section('Análisis DAFO', 'Fortalezas, debilidades, oportunidades y riesgos del proyecto');
+  const dafo: [string, string[], RGB][] = [
+    ['Fortalezas', report.strengths, C.green],
+    ['Debilidades', report.weaknesses.length ? report.weaknesses : ['No se detectaron debilidades críticas.'], C.red],
+    ['Oportunidades', report.opportunities, C.blue],
+    ['Riesgos', report.risks, C.amber],
+  ];
+  for (const [name, items, c] of dafo) {
+    ensure(22);
+    fill(c);
+    doc.rect(ML, y - 4.2, 2.4, 5.2, 'F');
+    serif(13.5);
+    color(c);
+    doc.text(name, ML + 6, y);
+    sans(7.5);
+    color(C.muted);
+    doc.text(`${items.length} ${items.length === 1 ? 'punto' : 'puntos'}`, ML + CW, y, { align: 'right' });
+    y += 3;
+    stroke(C.hair);
+    doc.setLineWidth(0.2);
+    doc.line(ML, y, ML + CW, y);
+    y += 5.5;
+    bullets(items, { marker: c });
+    y += 5;
+  }
 
-  const festivalRows = report.recommendedFestivals.map(f => [
-    f.name,
-    f.country,
-    f.tier.toUpperCase().replace('_', ' '),
-    f.month,
-    f.deadline,
-    f.submissionFee,
-    f.reason,
-  ]);
+  // ── 03 FESTIVALES ──────────────────────────────────────────────────────────
+  section('Festivales recomendados', `${report.recommendedFestivals.length} festivales seleccionados para esta película, por orden de prioridad`);
+  report.recommendedFestivals.forEach((f, i) => {
+    const textX = ML + 26;
+    const textW = CW - 26;
+    sans(8.5);
+    const reasonLines = wrap(f.reason, textW);
+    const cardH = 18 + reasonLines.length * lh(8.5);
+    ensure(Math.min(cardH, 60));
 
-  autoTable(doc, {
-    startY: y,
-    head: [['Festival', 'País', 'Tier', 'Mes', 'Deadline', 'Tasa', 'Razón']],
-    body: festivalRows,
-    margin: { left: margin, right: margin },
-    styles: { fontSize: 6.5, cellPadding: 2, overflow: 'linebreak', font: fontFamily },
-    headStyles: { fillColor: DARK, textColor: GOLD, fontStyle: 'bold', font: fontFamily },
-    columnStyles: {
-      0: { cellWidth: 38 },
-      6: { cellWidth: 42 },
-    },
-    alternateRowStyles: { fillColor: [245, 245, 248] },
-    theme: 'striped',
+    serif(18);
+    color(C.numeral);
+    doc.text(String(i + 1).padStart(2, '0'), ML, y + 5);
+
+    const tier = TIER_LABELS[f.tier] ?? f.tier.toUpperCase();
+    const tierStyle: [RGB, RGB] = f.tier === 'tier_a' ? [C.gold, C.paper] : f.tier === 'tier_b' ? [C.goldPale, C.gold] : [C.cream, C.muted];
+    sansBold(5.6);
+    const tw = doc.getTextWidth(tier) + 5;
+    fill(tierStyle[0]);
+    doc.roundedRect(ML, y + 8, tw, 4.4, 1, 1, 'F');
+    color(tierStyle[1]);
+    doc.text(tier, ML + 2.5, y + 11.2);
+
+    serif(12.5);
+    color(C.text);
+    doc.text(f.name, textX, y + 3);
+    sans(7.6);
+    color(C.muted);
+    doc.text([f.country, f.city, f.month].filter(Boolean).join('  ·  '), textX, y + 8);
+    sansBold(7.2);
+    color(C.gold);
+    const facts = [`Deadline: ${f.deadline}`, `Tasa: ${f.submissionFee}`, f.platform ? `Vía: ${f.platform}` : ''].filter(Boolean).join('     ');
+    doc.text(wrap(facts, textW)[0], textX, y + 12.5);
+    y += 18;
+    writeLines(reasonLines, textX, 8.5, () => sans(8.5), C.text);
+    y += 3;
+    stroke(C.hair);
+    doc.setLineWidth(0.2);
+    doc.line(textX, y, ML + CW, y);
+    y += 6;
   });
-  y = (doc as any).lastAutoTable.finalY + 12;
 
-  // ── Hoja de ruta de festivales ────────────────────────────────────────────
+  // ── 04 CALENDARIO ──────────────────────────────────────────────────────────
   if (report.festivalRoadmap.length > 0) {
-    sectionTitle('HOJA DE RUTA — CIRCUITO DE FESTIVALES');
-
-    const roadmapRows = report.festivalRoadmap.map(r => [
-      r.month,
-      r.festivals.join(', '),
-    ]);
-
-    autoTable(doc, {
-      startY: y,
-      head: [['Mes', 'Festivales']],
-      body: roadmapRows,
-      margin: { left: margin, right: margin },
-      styles: { fontSize: 7.5, cellPadding: 3, overflow: 'linebreak', font: fontFamily },
-      headStyles: { fillColor: DARK, textColor: GOLD, fontStyle: 'bold', font: fontFamily },
-      columnStyles: {
-        0: { cellWidth: 30, fontStyle: 'bold' },
-        1: { textColor: BLACK },
-      },
-      theme: 'striped',
+    section('Calendario del circuito', 'Meses de celebración de los festivales seleccionados');
+    const lineX = ML + 24;
+    report.festivalRoadmap.forEach((m, i) => {
+      sans(8.8);
+      const lines = wrap(m.festivals.join('  ·  '), CW - 32);
+      const rowH = Math.max(8, lines.length * lh(8.8) + 3);
+      ensure(rowH + 2);
+      const isLast = i === report.festivalRoadmap.length - 1;
+      stroke(C.hair);
+      doc.setLineWidth(0.4);
+      if (!isLast) doc.line(lineX, y - 1, lineX, y - 1 + rowH + 2);
+      fill(C.gold);
+      doc.circle(lineX, y - 1.2, 1.5, 'F');
+      fill(C.paper);
+      doc.circle(lineX, y - 1.2, 0.6, 'F');
+      sansBold(7.5);
+      color(C.gold);
+      spaced(m.month.toUpperCase(), lineX - 5, y, 0.8, 'right');
+      writeLines(lines, lineX + 6, 8.8, () => sans(8.8), C.text);
+      y += rowH - lines.length * lh(8.8) + 2;
     });
-    y = (doc as any).lastAutoTable.finalY + 12;
+    y += 2;
   }
 
-  // ── Plataformas recomendadas ──────────────────────────────────────────────
+  // ── 05 PLATAFORMAS ─────────────────────────────────────────────────────────
   if (report.recommendedPlatforms.length > 0) {
-    sectionTitle('PLATAFORMAS RECOMENDADAS');
-
-    const platformRows = report.recommendedPlatforms.map(p => [
-      p.name,
-      p.type,
-      p.territory,
-      p.probability,
-      p.notes,
-    ]);
-
-    autoTable(doc, {
-      startY: y,
-      head: [['Plataforma', 'Tipo', 'Territorio', 'Probabilidad', 'Notas']],
-      body: platformRows,
-      margin: { left: margin, right: margin },
-      styles: { fontSize: 7, cellPadding: 2.5, overflow: 'linebreak', font: fontFamily },
-      headStyles: { fillColor: DARK, textColor: GOLD, fontStyle: 'bold', font: fontFamily },
-      columnStyles: {
-        0: { cellWidth: 32, fontStyle: 'bold' },
-        4: { cellWidth: 45 },
-      },
-      didParseCell: (data) => {
-        if (data.column.index === 3 && data.section === 'body') {
-          const val = String(platformRows[data.row.index]?.[3] ?? '').toLowerCase();
-          if (val.includes('alta')) data.cell.styles.textColor = GREEN;
-          else if (val.includes('media')) data.cell.styles.textColor = YELLOW;
-          else if (val.includes('baja')) data.cell.styles.textColor = RED;
-        }
-      },
-      theme: 'striped',
-    });
-    y = (doc as any).lastAutoTable.finalY + 12;
-  }
-
-  // ── Ventanas de distribución ──────────────────────────────────────────────
-  sectionTitle('VENTANAS DE DISTRIBUCIÓN');
-
-  const windowRows = report.distributionWindows.map(w => [
-    w.window,
-    w.platform,
-    w.timing,
-    w.revenue,
-    w.notes,
-  ]);
-
-  autoTable(doc, {
-    startY: y,
-    head: [['Ventana', 'Plataforma', 'Timing', 'Ingresos Est.', 'Notas']],
-    body: windowRows,
-    margin: { left: margin, right: margin },
-    styles: { fontSize: 7, cellPadding: 2.5, overflow: 'linebreak', font: fontFamily },
-    headStyles: { fillColor: DARK, textColor: GOLD, fontStyle: 'bold', font: fontFamily },
-    columnStyles: { 4: { cellWidth: 42 } },
-    theme: 'striped',
-  });
-  y = (doc as any).lastAutoTable.finalY + 12;
-
-  // ── Fases de marketing ────────────────────────────────────────────────────
-  if (report.marketingPhases.length > 0) {
-    sectionTitle('PLAN DE MARKETING — FASES');
-
-    report.marketingPhases.forEach((phase, i) => {
-      checkSpace(30);
-
-      // Cabecera de fase: título en la barra oscura, duración y presupuesto debajo (la IA puede escribirlos largos)
-      doc.setFontSize(8.5);
-      setBold();
-      const phaseTitle = `FASE ${i + 1}: ${stripPhaseNumber(phase.phase).toUpperCase()}`;
-      const titleLines = doc.splitTextToSize(phaseTitle, contentW - 6);
-      const barH = 4 + titleLines.length * 4.2;
-      doc.setFillColor(...DARK);
-      doc.rect(margin, y - 3, contentW, barH, 'F');
-      doc.setTextColor(...GOLD);
-      doc.text(titleLines, margin + 3, y + 2);
-      y += barH + 2;
-
-      doc.setTextColor(...GREY);
-      setNormal();
-      doc.setFontSize(7.5);
-      const metaLines = doc.splitTextToSize(`Duración: ${phase.duration}  |  Presupuesto: ${phase.budget}`, contentW - 4);
-      doc.text(metaLines, margin + 2, y);
-      y += metaLines.length * 4 + 3;
-
-      // Acciones
-      doc.setTextColor(...BLACK);
-      doc.setFontSize(7.5);
-      setBold();
-      doc.text('Acciones:', margin + 2, y);
-      y += 5;
-      setNormal();
-      phase.actions.forEach(action => {
-        checkSpace(6);
-        const lines = doc.splitTextToSize(`- ${action}`, contentW - 6);
-        doc.text(lines, margin + 4, y);
-        y += lines.length * 4.5;
-      });
-
-      // KPIs
-      y += 2;
-      setBold();
-      doc.setFontSize(7.5);
-      doc.text('KPIs:', margin + 2, y);
-      y += 5;
-      setNormal();
-      doc.setTextColor(...GREY);
-      phase.kpis.forEach(kpi => {
-        checkSpace(6);
-        const lines = doc.splitTextToSize(`* ${kpi}`, contentW - 6);
-        doc.text(lines, margin + 4, y);
-        y += lines.length * 4.5;
-      });
-
+    section('Plataformas', 'Vías de distribución digital y su accesibilidad para este proyecto');
+    const probColor = (p: string): RGB => {
+      const v = p.toLowerCase();
+      if (v.startsWith('alta')) return C.green;
+      if (v.startsWith('baja')) return C.red;
+      return C.amber;
+    };
+    for (const p of report.recommendedPlatforms) {
+      sans(7.8);
+      const noteLines = wrap(p.notes, CW - 62);
+      ensure(Math.max(16, noteLines.length * lh(7.8) + 6));
+      serif(11);
+      color(C.text);
+      doc.text(p.name, ML, y);
+      sansBold(5.8);
+      color(C.muted);
+      spaced(wrap(`${p.type.toUpperCase()}  ·  ${p.territory.toUpperCase()}`, 44)[0], ML, y + 4.5, 0.5);
+      const pc = probColor(p.probability);
+      fill(pc);
+      doc.circle(ML + 1, y + 8.8, 0.9, 'F');
+      sansBold(7);
+      color(pc);
+      doc.text(p.probability.replace(/\s*\(.*\)$/, ''), ML + 3.5, y + 9.6);
+      const ny = y;
+      y = ny - 0.5;
+      writeLines(noteLines, ML + 62, 7.8, () => sans(7.8), C.muted);
+      y = Math.max(y, ny + 13);
+      stroke(C.hair);
+      doc.setLineWidth(0.2);
+      doc.line(ML, y, ML + CW, y);
       y += 6;
-    });
+    }
   }
 
-  // ── Checklist de entregables ──────────────────────────────────────────────
-  addPage();
-  sectionTitle('CHECKLIST DE ENTREGABLES');
-
-  const checklistRows = report.deliverableChecklist.map(item => [
-    item.item,
-    item.priority.toUpperCase(),
-    item.status === 'listo' ? 'Listo' : item.status === 'en_proceso' ? 'En proceso' : 'Pendiente',
-    item.deadline,
-  ]);
-
-  autoTable(doc, {
-    startY: y,
-    head: [['Entregable', 'Prioridad', 'Estado', 'Deadline']],
-    body: checklistRows,
-    margin: { left: margin, right: margin },
-    styles: { fontSize: 7.5, cellPadding: 2.5, font: fontFamily },
-    headStyles: { fillColor: DARK, textColor: GOLD, fontStyle: 'bold', font: fontFamily },
-    columnStyles: {
-      1: { cellWidth: 22, fontStyle: 'bold' },
-      2: { cellWidth: 22 },
-      3: { cellWidth: 28 },
-    },
-    didParseCell: (data) => {
-      if (data.section !== 'body') return;
-      if (data.column.index === 1) {
-        const val = String(checklistRows[data.row.index]?.[1] ?? '');
-        if (val === 'ALTA') data.cell.styles.textColor = RED;
-        else if (val === 'MEDIA') data.cell.styles.textColor = YELLOW;
-        else data.cell.styles.textColor = GREEN;
-      }
-      if (data.column.index === 2) {
-        const val = String(checklistRows[data.row.index]?.[2] ?? '');
-        if (val === 'Listo') data.cell.styles.textColor = GREEN;
-        else if (val === 'En proceso') data.cell.styles.textColor = YELLOW;
-        else data.cell.styles.textColor = RED;
-      }
-    },
-    theme: 'striped',
+  // ── 06 VENTANAS ────────────────────────────────────────────────────────────
+  section('Ventanas de distribución', 'Secuencia recomendada de explotación');
+  report.distributionWindows.forEach((w, i) => {
+    const RX = ML + 68;
+    const RW = CW - 68;
+    sans(8);
+    const notes = wrap(w.notes, RW);
+    sans(7.6);
+    const platformLines = wrap(w.platform, 50).slice(0, 2);
+    serif(11);
+    const nameLines = wrap(w.window, 52).slice(0, 2);
+    const leftH = nameLines.length * lh(11, 1.2) + 5 + platformLines.length * lh(7.6, 1.3);
+    const rowH = Math.max(leftH, 5 + notes.length * lh(8)) + 3;
+    ensure(rowH);
+    fill(C.goldPale);
+    doc.circle(ML + 4, y - 1, 4, 'F');
+    serif(9);
+    color(C.gold);
+    doc.text(String(i + 1), ML + 4, y + 0.6, { align: 'center' });
+    const ny = y;
+    serif(11);
+    color(C.text);
+    doc.text(nameLines, ML + 12, y, { lineHeightFactor: 1.2 });
+    let ly = y + (nameLines.length - 1) * lh(11, 1.2) + 5;
+    sansBold(7.2);
+    color(C.gold);
+    doc.text(w.timing, ML + 12, ly);
+    ly += 4.5;
+    sans(7.6);
+    color(C.muted);
+    doc.text(platformLines, ML + 12, ly, { lineHeightFactor: 1.3 });
+    sansBold(7.6);
+    color(C.text);
+    doc.text(wrap(w.revenue, RW)[0], RX, y);
+    y = ny + 5;
+    writeLines(notes, RX, 8, () => sans(8), C.muted);
+    y = Math.max(y, ny + rowH - 3);
+    stroke(C.hair);
+    doc.setLineWidth(0.2);
+    doc.line(ML + 12, y, ML + CW, y);
+    y += 6;
   });
-  y = (doc as any).lastAutoTable.finalY + 12;
 
-  // ── Presupuesto ───────────────────────────────────────────────────────────
-  if (report.totalBudgetEstimate > 0) {
-    checkSpace(50);
-    sectionTitle('DESGLOSE PRESUPUESTARIO');
-
-    const budgetRows = report.budgetBreakdown.map(b => [
-      b.category,
-      `${formatNumber(b.recommended)} €`,
-      `${b.percentage}%`,
-    ]);
-    budgetRows.push(['TOTAL ESTIMADO', `${formatNumber(report.totalBudgetEstimate)} €`, '100%']);
-
-    autoTable(doc, {
-      startY: y,
-      head: [['Categoría', 'Importe', '%']],
-      body: budgetRows,
-      margin: { left: margin, right: margin },
-      styles: { fontSize: 8, cellPadding: 3, font: fontFamily },
-      headStyles: { fillColor: DARK, textColor: GOLD, fontStyle: 'bold', font: fontFamily },
-      didParseCell: (data) => {
-        if (data.row.index === budgetRows.length - 1 && data.section === 'body') {
-          data.cell.styles.fontStyle = 'bold';
-          data.cell.styles.textColor = GOLD;
-          data.cell.styles.fillColor = DARK;
-        }
-      },
-      theme: 'striped',
+  // ── 07 PLAN DE LANZAMIENTO ─────────────────────────────────────────────────
+  if (report.marketingPhases.length > 0) {
+    section('Plan de lanzamiento', 'Fases, acciones e indicadores de éxito');
+    report.marketingPhases.forEach((phase, i) => {
+      ensure(40);
+      const textX = ML + 22;
+      const textW = CW - 22;
+      serif(40);
+      color(C.numeral);
+      doc.text(String(i + 1), ML + 1, y + 12);
+      serif(13.5);
+      const nameLines = wrap(stripPhaseNumber(phase.phase), textW);
+      writeLines(nameLines, textX, 13.5, () => serif(13.5), C.text, 1.3);
+      sansBold(7.2);
+      const metaLines = wrap(`${phase.duration}   ·   ${phase.budget}`, textW);
+      writeLines(metaLines, textX, 7.2, () => sansBold(7.2), C.gold);
+      y += 3;
+      sansBold(6.5);
+      color(C.muted);
+      spaced('ACCIONES', textX, y, 1.1);
+      y += 4.5;
+      bullets(phase.actions, { x: textX, width: textW, size: 8.5, gap: 1 });
+      if (phase.kpis.length > 0) {
+        y += 2;
+        ensure(10);
+        sansBold(6.5);
+        color(C.muted);
+        spaced('INDICADORES DE ÉXITO', textX, y, 1.1);
+        y += 4.5;
+        bullets(phase.kpis, { x: textX, width: textW, size: 8.2, c: C.muted, marker: C.green, gap: 0.8 });
+      }
+      y += 7;
     });
-    y = (doc as any).lastAutoTable.finalY + 12;
   }
 
-  // ── Próximos pasos ────────────────────────────────────────────────────────
-  checkSpace(30);
-  sectionTitle('PRÓXIMOS PASOS INMEDIATOS');
+  // ── 08 ENTREGABLES ─────────────────────────────────────────────────────────
+  section('Entregables', 'Estado de los materiales necesarios para la distribución', 30);
+  const statusDot = (x: number, yy: number, status: string) => {
+    if (status === 'listo') {
+      fill(C.green);
+      doc.circle(x, yy, 1.4, 'F');
+    } else if (status === 'en_proceso') {
+      stroke(C.amber);
+      doc.setLineWidth(0.5);
+      doc.circle(x, yy, 1.3, 'S');
+      fill(C.amber);
+      doc.triangle(x, yy - 1.3, x, yy + 1.3, x + 1.3, yy, 'F');
+    } else {
+      stroke(C.red);
+      doc.setLineWidth(0.5);
+      doc.circle(x, yy, 1.3, 'S');
+    }
+  };
+  ensure(10);
+  [['listo', 'Listo'], ['en_proceso', 'En proceso'], ['no_disponible', 'Pendiente']].forEach(([s, t], i) => {
+    const lx = ML + i * 30;
+    statusDot(lx + 1.4, y - 1, s);
+    sans(7.5);
+    color(C.muted);
+    doc.text(t, lx + 4.5, y);
+  });
+  y += 8;
+  const colW = (CW - 10) / 2;
+  const items = report.deliverableChecklist;
+  for (let i = 0; i < items.length; i += 2) {
+    const pair = items.slice(i, i + 2);
+    const heights = pair.map(it => {
+      sans(8.2);
+      return wrap(it.item, colW - 22).length * lh(8.2) + 7;
+    });
+    const rowH = Math.max(...heights);
+    ensure(rowH);
+    pair.forEach((it, j) => {
+      const cx = ML + j * (colW + 10);
+      statusDot(cx + 1.4, y - 1, it.status);
+      sans(8.2);
+      color(C.text);
+      const lines = wrap(it.item, colW - 22);
+      doc.text(lines, cx + 5, y);
+      const pc = it.priority === 'alta' ? C.red : it.priority === 'media' ? C.amber : C.green;
+      sansBold(5.8);
+      color(pc);
+      spaced(it.priority.toUpperCase(), cx + colW, y, 0.6, 'right');
+      sans(6.8);
+      color(C.muted);
+      doc.text(it.deadline, cx + 5, y + lines.length * lh(8.2) + 0.5);
+    });
+    y += rowH;
+    stroke(C.hair);
+    doc.setLineWidth(0.15);
+    doc.line(ML, y - 3, ML + CW, y - 3);
+    y += 2;
+  }
 
+  // ── 09 PRESUPUESTO ─────────────────────────────────────────────────────────
+  if (report.totalBudgetEstimate > 0 && report.budgetBreakdown.length > 0) {
+    section('Inversión recomendada', `Reparto orientativo de ${formatNumber(report.totalBudgetEstimate)} € de presupuesto de distribución`);
+    const maxPct = Math.max(...report.budgetBreakdown.map(b => b.percentage), 1);
+    const labelW = 72;
+    const barW = CW - labelW - 34;
+    for (const b of report.budgetBreakdown) {
+      ensure(10);
+      sans(8.5);
+      color(C.text);
+      doc.text(wrap(b.category, labelW - 4)[0], ML, y);
+      fill(C.cream);
+      doc.roundedRect(ML + labelW, y - 3, barW, 3.6, 1.8, 1.8, 'F');
+      fill(C.gold);
+      doc.roundedRect(ML + labelW, y - 3, Math.max(3.6, (barW * b.percentage) / maxPct), 3.6, 1.8, 1.8, 'F');
+      sansBold(8.2);
+      color(C.text);
+      doc.text(`${formatNumber(b.recommended)} €`, ML + CW - 9, y, { align: 'right' });
+      sans(7);
+      color(C.muted);
+      doc.text(`${b.percentage}%`, ML + CW, y, { align: 'right' });
+      y += 8.5;
+    }
+    ensure(12);
+    stroke(C.gold);
+    doc.setLineWidth(0.4);
+    doc.line(ML, y - 3, ML + CW, y - 3);
+    y += 3;
+    serif(12);
+    color(C.text);
+    doc.text('Total', ML, y);
+    serif(14);
+    color(C.gold);
+    doc.text(`${formatNumber(report.totalBudgetEstimate)} €`, ML + CW, y, { align: 'right' });
+    y += 8;
+  }
+
+  // ── 10 PRÓXIMOS PASOS ──────────────────────────────────────────────────────
+  section('Próximos pasos', 'Acciones inmediatas, por orden de urgencia');
   report.nextSteps.forEach((step, i) => {
-    checkSpace(12);
-    doc.setTextColor(...GOLD);
-    doc.setFontSize(9);
-    setBold();
-    doc.text(`${i + 1}.`, margin, y);
-    doc.setTextColor(...BLACK);
-    setNormal();
-    doc.setFontSize(8);
-    const lines = doc.splitTextToSize(step, contentW - 8);
-    doc.text(lines, margin + 8, y);
-    y += lines.length * 5 + 3;
+    sans(9.2);
+    const lines = wrap(step, CW - 16);
+    ensure(Math.min(lines.length * lh(9.2) + 8, 40));
+    serif(20);
+    color(C.gold);
+    doc.text(String(i + 1), ML + 4, y + 2.5, { align: 'center' });
+    writeLines(lines, ML + 14, 9.2, () => sans(9.2), C.text);
+    y += 5;
   });
 
-  // ── Footer en todas las páginas ───────────────────────────────────────────
-  const totalPages = doc.getNumberOfPages();
-  for (let page = 1; page <= totalPages; page++) {
-    doc.setPage(page);
-    doc.setFillColor(10, 10, 15);
-    doc.rect(0, pageH - 10, pageW, 10, 'F');
-    doc.setFontSize(6.5);
-    doc.setTextColor(...GREY);
-    setNormal();
-    doc.text(
-      `FilmRoute  |  "${report.filmTitle}"  |  Página ${page} de ${totalPages}`,
-      pageW / 2,
-      pageH - 4,
-      { align: 'center' }
-    );
+  // ── CONTRAPORTADA ──────────────────────────────────────────────────────────
+  doc.addPage();
+  fill(C.ink);
+  doc.rect(0, 0, W, H, 'F');
+  fill(C.inkSoft);
+  for (let py = 6; py < H - 6; py += 7.2) {
+    doc.roundedRect(5, py, 4.2, 3.4, 0.7, 0.7, 'F');
+    doc.roundedRect(W - 9.2, py, 4.2, 3.4, 0.7, 0.7, 'F');
+  }
+  stroke(C.goldBright);
+  doc.setLineWidth(0.5);
+  doc.line(W / 2 - 10, H / 2 - 22, W / 2 + 10, H / 2 - 22);
+  serif(30);
+  color(C.goldBright);
+  doc.text('FilmRoute', W / 2, H / 2 - 6, { align: 'center' });
+  serifItalic(11);
+  color([196, 190, 178]);
+  doc.text('Cada película merece encontrar a su público.', W / 2, H / 2 + 4, { align: 'center' });
+  sansBold(8);
+  color(C.goldBright);
+  spaced('WWW.FILMROUTE.AI', W / 2, H / 2 + 16, 1.6, 'center');
+  sans(6.8);
+  color(C.muted);
+  const disclaimer = wrap(
+    'Este informe es una recomendación orientativa elaborada a partir de los datos facilitados. Plazos, tasas y requisitos de los festivales y plataformas pueden cambiar: verifícalos siempre en sus fuentes oficiales. FilmRoute no garantiza selecciones, ventas ni ingresos.',
+    120,
+  );
+  doc.text(disclaimer, W / 2, H - 40, { align: 'center' });
+  doc.text(`© ${new Date().getFullYear()} FilmRoute · LUR Atlantik Films`, W / 2, H - 22, { align: 'center' });
+
+  // ── Pies de página (todas menos portada y contraportada) ───────────────────
+  const total = doc.getNumberOfPages();
+  for (let p = 2; p < total; p++) {
+    doc.setPage(p);
+    stroke(C.hair);
+    doc.setLineWidth(0.2);
+    doc.line(ML, H - 14, W - MR, H - 14);
+    sans(7);
+    color(C.muted);
+    doc.text('Dossier de distribución', ML, H - 9);
+    sansBold(7);
+    color(C.gold);
+    doc.text(`${p - 1} / ${total - 2}`, W - MR, H - 9, { align: 'right' });
   }
 
-  const filename = `FilmRoute_${report.filmTitle.replace(/[^a-zA-Z0-9]/g, '_')}.pdf`;
+  const filename = `FilmRoute_${title.normalize('NFD').replace(/[̀-ͯ]/g, '').replace(/[^a-zA-Z0-9]+/g, '_')}.pdf`;
   doc.save(filename);
 }
