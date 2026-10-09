@@ -15,6 +15,7 @@ interface AdvisorResponse {
   festivals: { name: string; reason: string }[];
   marketingPhases: StrategyPhase[];
   nextSteps: string[];
+  posterAnalysis: string;
 }
 
 export interface GenerationResult {
@@ -76,6 +77,7 @@ export async function generateStrategyWithAI(
         festivalRoadmap: buildFestivalRoadmap(festivals.length > 0 ? festivals : base.recommendedFestivals),
         marketingPhases: advice.marketingPhases.length > 0 ? advice.marketingPhases : base.marketingPhases,
         nextSteps: advice.nextSteps,
+        posterAnalysis: advice.posterAnalysis?.trim() || undefined,
         aiGenerated: true,
       },
     };

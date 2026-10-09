@@ -1,6 +1,6 @@
 import Anthropic from '@anthropic-ai/sdk';
 import { zodOutputFormat } from '@anthropic-ai/sdk/helpers/zod';
-import { createClient } from '@supabase/supabase-js';
+import { createClient, type SupabaseClient } from '@supabase/supabase-js';
 import { z } from 'zod';
 
 export const maxDuration = 300;
@@ -26,6 +26,7 @@ const AdvisorSchema = z.object({
   festivals: z.array(z.object({ name: z.string(), reason: z.string() })),
   marketingPhases: z.array(PhaseSchema),
   nextSteps: z.array(z.string()),
+  posterAnalysis: z.string(),
 });
 
 const SYSTEM_PROMPT = `Eres el asesor de distribución de FilmRoute: un consultor senior de distribución de cine independiente con experiencia en festivales internacionales, agentes de ventas, plataformas (SVOD, AVOD, TVOD), televisión y distribución educativa, especialmente en el mercado español y europeo.
@@ -41,7 +42,8 @@ Reglas:
 - marketingPhases: entre 3 y 5 fases en orden cronológico, con acciones concretas y KPIs medibles.
 - nextSteps: entre 5 y 8 acciones inmediatas ordenadas por urgencia. Cada una debe ser accionable esta semana o este mes y mencionar nombres concretos (festivales, plataformas, entregables) cuando aplique. No repitas tareas que el cineasta ya tiene hechas.
 - Si faltan datos importantes, dilo en las debilidades en vez de suponerlos.
-- No prometas resultados (selecciones, ventas o ingresos garantizados).`;
+- No prometas resultados (selecciones, ventas o ingresos garantizados).
+- posterAnalysis: si se adjunta el cartel de la película, valóralo como herramienta de venta en 3-5 frases: legibilidad del título en miniatura (catálogos de festivales y plataformas), si transmite género y tono, coherencia con el público objetivo y la estrategia, y qué conviene ajustar (laureles tras las selecciones, bloque de créditos, versiones por territorio). Ten en cuenta el cartel también en el resto del análisis cuando sea relevante. Si no hay cartel, devuelve una cadena vacía.`;
 
 interface RequestBody {
   filmData: unknown;
@@ -54,6 +56,19 @@ function json(status: number, body: unknown): Response {
     status,
     headers: { 'Content-Type': 'application/json' },
   });
+}
+
+// El cartel se descarga con el token del usuario: las políticas del bucket impiden leer carteles ajenos
+async function loadPoster(
+  supabase: SupabaseClient,
+  userId: string,
+  filmData: unknown,
+): Promise<string | null> {
+  const path = (filmData as { basicInfo?: { posterPath?: unknown } })?.basicInfo?.posterPath;
+  if (typeof path !== 'string' || !path.startsWith(`${userId}/`)) return null;
+  const { data: blob, error } = await supabase.storage.from('posters').download(path);
+  if (error || !blob || blob.size > 4_500_000) return null;
+  return Buffer.from(await blob.arrayBuffer()).toString('base64');
 }
 
 export async function POST(request: Request): Promise<Response> {
@@ -105,6 +120,8 @@ export async function POST(request: Request): Promise<Response> {
 
   const targetCount = Math.min(Math.max(Number(body.targetFestivalCount) || 12, 3), 25);
 
+  const poster = await loadPoster(supabase, user.id, body.filmData);
+
   const client = new Anthropic();
   try {
     const response = await client.messages.parse({
@@ -117,11 +134,20 @@ export async function POST(request: Request): Promise<Response> {
       system: SYSTEM_PROMPT,
       messages: [{
         role: 'user',
-        content:
-          `Fecha de hoy: ${new Date().toISOString().slice(0, 10)}\n` +
-          `Número de festivales objetivo: ${targetCount}\n\n` +
-          `<datos_pelicula>\n${JSON.stringify(body.filmData, null, 2)}\n</datos_pelicula>\n\n` +
-          `<festivales_candidatos>\n${JSON.stringify(body.candidates, null, 2)}\n</festivales_candidatos>`,
+        content: [
+          ...(poster
+            ? [{ type: 'image' as const, source: { type: 'base64' as const, media_type: 'image/jpeg' as const, data: poster } }]
+            : []),
+          {
+            type: 'text' as const,
+            text:
+              `Fecha de hoy: ${new Date().toISOString().slice(0, 10)}\n` +
+              `Número de festivales objetivo: ${targetCount}\n` +
+              `Cartel adjunto: ${poster ? 'sí (imagen anterior)' : 'no'}\n\n` +
+              `<datos_pelicula>\n${JSON.stringify(body.filmData, null, 2)}\n</datos_pelicula>\n\n` +
+              `<festivales_candidatos>\n${JSON.stringify(body.candidates, null, 2)}\n</festivales_candidatos>`,
+          },
+        ],
       }],
     });
 

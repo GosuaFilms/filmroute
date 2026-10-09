@@ -28,6 +28,7 @@ export interface BasicInfo {
   directorName: string;
   producerName: string;
   website: string;
+  posterPath: string;
 }
 
 export interface CreativeDetails {
@@ -168,4 +169,5 @@ export interface StrategyReport {
   nextSteps: string[];
   aiGenerated?: boolean;
   scoreRationale?: string;
+  posterAnalysis?: string;
 }

@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { Film, Plus, Trash2, Clock, FileText, Pencil, AlertCircle, Trophy, Star, Send } from 'lucide-react';
 import { listStrategies, deleteStrategy, type SavedStrategy } from '../../lib/strategies';
 import { getSubmissionStatsByStrategy, type SubmissionStats } from '../../lib/submissions';
+import { getPosterUrls } from '../../lib/posters';
 import { Button } from '../ui/Button';
 
 interface DashboardProps {
@@ -57,6 +58,7 @@ export function Dashboard({ onNew, onLoad, onTracker }: DashboardProps) {
   const [error, setError] = useState<string | null>(null);
   const [deletingId, setDeletingId] = useState<string | null>(null);
   const [submissionStats, setSubmissionStats] = useState<Record<string, SubmissionStats>>({});
+  const [posterUrls, setPosterUrls] = useState<Record<string, string>>({});
 
   useEffect(() => {
     load();
@@ -69,6 +71,8 @@ export function Dashboard({ onNew, onLoad, onTracker }: DashboardProps) {
       const data = await listStrategies();
       setStrategies(data);
       getSubmissionStatsByStrategy().then(setSubmissionStats).catch(() => {});
+      const paths = data.map(st => st.film_data?.basicInfo?.posterPath).filter((p): p is string => !!p);
+      getPosterUrls(paths).then(setPosterUrls).catch(() => {});
     } catch {
       setError('No se pudieron cargar las estrategias. Comprueba tu conexión.');
     } finally {
@@ -168,6 +172,7 @@ export function Dashboard({ onNew, onLoad, onTracker }: DashboardProps) {
                 onEdit={() => onLoad(s, 'wizard')}
                 onTracker={() => onTracker(s)}
                 stats={submissionStats[s.id]}
+                posterUrl={posterUrls[s.film_data?.basicInfo?.posterPath ?? '']}
                 onDelete={e => handleDelete(s.id, e)}
                 isDeleting={deletingId === s.id}
                 formatDate={formatDate}
@@ -195,6 +200,7 @@ export function Dashboard({ onNew, onLoad, onTracker }: DashboardProps) {
                 onEdit={() => onLoad(s, 'wizard')}
                 onTracker={() => onTracker(s)}
                 stats={submissionStats[s.id]}
+                posterUrl={posterUrls[s.film_data?.basicInfo?.posterPath ?? '']}
                 onDelete={e => handleDelete(s.id, e)}
                 isDeleting={deletingId === s.id}
                 formatDate={formatDate}
@@ -216,9 +222,10 @@ interface CardProps {
   isDeleting: boolean;
   formatDate: (iso: string) => string;
   stats?: SubmissionStats;
+  posterUrl?: string;
 }
 
-function StrategyCard({ strategy: s, onViewReport, onEdit, onTracker, onDelete, isDeleting, formatDate, stats }: CardProps) {
+function StrategyCard({ strategy: s, onViewReport, onEdit, onTracker, onDelete, isDeleting, formatDate, stats, posterUrl }: CardProps) {
   const filmType = s.film_data?.basicInfo?.filmType;
   const genre = s.film_data?.basicInfo?.genre;
   const country = s.film_data?.basicInfo?.country;
@@ -230,9 +237,13 @@ function StrategyCard({ strategy: s, onViewReport, onEdit, onTracker, onDelete, 
       <div className="flex items-start justify-between gap-4">
         {/* Icono + info principal */}
         <div className="flex items-start gap-4 min-w-0">
-          <div className="w-11 h-11 rounded-lg bg-cinema-gold/10 flex items-center justify-center shrink-0 mt-0.5">
-            <Film size={20} className="text-cinema-gold" />
-          </div>
+          {posterUrl ? (
+            <img src={posterUrl} alt="" className="w-12 aspect-[2/3] object-cover rounded-md border border-cinema-border shrink-0 mt-0.5" />
+          ) : (
+            <div className="w-11 h-11 rounded-lg bg-cinema-gold/10 flex items-center justify-center shrink-0 mt-0.5">
+              <Film size={20} className="text-cinema-gold" />
+            </div>
+          )}
           <div className="min-w-0">
             <p className="font-semibold text-cinema-text text-base truncate">{s.film_title}</p>
 

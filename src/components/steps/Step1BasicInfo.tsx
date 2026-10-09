@@ -3,6 +3,7 @@ import { Input } from '../ui/Input';
 import { Select } from '../ui/Select';
 import { SectionCard } from '../ui/SectionCard';
 import { CheckboxGroup } from '../ui/CheckboxGroup';
+import { PosterUpload } from './PosterUpload';
 import type { StepErrors } from '../../utils/validation';
 
 interface Props {
@@ -155,6 +156,16 @@ export function Step1BasicInfo({ data, onChange, errors = {} }: Props) {
             className="sm:col-span-2"
           />
         </div>
+      </SectionCard>
+
+      <SectionCard
+        title="Cartel de la película"
+        description="Opcional, pero recomendado: el asesor IA valorará el cartel y aparecerá en la portada del dossier."
+      >
+        <PosterUpload
+          posterPath={data.posterPath}
+          onChange={path => onChange({ basicInfo: { ...data, posterPath: path } })}
+        />
       </SectionCard>
 
       <SectionCard title="Idioma y versiones">

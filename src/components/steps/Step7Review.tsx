@@ -1,11 +1,12 @@
 import type { FilmData } from '../../types/film';
 import { formatEuro } from '../../utils/format';
-import { Film, Globe, Award, Package, Target, DollarSign } from 'lucide-react';
+import { Film, Globe, Award, Package, Target, DollarSign, Pencil } from 'lucide-react';
 
 interface Props {
   data: FilmData;
   onGenerate: () => void;
   isGenerating: boolean;
+  onEditStep: (step: number) => void;
 }
 
 interface ReviewRowProps {
@@ -28,32 +29,40 @@ interface ReviewSectionProps {
   icon: React.ReactNode;
   title: string;
   children: React.ReactNode;
+  onEdit: () => void;
 }
 
-function ReviewSection({ icon, title, children }: ReviewSectionProps) {
+function ReviewSection({ icon, title, children, onEdit }: ReviewSectionProps) {
   return (
     <div className="bg-cinema-card border border-cinema-border rounded-xl overflow-hidden">
       <div className="flex items-center gap-2 px-4 py-3 border-b border-cinema-border bg-cinema-dark/50">
         <span className="text-cinema-gold">{icon}</span>
-        <h3 className="text-sm font-semibold text-cinema-text">{title}</h3>
+        <h3 className="text-sm font-semibold text-cinema-text flex-1">{title}</h3>
+        <button
+          type="button"
+          onClick={onEdit}
+          className="inline-flex items-center gap-1 text-xs text-cinema-text-dim hover:text-cinema-gold border border-cinema-border hover:border-cinema-gold/50 rounded-md px-2 py-1 transition-all"
+        >
+          <Pencil size={11} /> Editar
+        </button>
       </div>
       <div className="px-4 py-3 space-y-0">{children}</div>
     </div>
   );
 }
 
-export function Step7Review({ data, onGenerate, isGenerating }: Props) {
+export function Step7Review({ data, onGenerate, isGenerating, onEditStep }: Props) {
   const { basicInfo: b, creativeDetails: c, materials: m, distributionGoals: d, festivalStrategy: f, budgetResources: br } = data;
 
   return (
     <div className="space-y-6">
       <div>
         <h2 className="text-2xl font-display font-bold text-cinema-text mb-1">Revisión y generación de estrategia</h2>
-        <p className="text-cinema-text-dim text-sm">Revisa los datos introducidos y genera tu informe de distribución personalizado.</p>
+        <p className="text-cinema-text-dim text-sm">Revisa los datos introducidos y genera tu informe de distribución personalizado. Pulsa «Editar» en cualquier bloque para corregirlo.</p>
       </div>
 
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-        <ReviewSection icon={<Film size={16} />} title="Información básica">
+        <ReviewSection icon={<Film size={16} />} title="Información básica" onEdit={() => onEditStep(1)}>
           <ReviewRow label="Título" value={b.title} />
           <ReviewRow label="Tipo" value={b.filmType} />
           <ReviewRow label="Género" value={b.genre} />
@@ -62,9 +71,10 @@ export function Step7Review({ data, onGenerate, isGenerating }: Props) {
           <ReviewRow label="Director/a" value={b.directorName} />
           <ReviewRow label="Idioma original" value={b.originalLanguage} />
           <ReviewRow label="Subtítulos" value={b.availableSubtitles} />
+          <ReviewRow label="Cartel" value={b.posterPath ? 'Subido' : 'No subido'} />
         </ReviewSection>
 
-        <ReviewSection icon={<Award size={16} />} title="Detalles creativos">
+        <ReviewSection icon={<Award size={16} />} title="Detalles creativos" onEdit={() => onEditStep(2)}>
           <ReviewRow label="Público objetivo" value={c.targetAudience} />
           <ReviewRow label="Clasificación" value={c.ageRating} />
           <ReviewRow label="Temáticas" value={c.themes} />
@@ -72,7 +82,7 @@ export function Step7Review({ data, onGenerate, isGenerating }: Props) {
           <ReviewRow label="USP definido" value={c.uniqueSellingPoint ? 'Sí' : 'No'} />
         </ReviewSection>
 
-        <ReviewSection icon={<Package size={16} />} title="Estado de materiales">
+        <ReviewSection icon={<Package size={16} />} title="Estado de materiales" onEdit={() => onEditStep(3)}>
           <ReviewRow label="DCP" value={m.dcp} />
           <ReviewRow label="Tráiler teatral" value={m.trailerTheatrical} />
           <ReviewRow label="Póster oficial" value={m.poster} />
@@ -82,7 +92,7 @@ export function Step7Review({ data, onGenerate, isGenerating }: Props) {
           <ReviewRow label="Sitio web" value={m.website} />
         </ReviewSection>
 
-        <ReviewSection icon={<Globe size={16} />} title="Objetivos de distribución">
+        <ReviewSection icon={<Globe size={16} />} title="Objetivos de distribución" onEdit={() => onEditStep(4)}>
           <ReviewRow label="Canales objetivo" value={d.primaryTargets} />
           <ReviewRow label="Mercados" value={d.geographicMarkets} />
           <ReviewRow label="Mercado prioritario" value={d.priorityMarket} />
@@ -92,7 +102,7 @@ export function Step7Review({ data, onGenerate, isGenerating }: Props) {
           <ReviewRow label="Ventas internacionales" value={d.openToInternationalSales} />
         </ReviewSection>
 
-        <ReviewSection icon={<Award size={16} />} title="Estrategia de festivales">
+        <ReviewSection icon={<Award size={16} />} title="Estrategia de festivales" onEdit={() => onEditStep(5)}>
           <ReviewRow label="Estreno mundial disponible" value={f.worldPremiereAvailable} />
           <ReviewRow label="Estado actual" value={f.currentPremiereStatus} />
           <ReviewRow label="Tiers objetivo" value={f.targetTiers} />
@@ -102,7 +112,7 @@ export function Step7Review({ data, onGenerate, isGenerating }: Props) {
           <ReviewRow label="Estrategia de envío" value={f.submissionStrategy} />
         </ReviewSection>
 
-        <ReviewSection icon={<DollarSign size={16} />} title="Presupuesto y recursos">
+        <ReviewSection icon={<DollarSign size={16} />} title="Presupuesto y recursos" onEdit={() => onEditStep(6)}>
           <ReviewRow label="Presupuesto total" value={br.totalDistributionBudget ? formatEuro(br.totalDistributionBudget) : undefined} />
           <ReviewRow label="Presupuesto festivales" value={br.festivalsBudget ? formatEuro(br.festivalsBudget) : undefined} />
           <ReviewRow label="Presupuesto marketing" value={br.marketingBudget ? formatEuro(br.marketingBudget) : undefined} />

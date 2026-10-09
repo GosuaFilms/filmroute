@@ -30,6 +30,7 @@ function PageSpinner() {
 import { generateStrategyWithAI } from './lib/aiAdvisor';
 import { LegalPage, LegalLinks, legalSlugFromPath } from './pages/LegalPage';
 import { exportReportToPDF } from './utils/pdfExport';
+import { getPosterUrl, loadPosterImage } from './lib/posters';
 import { saveStrategy, updateStrategy, type SavedStrategy } from './lib/strategies';
 import { validateStep, hasErrors, type StepErrors } from './utils/validation';
 import { listFestivalsFromDb, getIsAdmin, rowToFestival } from './lib/festivalsDb';
@@ -181,6 +182,15 @@ function AppContent() {
   const [draftRestored, setDraftRestored] = useState(false);
   const [isAdmin, setIsAdmin] = useState(false);
   const [festivals, setFestivals] = useState<RecommendedFestival[]>([]);
+  const [posterUrl, setPosterUrl] = useState<string | null>(null);
+  const posterPath = filmData.basicInfo?.posterPath;
+
+  useEffect(() => {
+    let cancelled = false;
+    setPosterUrl(null);
+    if (posterPath) getPosterUrl(posterPath).then(u => { if (!cancelled) setPosterUrl(u); }).catch(() => {});
+    return () => { cancelled = true; };
+  }, [posterPath]);
 
   const updateData = useCallback((partial: Partial<FilmData>) => {
     setFilmData(prev => ({ ...prev, ...partial }));
@@ -327,7 +337,8 @@ function AppContent() {
     if (!report) return;
     setIsExporting(true);
     try {
-      await exportReportToPDF(report, filmData);
+      const poster = posterPath ? await loadPosterImage(posterPath).catch(() => null) : null;
+      await exportReportToPDF(report, filmData, poster);
     } catch (e) {
       console.error('Error exportando PDF:', e);
       alert('Error al exportar el PDF. Por favor, inténtalo de nuevo.');
@@ -456,6 +467,7 @@ function AppContent() {
               strategyId={currentStrategyId}
               onRegenerate={handleGenerate}
               isRegenerating={isGenerating}
+              posterUrl={posterUrl}
             />
           </Suspense>
         </main>
@@ -489,7 +501,16 @@ function AppContent() {
           {currentStep === 5 && <Step5Festivals data={filmData.festivalStrategy} onChange={updateData} errors={stepErrors} />}
           {currentStep === 6 && <Step6Budget data={filmData.budgetResources} onChange={updateData} errors={stepErrors} />}
           {currentStep === 7 && (
-            <Step7Review data={filmData} onGenerate={handleGenerate} isGenerating={isGenerating} />
+            <Step7Review
+              data={filmData}
+              onGenerate={handleGenerate}
+              isGenerating={isGenerating}
+              onEditStep={step => {
+                setStepErrors({});
+                setCurrentStep(step);
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+              }}
+            />
           )}
         </Suspense>
 

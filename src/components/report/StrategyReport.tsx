@@ -1,6 +1,6 @@
 import type { StrategyReport } from '../../types/film';
 import { formatEuro } from '../../utils/format';
-import { Download, Trophy, Globe, Tv, CheckSquare, BarChart2, Calendar, TrendingUp, AlertTriangle, ChevronRight, Star, Sparkles } from 'lucide-react';
+import { Download, Trophy, Globe, Tv, CheckSquare, BarChart2, Calendar, TrendingUp, AlertTriangle, ChevronRight, Star, Sparkles, ImageIcon } from 'lucide-react';
 import clsx from 'clsx';
 import { SubmissionTracker } from '../submissions/SubmissionTracker';
 
@@ -12,6 +12,7 @@ interface Props {
   strategyId?: string | null;
   onRegenerate?: () => void;
   isRegenerating?: boolean;
+  posterUrl?: string | null;
 }
 
 interface CardProps {
@@ -51,12 +52,20 @@ function StatusBadge({ status }: { status: string }) {
   );
 }
 
-export function StrategyReportView({ report, onBack, onExport, isExporting = false, strategyId, onRegenerate, isRegenerating = false }: Props) {
+export function StrategyReportView({ report, onBack, onExport, isExporting = false, strategyId, onRegenerate, isRegenerating = false, posterUrl }: Props) {
   return (
     <div className="space-y-6" id="strategy-report">
       {/* Header del informe */}
       <div className="bg-gradient-to-r from-cinema-dark via-cinema-card to-cinema-dark border border-cinema-border rounded-2xl p-6 sm:p-8">
         <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-4">
+          <div className="flex gap-5 items-start">
+          {posterUrl && (
+            <img
+              src={posterUrl}
+              alt={`Cartel de ${report.filmTitle}`}
+              className="w-24 sm:w-28 aspect-[2/3] object-cover rounded-lg border border-cinema-border shadow-xl shadow-black/50 shrink-0"
+            />
+          )}
           <div>
             <div className="text-cinema-gold text-xs font-semibold uppercase tracking-widest mb-2">Informe de Estrategia de Distribución</div>
             <h1 className="text-2xl sm:text-3xl font-display font-bold text-cinema-text mb-1">"{report.filmTitle}"</h1>
@@ -86,6 +95,7 @@ export function StrategyReportView({ report, onBack, onExport, isExporting = fal
               </div>
             )}
           </div>
+          </div>
           <div className="flex items-center gap-3 flex-shrink-0">
             <div className="text-center bg-cinema-dark border border-cinema-gold/30 rounded-xl p-4">
               <div className="text-3xl font-bold text-cinema-gold">{report.overallScore}</div>
@@ -105,6 +115,18 @@ export function StrategyReportView({ report, onBack, onExport, isExporting = fal
           )}
         </div>
       </div>
+
+      {/* Análisis del cartel */}
+      {report.posterAnalysis && (
+        <ReportCard title="Análisis del cartel" icon={<ImageIcon size={18} />}>
+          <div className="flex gap-5 items-start">
+            {posterUrl && (
+              <img src={posterUrl} alt="" className="w-20 aspect-[2/3] object-cover rounded-md border border-cinema-border shrink-0" />
+            )}
+            <p className="text-sm text-cinema-text-dim leading-relaxed whitespace-pre-line">{report.posterAnalysis}</p>
+          </div>
+        </ReportCard>
+      )}
 
       {/* DAFO */}
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">

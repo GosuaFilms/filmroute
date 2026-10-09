@@ -1,5 +1,6 @@
 import type { jsPDF as JsPDF } from 'jspdf';
 import type { FilmData, StrategyReport } from '../types/film';
+import type { PosterImage } from '../lib/posters';
 import { formatNumber, genreLabel } from './format';
 
 type RGB = [number, number, number];
@@ -84,7 +85,7 @@ function splitLead(text: string): [string, string] {
   return match ? [match[1], match[2]] : [text, ''];
 }
 
-export async function exportReportToPDF(report: StrategyReport, filmData?: FilmData): Promise<void> {
+export async function exportReportToPDF(report: StrategyReport, filmData?: FilmData, poster?: PosterImage | null): Promise<void> {
   const { jsPDF, GState } = await import('jspdf');
   const doc = new jsPDF({ orientation: 'portrait', unit: 'mm', format: 'a4' });
   const hasFonts = await registerFonts(doc);
@@ -213,7 +214,8 @@ export async function exportReportToPDF(report: StrategyReport, filmData?: FilmD
   fill(C.ink);
   doc.rect(0, 0, W, H, 'F');
 
-  // Bobina de película como motivo de fondo
+  // Bobina de película como motivo de fondo (el cartel ocupa su lugar si existe)
+  if (!poster) {
   doc.setGState(new GState({ opacity: 0.45 }));
   stroke(C.inkLine);
   doc.setLineWidth(0.5);
@@ -227,6 +229,7 @@ export async function exportReportToPDF(report: StrategyReport, filmData?: FilmD
     doc.circle(reelX + Math.cos(a) * 33, reelY + Math.sin(a) * 33, 13, 'S');
   }
   doc.setGState(new GState({ opacity: 1 }));
+  }
 
   // Perforaciones de película en los márgenes
   fill(C.inkSoft);
@@ -251,20 +254,44 @@ export async function exportReportToPDF(report: StrategyReport, filmData?: FilmD
   doc.setLineWidth(0.25);
   doc.line(CL, 37, CR, 37);
 
+  // Cartel enmarcado a la derecha; el bloque de título se estrecha para dejarle sitio
+  let textW = CR - CL;
+  let kickerY = 112;
+  if (poster) {
+    const ratio = poster.height / poster.width;
+    let pw = 70;
+    let ph = pw * ratio;
+    if (ph > 110) {
+      ph = 110;
+      pw = ph / ratio;
+    }
+    const px = CR - pw;
+    const py = 52;
+    fill([6, 6, 10]);
+    doc.rect(px + 2.5, py + 2.5, pw, ph, 'F');
+    doc.addImage(poster.dataUrl, 'JPEG', px, py, pw, ph);
+    stroke(C.goldBright);
+    doc.setLineWidth(0.3);
+    doc.rect(px - 2, py - 2, pw + 4, ph + 4, 'S');
+    textW = px - CL - 12;
+    kickerY = 76;
+  }
+
   sansBold(7.5);
   color(C.goldBright);
-  spaced('DOSSIER DE DISTRIBUCIÓN', CL, 112, 2);
+  spaced('DOSSIER DE DISTRIBUCIÓN', CL, kickerY, 2);
   stroke(C.goldBright);
   doc.setLineWidth(0.5);
-  doc.line(CL, 116, CL + 14, 116);
+  doc.line(CL, kickerY + 4, CL + 14, kickerY + 4);
 
-  serif(36);
+  const titleSize = poster ? 30 : 36;
+  serif(titleSize);
   color([246, 241, 229]);
-  const titleLines = wrap(title, CR - CL);
-  let ty = 132;
+  const titleLines = wrap(title, textW);
+  let ty = kickerY + 20;
   for (const line of titleLines.slice(0, 4)) {
     doc.text(line, CL, ty);
-    ty += 14;
+    ty += titleSize * 0.39;
   }
 
   const metaParts = [
@@ -277,19 +304,20 @@ export async function exportReportToPDF(report: StrategyReport, filmData?: FilmD
   if (metaParts.length > 0) {
     serifItalic(12.5);
     color(C.goldBright);
-    doc.text(metaParts.join('  ·  '), CL, ty + 1);
-    ty += 9;
+    const metaLines = wrap(metaParts.join('  ·  '), textW);
+    doc.text(metaLines, CL, ty + 1, { lineHeightFactor: 1.35 });
+    ty += 3 + metaLines.length * lh(12.5, 1.35);
   }
   if (film.directorName) {
     sans(9.5);
     color([196, 190, 178]);
-    doc.text(`Un film de ${film.directorName}`, CL, ty + 2);
+    doc.text(wrap(`Un film de ${film.directorName}`, textW)[0], CL, ty + 2);
     ty += 6;
   }
   if (film.productionCompany) {
     sans(8.5);
     color(C.muted);
-    doc.text(`Producción: ${film.productionCompany}`, CL, ty + 2);
+    doc.text(wrap(`Producción: ${film.productionCompany}`, textW)[0], CL, ty + 2);
   }
 
   // Anillo del índice de distribución
@@ -389,6 +417,29 @@ export async function exportReportToPDF(report: StrategyReport, filmData?: FilmD
       ry += lh(8.5);
     }
     y += boxH + 6;
+  }
+
+  if (report.posterAnalysis) {
+    const thumbW = poster ? 24 : 0;
+    const tx = ML + (poster ? thumbW + 8 : 0);
+    sans(8.6);
+    const pLines = wrap(report.posterAnalysis, CW - (tx - ML));
+    const textH = 7 + pLines.length * lh(8.6);
+    const thumbH = poster ? thumbW * (poster.height / poster.width) : 0;
+    ensure(Math.min(Math.max(textH, thumbH) + 6, 90));
+    const top = y;
+    if (poster) {
+      doc.addImage(poster.dataUrl, 'JPEG', ML, top, thumbW, thumbH);
+      stroke(C.hair);
+      doc.setLineWidth(0.2);
+      doc.rect(ML, top, thumbW, thumbH, 'S');
+    }
+    sansBold(6.8);
+    color(C.gold);
+    spaced('EL CARTEL', tx, top + 3, 1.1);
+    y = top + 8.5;
+    writeLines(pLines, tx, 8.6, () => sans(8.6), C.text);
+    y = Math.max(y, top + thumbH) + 8;
   }
 
   // Fila de cifras
