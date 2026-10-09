@@ -85,7 +85,13 @@ function splitLead(text: string): [string, string] {
   return match ? [match[1], match[2]] : [text, ''];
 }
 
-export async function exportReportToPDF(report: StrategyReport, filmData?: FilmData, poster?: PosterImage | null): Promise<void> {
+// sample: informe de demostración con datos ficticios (página de inicio); cambia los textos de portada y pie
+export async function exportReportToPDF(
+  report: StrategyReport,
+  filmData?: FilmData,
+  poster?: PosterImage | null,
+  options: { sample?: boolean } = {},
+): Promise<void> {
   const { jsPDF, GState } = await import('jspdf');
   const doc = new jsPDF({ orientation: 'portrait', unit: 'mm', format: 'a4' });
   const hasFonts = await registerFonts(doc);
@@ -384,9 +390,17 @@ export async function exportReportToPDF(report: StrategyReport, filmData?: FilmD
   sans(7.5);
   color(C.muted);
   doc.text(`Generado el ${report.generatedAt}`, CL, H - 23);
-  doc.text(report.aiGenerated ? 'Elaborado por el asesor IA de FilmRoute' : 'Elaborado con FilmRoute', CR, H - 23, { align: 'right' });
+  doc.text(
+    options.sample ? 'Informe de ejemplo elaborado con FilmRoute'
+      : report.aiGenerated ? 'Elaborado por el asesor IA de FilmRoute' : 'Elaborado con FilmRoute',
+    CR, H - 23, { align: 'right' },
+  );
   sans(6.5);
-  doc.text('Documento confidencial · Uso exclusivo del equipo del proyecto', CL, H - 18);
+  doc.text(
+    options.sample ? 'Película, equipo y datos ficticios · Los festivales y plataformas son reales'
+      : 'Documento confidencial · Uso exclusivo del equipo del proyecto',
+    CL, H - 18,
+  );
 
   // ── 01 RESUMEN EJECUTIVO ───────────────────────────────────────────────────
   newPage();
@@ -508,7 +522,11 @@ export async function exportReportToPDF(report: StrategyReport, filmData?: FilmD
     const textW = CW - 26;
     sans(8.5);
     const reasonLines = wrap(f.reason, textW);
-    const cardH = 18 + reasonLines.length * lh(8.5);
+    sansBold(7.2);
+    const facts = [`Deadline: ${f.deadline}`, `Tasa: ${f.submissionFee}`, f.platform ? `Vía: ${f.platform}` : ''].filter(Boolean).join('     ');
+    const factLines = wrap(facts, textW);
+    const factsExtra = (factLines.length - 1) * lh(7.2, 1.3);
+    const cardH = 18 + factsExtra + reasonLines.length * lh(8.5);
     ensure(Math.min(cardH, 60));
 
     serif(18);
@@ -532,9 +550,8 @@ export async function exportReportToPDF(report: StrategyReport, filmData?: FilmD
     doc.text([f.country, f.city, f.month].filter(Boolean).join('  ·  '), textX, y + 8);
     sansBold(7.2);
     color(C.gold);
-    const facts = [`Deadline: ${f.deadline}`, `Tasa: ${f.submissionFee}`, f.platform ? `Vía: ${f.platform}` : ''].filter(Boolean).join('     ');
-    doc.text(wrap(facts, textW)[0], textX, y + 12.5);
-    y += 18;
+    doc.text(factLines, textX, y + 12.5, { lineHeightFactor: 1.3 });
+    y += 18 + factsExtra;
     writeLines(reasonLines, textX, 8.5, () => sans(8.5), C.text);
     y += 3;
     stroke(C.hair);
@@ -919,7 +936,7 @@ export async function exportReportToPDF(report: StrategyReport, filmData?: FilmD
     doc.line(ML, H - 14, W - MR, H - 14);
     sans(7);
     color(C.muted);
-    doc.text('Dossier de distribución', ML, H - 9);
+    doc.text(options.sample ? 'Informe de ejemplo · Película ficticia' : 'Dossier de distribución', ML, H - 9);
     sansBold(7);
     color(C.gold);
     doc.text(`${p - 1} / ${total - 2}`, W - MR, H - 9, { align: 'right' });
