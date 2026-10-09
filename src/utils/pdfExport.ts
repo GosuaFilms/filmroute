@@ -140,8 +140,15 @@ export async function exportReportToPDF(report: StrategyReport, filmData?: FilmD
     y = TOP;
   };
 
+  // La cabecera de la página nueva cambia la fuente; se restaura la que estaba activa
   const ensure = (h: number) => {
-    if (y + h > H - BOTTOM) newPage();
+    if (y + h > H - BOTTOM) {
+      const { fontName, fontStyle } = doc.getFont();
+      const size = doc.getFontSize();
+      newPage();
+      doc.setFont(fontName, fontStyle);
+      doc.setFontSize(size);
+    }
   };
 
   const wrap = (text: string, width: number): string[] => doc.splitTextToSize(text, width) as string[];
@@ -681,7 +688,7 @@ export async function exportReportToPDF(report: StrategyReport, filmData?: FilmD
     sans(7.6);
     const platformLines = wrap(w.platform, LW).slice(0, 3);
     serif(11);
-    const nameLines = wrap(w.window, LW).slice(0, 2);
+    const nameLines = wrap(w.window, LW).slice(0, 3);
     const leftH = nameLines.length * lh(11, 1.2) + 2 + timingLines.length * lh(7.2, 1.3) + 1.5 + platformLines.length * lh(7.6, 1.3);
     const rightH = revenueLines.length * lh(7.6, 1.3) + 1.5 + notes.length * lh(8);
     const rowH = Math.max(leftH, rightH) + 3;
@@ -782,8 +789,10 @@ export async function exportReportToPDF(report: StrategyReport, filmData?: FilmD
   for (let i = 0; i < items.length; i += 2) {
     const pair = items.slice(i, i + 2);
     const heights = pair.map(it => {
+      sans(6.8);
+      const deadlineH = wrap(it.deadline, colW - 5).length * lh(6.8, 1.3);
       sans(8.2);
-      return wrap(it.item, colW - 22).length * lh(8.2) + 7;
+      return wrap(it.item, colW - 22).length * lh(8.2) + 4 + deadlineH;
     });
     const rowH = Math.max(...heights);
     ensure(rowH);
@@ -800,7 +809,7 @@ export async function exportReportToPDF(report: StrategyReport, filmData?: FilmD
       spaced(it.priority.toUpperCase(), cx + colW, y, 0.6, 'right');
       sans(6.8);
       color(C.muted);
-      doc.text(it.deadline, cx + 5, y + lines.length * lh(8.2) + 0.5);
+      doc.text(wrap(it.deadline, colW - 5), cx + 5, y + lines.length * lh(8.2) + 0.5, { lineHeightFactor: 1.3 });
     });
     y += rowH;
     stroke(C.hair);
