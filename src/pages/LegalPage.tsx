@@ -3,11 +3,12 @@ import type { ComponentType, ReactNode } from 'react';
 
 // BORRADOR pendiente de revisión jurídica. Rellenar estos datos antes de anunciar el servicio.
 const TITULAR = {
-  razonSocial: '[PENDIENTE: razón social de LUR Atlantik Films]',
-  nif: '[PENDIENTE: NIF/CIF]',
-  domicilio: '[PENDIENTE: domicilio social completo]',
-  registro: '[PENDIENTE: datos de inscripción en el Registro Mercantil, si aplica]',
-  email: '[PENDIENTE: email de contacto, p. ej. privacidad@filmroute.ai]',
+  razonSocial: 'LUR Atlantik Films S.L.',
+  nif: 'B22922751',
+  domicilio: 'Calle Bailén 1, 3.º 6.ª, 48003 Bilbao (Bizkaia), España',
+  // Falta añadir tomo, folio y hoja (BI-…) de la escritura o de una nota simple
+  registro: 'Inscrita en el Registro Mercantil de Bizkaia',
+  email: 'info@luratlantik.com',
   regionSupabase: '[PENDIENTE: región del proyecto Supabase, p. ej. UE (Fráncfort)]',
 };
 
