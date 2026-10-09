@@ -1,5 +1,5 @@
 import Anthropic from '@anthropic-ai/sdk';
-import { MODEL, anthropicErrorResponse, authorize, checkDailyLimit, json, logUsage } from './_shared.js';
+import { MODEL, anthropicErrorResponse, authorize, checkDailyLimit, claimAnalysisPhase, json, logUsage } from './_shared.js';
 
 export const maxDuration = 300;
 
@@ -17,6 +17,7 @@ Para cada oportunidad, comprueba en su web oficial la edición actual o la próx
 Responde en español con un informe en texto. Para cada oportunidad incluye: nombre, tipo (festival, mercado, plataforma o televisión), país y ciudad, fechas de la edición, plazo de inscripción, tasa, requisitos de estreno, por qué encaja con esta película y la URL oficial donde lo has comprobado. Incluye como máximo 10 festivales o mercados y 4 plataformas o televisiones, ordenados por interés. Si un dato no está publicado, escribe "Por confirmar". No incluyas nada que no hayas comprobado en la web.`;
 
 interface RequestBody {
+  analysisId: string;
   filmData: unknown;
   knownFestivals: string[];
   knownPlatforms: string[];
@@ -36,6 +37,8 @@ export async function POST(request: Request): Promise<Response> {
   }
   if (!body?.filmData) return json(400, { error: 'Faltan datos de la película' });
   if (JSON.stringify(body).length > 200_000) return json(413, { error: 'Datos demasiado grandes' });
+  const run = await claimAnalysisPhase(auth, body.analysisId, 'research_used');
+  if (run instanceof Response) return run;
 
   const userText =
     `Fecha de hoy: ${new Date().toISOString().slice(0, 10)}\n\n` +

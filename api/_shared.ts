@@ -70,3 +70,57 @@ export function anthropicErrorResponse(error: unknown, route: string): Response 
   console.error(`[${route}] error:`, error);
   return json(500, { error: 'Error interno' });
 }
+
+// Cliente con la clave service_role: solo para tablas que el usuario no puede escribir (cobros, análisis)
+export function adminClient(): SupabaseClient {
+  const url = process.env.VITE_SUPABASE_URL ?? process.env.SUPABASE_URL;
+  const key = process.env.SUPABASE_SERVICE_ROLE_KEY;
+  if (!url || !key) throw new Error('Falta SUPABASE_SERVICE_ROLE_KEY');
+  return createClient(url, key, { auth: { persistSession: false, autoRefreshToken: false } });
+}
+
+export async function isAdminUser({ supabase, user }: AuthContext): Promise<boolean> {
+  const { data } = await supabase.from('profiles').select('is_admin').eq('id', user.id).maybeSingle();
+  return data?.is_admin === true;
+}
+
+// Un análisis autorizado por /api/start-analysis permite usar cada fase (investigación y redacción) una vez
+const RUN_TTL_MS = 30 * 60 * 1000;
+export async function claimAnalysisPhase(
+  { user }: AuthContext,
+  analysisId: unknown,
+  phase: 'research_used' | 'generate_used',
+): Promise<Response | { id: string; source: string; license_id: string | null }> {
+  if (typeof analysisId !== 'string' || !/^[0-9a-f-]{36}$/i.test(analysisId)) {
+    return json(402, { error: 'Este análisis no está autorizado', code: 'payment_required' });
+  }
+  const since = new Date(Date.now() - RUN_TTL_MS).toISOString();
+  const { data, error } = await adminClient()
+    .from('analysis_runs')
+    .update({ [phase]: true })
+    .eq('id', analysisId)
+    .eq('user_id', user.id)
+    .eq(phase, false)
+    .gte('created_at', since)
+    .select('id, source, license_id');
+  if (error) {
+    console.error('analysis_runs claim failed:', error.message);
+    return json(503, { error: 'No se pudo comprobar el análisis' });
+  }
+  if (!data || data.length === 0) {
+    return json(402, { error: 'Este análisis ya se ha usado o ha caducado. Vuelve a generarlo.', code: 'payment_required' });
+  }
+  return data[0];
+}
+
+// Si la redacción falla, se devuelve el análisis (licencia o cupo mensual) para no cobrar un informe que no llegó
+export async function refundAnalysis(run: { id: string; source: string; license_id: string | null }): Promise<void> {
+  const admin = adminClient();
+  if (run.source === 'film' && run.license_id) {
+    const { data: lic } = await admin.from('film_licenses').select('analyses_used').eq('id', run.license_id).maybeSingle();
+    if (lic && lic.analyses_used > 0) {
+      await admin.from('film_licenses').update({ analyses_used: lic.analyses_used - 1 }).eq('id', run.license_id);
+    }
+  }
+  await admin.from('analysis_runs').delete().eq('id', run.id);
+}

@@ -13,7 +13,7 @@ export interface SavedStrategy {
 
 export async function saveStrategy(
   filmData: FilmData,
-  report: StrategyReport
+  report: StrategyReport | null
 ): Promise<SavedStrategy> {
   const { data: { user } } = await supabase.auth.getUser();
   if (!user) throw new Error('Usuario no autenticado');

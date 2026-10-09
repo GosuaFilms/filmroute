@@ -27,11 +27,13 @@ function PageSpinner() {
     </div>
   );
 }
-import { generateStrategyWithAI, type GenerationStage } from './lib/aiAdvisor';
+import { generateStrategyWithAI, type GenerationStage, type PaymentRequired } from './lib/aiAdvisor';
 import { LegalPage, LegalLinks, legalSlugFromPath } from './pages/LegalPage';
 import { exportReportToPDF } from './utils/pdfExport';
 import { getPosterUrl, loadPosterImage } from './lib/posters';
-import { saveStrategy, updateStrategy, type SavedStrategy } from './lib/strategies';
+import { listStrategies, saveStrategy, updateStrategy, type SavedStrategy } from './lib/strategies';
+import { takePendingCheckout } from './lib/billing';
+import { PaywallModal } from './components/billing/PaywallModal';
 import { validateStep, hasErrors, type StepErrors } from './utils/validation';
 import { listFestivalsFromDb, getIsAdmin, rowToFestival } from './lib/festivalsDb';
 import type { FilmData, StrategyReport, RecommendedFestival } from './types/film';
@@ -189,7 +191,37 @@ function AppContent() {
   const [isAdmin, setIsAdmin] = useState(false);
   const [festivals, setFestivals] = useState<RecommendedFestival[]>([]);
   const [posterUrl, setPosterUrl] = useState<string | null>(null);
+  const [paywall, setPaywall] = useState<PaymentRequired | null>(null);
+  const [paymentNotice, setPaymentNotice] = useState<{ ok: boolean; text: string } | null>(null);
   const posterPath = filmData.basicInfo?.posterPath;
+
+  // Vuelta desde Stripe: se avisa del resultado y se reabre la película desde la que se pagó
+  useEffect(() => {
+    if (!user) return;
+    const params = new URLSearchParams(window.location.search);
+    const result = params.get('pago');
+    if (!result) return;
+    window.history.replaceState(null, '', window.location.pathname);
+    if (result !== 'ok') {
+      takePendingCheckout();
+      setPaymentNotice({ ok: false, text: 'Pago cancelado. No se ha realizado ningún cargo.' });
+      return;
+    }
+    setPaymentNotice({ ok: true, text: 'Pago recibido. Ya puedes generar el análisis con IA (si no se activa al momento, espera unos segundos).' });
+    const pending = takePendingCheckout();
+    if (!pending) return;
+    listStrategies()
+      .then(list => {
+        const strategy = list.find(s => s.id === pending);
+        if (!strategy) return;
+        setFilmData(strategy.film_data);
+        setReport(strategy.report);
+        setCurrentStrategyId(strategy.id);
+        setCurrentStep(7);
+        setView('wizard');
+      })
+      .catch(() => {});
+  }, [user]);
 
   useEffect(() => {
     let cancelled = false;
@@ -309,8 +341,30 @@ function AppContent() {
     setSaveError(null);
     setAiNotice(null);
     setSavedOk(false);
-    const { report: result, aiError, researchError } = await generateStrategyWithAI(filmData, festivals.length > 0 ? festivals : undefined, setGenerationStage);
+    setPaymentNotice(null);
+
+    // El análisis se cobra por película: hace falta guardarla antes para tener su identificador
+    let strategyId = currentStrategyId;
+    if (!strategyId) {
+      try {
+        const saved = await saveStrategy(filmData, null);
+        strategyId = saved.id;
+        setCurrentStrategyId(saved.id);
+      } catch {
+        setIsGenerating(false);
+        setSaveError('No se pudo guardar la película. Comprueba tu conexión e inténtalo de nuevo.');
+        return;
+      }
+    }
+
+    const outcome = await generateStrategyWithAI(filmData, festivals.length > 0 ? festivals : undefined, strategyId, setGenerationStage);
     setGenerationStage(null);
+    if (outcome.paymentRequired) {
+      setIsGenerating(false);
+      setPaywall(outcome.paymentRequired);
+      return;
+    }
+    const { report: result, aiError, researchError } = outcome;
     if (aiError) {
       console.error('Asesor IA no disponible:', aiError);
       setAiNotice(aiError.startsWith('Has alcanzado el límite')
@@ -326,12 +380,7 @@ function AppContent() {
     // Guardar en Supabase en segundo plano
     setIsSaving(true);
     try {
-      if (currentStrategyId) {
-        await updateStrategy(currentStrategyId, filmData, result);
-      } else {
-        const saved = await saveStrategy(filmData, result);
-        setCurrentStrategyId(saved.id);
-      }
+      await updateStrategy(strategyId, filmData, result);
       clearDraft();
       setSavedOk(true);
       setTimeout(() => setSavedOk(false), 4000);
@@ -341,6 +390,22 @@ function AppContent() {
       setIsSaving(false);
     }
   };
+
+  const paywallModal = paywall && (
+    <PaywallModal
+      reason={paywall}
+      filmTitle={filmData.basicInfo?.title?.trim() || 'tu película'}
+      strategyId={currentStrategyId}
+      onClose={() => setPaywall(null)}
+    />
+  );
+
+  const paymentBanner = paymentNotice && (
+    <div className={`mb-4 flex items-center justify-between gap-3 rounded-xl px-4 py-3 text-sm border ${paymentNotice.ok ? 'bg-green-500/10 border-green-500/30 text-green-400' : 'bg-yellow-500/10 border-yellow-500/30 text-yellow-400'}`}>
+      <span>{paymentNotice.ok ? '✓' : 'ℹ️'} {paymentNotice.text}</span>
+      <button onClick={() => setPaymentNotice(null)} className="text-xs opacity-70 hover:opacity-100">Cerrar</button>
+    </div>
+  );
 
   const handleExport = async () => {
     if (!report) return;
@@ -414,6 +479,7 @@ function AppContent() {
       <div className="min-h-screen bg-gradient-cinema flex flex-col">
         <Header onLogoClick={handleBackToDashboard} onAdminClick={isAdmin ? () => setView('admin') : undefined} />
         <main className="flex-1">
+          {paymentBanner && <div className="max-w-6xl mx-auto px-4 pt-6">{paymentBanner}</div>}
           <Suspense fallback={<PageSpinner />}>
             <Dashboard
               onNew={handleNew}
@@ -443,6 +509,8 @@ function AppContent() {
       <div className="min-h-screen bg-gradient-cinema">
         <Header onLogoClick={handleBackToDashboard} />
         <main className="max-w-5xl mx-auto px-4 py-8">
+          {paymentBanner}
+          {paywallModal}
           {aiNotice && (
             <div className="mb-4 flex items-center gap-2 bg-yellow-500/10 border border-yellow-500/30 rounded-xl px-4 py-3 text-yellow-400 text-sm">
               <span>⚠️</span> {aiNotice}
@@ -497,6 +565,13 @@ function AppContent() {
       </div>
 
       <main className="max-w-4xl mx-auto px-4 py-8">
+        {paymentBanner}
+        {paywallModal}
+        {saveError && (
+          <div className="mb-6 flex items-center gap-2 bg-yellow-500/10 border border-yellow-500/30 rounded-xl px-4 py-3 text-yellow-400 text-sm">
+            <span>⚠️</span> {saveError}
+          </div>
+        )}
         {draftRestored && (
           <div className="mb-6 flex items-center gap-2 bg-cinema-gold/10 border border-cinema-gold/30 rounded-xl px-4 py-3 text-cinema-gold text-sm">
             <span>💾</span>

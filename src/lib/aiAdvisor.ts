@@ -1,4 +1,4 @@
-import { supabase } from './supabase';
+import { ApiError, apiPost } from './billing';
 import { buildFestivalRoadmap, generateStrategy, platformCandidates, rankFestivalCandidates } from '../utils/strategyEngine';
 import { FESTIVALS_DATABASE } from '../data/festivals';
 import { PLATFORMS_DATABASE } from '../data/platforms';
@@ -33,45 +33,45 @@ interface WebResearch {
   sources: string[];
 }
 
-async function postJson<T>(url: string, token: string, body: unknown): Promise<T> {
-  const res = await fetch(url, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
-    body: JSON.stringify(body),
-  });
-  if (!res.ok) {
-    const err = await res.json().catch(() => null) as { error?: string } | null;
-    throw new Error(err?.error ?? `Error ${res.status}`);
-  }
-  return res.json() as Promise<T>;
+export interface PaymentRequired {
+  code: string;
+  message: string;
 }
 
-export interface GenerationResult {
-  report: StrategyReport;
-  aiError: string | null;
-  researchError: string | null;
-}
+export type GenerationResult =
+  | { report: StrategyReport; aiError: string | null; researchError: string | null; paymentRequired?: undefined }
+  | { paymentRequired: PaymentRequired; report?: undefined; aiError?: undefined; researchError?: undefined };
 
 // La IA elabora el informe completo a partir de los festivales y plataformas de nuestra base de datos;
 // el motor de reglas sirve de respaldo para cualquier sección que la IA devuelva vacía o si no responde.
 export async function generateStrategyWithAI(
   filmData: FilmData,
   festivalsDb: RecommendedFestival[] | undefined,
+  strategyId: string,
   onStage?: (stage: GenerationStage) => void,
 ): Promise<GenerationResult> {
   const base = generateStrategy(filmData, festivalsDb);
   const candidates = rankFestivalCandidates(filmData, festivalsDb, CANDIDATE_POOL);
   const platformPool = platformCandidates(filmData);
 
+  // Cada análisis se autoriza antes (licencia de la película, plan productora o administrador)
+  let analysisId: string;
   try {
-    const { data: { session } } = await supabase.auth.getSession();
-    if (!session) throw new Error('Sin sesión');
+    ({ analysisId } = await apiPost<{ analysisId: string }>('/api/start-analysis', { strategyId }));
+  } catch (e) {
+    if (e instanceof ApiError && e.status === 402) {
+      return { paymentRequired: { code: e.code ?? 'payment_required', message: e.message } };
+    }
+    return { report: { ...base, aiGenerated: false }, aiError: e instanceof Error ? e.message : 'Error desconocido', researchError: null };
+  }
 
+  try {
     // Fase 1: investigación web de oportunidades fuera de la base de datos. Si falla, se sigue sin ella.
     onStage?.('research');
     const knownFestivals = (festivalsDb && festivalsDb.length > 0 ? festivalsDb : FESTIVALS_DATABASE).map(f => f.name);
     let researchError: string | null = null;
-    const research = await postJson<WebResearch>('/api/research-opportunities', session.access_token, {
+    const research = await apiPost<WebResearch>('/api/research-opportunities', {
+      analysisId,
       filmData,
       knownFestivals,
       knownPlatforms: PLATFORMS_DATABASE.map(p => p.name),
@@ -84,7 +84,8 @@ export async function generateStrategyWithAI(
 
     // Fase 2: redacción de la estrategia
     onStage?.('writing');
-    const advice = await postJson<AdvisorResponse>('/api/generate-strategy', session.access_token, {
+    const advice = await apiPost<AdvisorResponse>('/api/generate-strategy', {
+      analysisId,
       filmData,
       candidates,
       platformCandidates: platformPool.map(p => ({

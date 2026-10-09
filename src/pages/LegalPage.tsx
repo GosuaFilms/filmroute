@@ -189,11 +189,29 @@ function Terminos() {
         'Avísanos si detectas un uso no autorizado de tu cuenta.',
       ]} />
 
-      <H2>3. Fase beta y precios</H2>
+      <H2>3. Planes, precios y pagos</H2>
+      <UL items={[
+        <><strong className="text-cinema-text">Por película (69 €, pago único):</strong> permite generar el análisis con IA de una película y actualizarlo hasta 5 veces (6 análisis en total) durante los 12 meses siguientes al primer análisis. La licencia queda asociada a esa película.</>,
+        <><strong className="text-cinema-text">Plan productora (99 € al mes o 990 € al año):</strong> hasta 5 películas activas y 25 análisis en cada periodo de 30 días. Se renueva automáticamente al final de cada periodo hasta que lo canceles.</>,
+        'Los precios incluyen el IVA. El pago se realiza a través de Stripe; no almacenamos los datos de tu tarjeta. Recibirás la factura por email.',
+        'Si un análisis no se completa por un error del servicio, no se descuenta de tu licencia ni de tu plan.',
+        'Las licencias y planes son personales y no se pueden revender ni ceder.',
+      ]} />
       <P>
-        FilmRoute se ofrece actualmente en fase beta, de forma gratuita y con límites de uso (por ejemplo, un número
-        máximo de análisis con IA al día). Podremos introducir planes de pago; te informaremos antes y nunca se te
-        cobrará nada sin que lo aceptes expresamente.
+        <strong className="text-cinema-text">Cancelación.</strong> Puedes cancelar el plan productora en cualquier
+        momento desde «Mi cuenta» → «Gestionar suscripción y facturas». Seguirás teniendo acceso hasta el final del
+        periodo ya pagado y no se te volverá a cobrar.
+      </P>
+      <P>
+        <strong className="text-cinema-text">Desistimiento y garantía.</strong> El servicio es contenido digital que
+        se presta de inmediato: al pagar consientes que empiece en ese momento, por lo que no se aplica el derecho de
+        desistimiento de 14 días previsto para los consumidores (art. 103.m del texto refundido de la Ley General para
+        la Defensa de los Consumidores y Usuarios). Aun así, si tu primer informe no te resulta útil, te devolvemos el
+        importe de tu primera compra si nos lo pides en los 14 días siguientes escribiendo a {TITULAR.email}.
+      </P>
+      <P>
+        Si cambiamos los precios, te avisaremos con antelación; los cambios no afectarán a lo que ya hayas pagado y,
+        en el plan productora, se aplicarán a partir de la siguiente renovación.
       </P>
 
       <H2>4. Naturaleza orientativa del asesor IA</H2>
@@ -230,8 +248,8 @@ function Terminos() {
 
       <H2>8. Baja</H2>
       <P>
-        Puedes dejar de usar FilmRoute y solicitar la eliminación de tu cuenta en cualquier momento escribiendo a{' '}
-        {TITULAR.email}.
+        Puedes dejar de usar FilmRoute y eliminar tu cuenta en cualquier momento desde «Mi cuenta» o escribiendo a{' '}
+        {TITULAR.email}. Si tienes el plan productora, cancélalo antes para que no se renueve.
       </P>
 
       <H2>9. Cambios</H2>

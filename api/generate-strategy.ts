@@ -2,7 +2,7 @@ import Anthropic from '@anthropic-ai/sdk';
 import { zodOutputFormat } from '@anthropic-ai/sdk/helpers/zod';
 import type { SupabaseClient } from '@supabase/supabase-js';
 import { z } from 'zod';
-import { MODEL, anthropicErrorResponse, authorize, checkDailyLimit, json, logUsage } from './_shared.js';
+import { MODEL, anthropicErrorResponse, authorize, checkDailyLimit, claimAnalysisPhase, json, logUsage, refundAnalysis } from './_shared.js';
 
 export const maxDuration = 300;
 
@@ -99,6 +99,7 @@ Reglas:
 - posterAnalysis: si se adjunta el cartel de la película, valóralo como herramienta de venta en 3-5 frases: legibilidad del título en miniatura (catálogos de festivales y plataformas), si transmite género y tono, coherencia con el público objetivo y la estrategia, y qué conviene ajustar (laureles tras las selecciones, bloque de créditos, versiones por territorio). Ten en cuenta el cartel también en el resto del análisis cuando sea relevante. Si no hay cartel, devuelve una cadena vacía.`;
 
 interface RequestBody {
+  analysisId: string;
   filmData: unknown;
   candidates: { name: string }[];
   platformCandidates?: { name: string }[];
@@ -205,6 +206,8 @@ export async function POST(request: Request): Promise<Response> {
   }
   const payloadSize = JSON.stringify(body).length;
   if (payloadSize > 200_000) return json(413, { error: 'Datos demasiado grandes' });
+  const run = await claimAnalysisPhase(auth, body.analysisId, 'generate_used');
+  if (run instanceof Response) return run;
 
   const targetCount = Math.min(Math.max(Number(body.targetFestivalCount) || 12, 3), 25);
 
@@ -258,6 +261,7 @@ export async function POST(request: Request): Promise<Response> {
     const planRes = planResult.status === 'fulfilled' ? planResult.value : null;
 
     if (analysisRes.stop_reason === 'refusal' || !analysisRes.parsed_output) {
+      await refundAnalysis(run);
       return json(502, { error: 'El asesor IA no pudo generar la estrategia' });
     }
     // Si el plan falla, el cliente usa las secciones del motor de reglas como respaldo
@@ -287,6 +291,7 @@ export async function POST(request: Request): Promise<Response> {
     ]);
     return json(200, { ...advice, budgetBreakdown, externalFestivals, externalPlatforms });
   } catch (error) {
+    await refundAnalysis(run).catch(e => console.error('[generate-strategy] refund failed:', e));
     return anthropicErrorResponse(error, 'generate-strategy');
   }
 }
