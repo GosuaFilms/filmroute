@@ -27,6 +27,28 @@ const AdvisorSchema = z.object({
   marketingPhases: z.array(PhaseSchema),
   nextSteps: z.array(z.string()),
   posterAnalysis: z.string(),
+  platforms: z.array(z.object({
+    name: z.string(),
+    probability: z.enum(['Alta', 'Media', 'Baja']),
+    notes: z.string(),
+  })),
+  distributionWindows: z.array(z.object({
+    window: z.string(),
+    platform: z.string(),
+    timing: z.string(),
+    revenue: z.string(),
+    notes: z.string(),
+  })),
+  budgetBreakdown: z.array(z.object({
+    category: z.string(),
+    amount: z.number(),
+  })),
+  deliverableChecklist: z.array(z.object({
+    item: z.string(),
+    status: z.enum(['listo', 'en_proceso', 'no_disponible']),
+    priority: z.enum(['alta', 'media', 'baja']),
+    deadline: z.string(),
+  })),
 });
 
 const SYSTEM_PROMPT = `Eres el asesor de distribución de FilmRoute: un consultor senior de distribución de cine independiente con experiencia en festivales internacionales, agentes de ventas, plataformas (SVOD, AVOD, TVOD), televisión y distribución educativa, especialmente en el mercado español y europeo.
@@ -43,11 +65,16 @@ Reglas:
 - nextSteps: entre 5 y 8 acciones inmediatas ordenadas por urgencia. Cada una debe ser accionable esta semana o este mes y mencionar nombres concretos (festivales, plataformas, entregables) cuando aplique. No repitas tareas que el cineasta ya tiene hechas.
 - Si faltan datos importantes, dilo en las debilidades en vez de suponerlos.
 - No prometas resultados (selecciones, ventas o ingresos garantizados).
+- platforms: elige entre 4 y 8 plataformas SOLO de <plataformas_candidatas> (nombre exacto). probability es la probabilidad realista de que ESTA película acceda a la plataforma con su situación actual (formato, duración, idioma, agente o distribuidora, ventanas ya comprometidas). En notes explica en 1-2 frases por qué y cómo acceder (vía directa, agregador, agente de ventas, momento de la ventana).
+- distributionWindows: entre 4 y 7 ventanas de explotación en orden cronológico, adaptadas a esta película: usa fechas o meses concretos coherentes con el estado del estreno, la distribuidora y los acuerdos que figuren en los datos (por ejemplo, la ventana de la televisión participante). revenue: expectativa de ingresos realista y prudente; notes: condiciones clave (exclusividad, territorios, orden respecto a otras ventanas).
+- budgetBreakdown: reparto recomendado del presupuesto total de distribución, entre 5 y 9 partidas con importes en euros enteros que sumen exactamente ese total, adaptadas a la estrategia (por ejemplo, campaña de premios, coloquios, subtítulos de idiomas concretos). Si las partidas que indica el cineasta son incoherentes, propón el reparto correcto. Si el presupuesto total es 0 o no consta, devuelve una lista vacía.
+- deliverableChecklist: entre 10 y 18 entregables necesarios para ejecutar ESTA estrategia, incluidos los específicos que se deriven de ella (versiones subtituladas concretas, materiales para campañas de premios, guía didáctica, versión para televisión…). status según los datos facilitados (si no consta, no_disponible); priority según la urgencia en el calendario; deadline con una fecha o hito concreto.
 - posterAnalysis: si se adjunta el cartel de la película, valóralo como herramienta de venta en 3-5 frases: legibilidad del título en miniatura (catálogos de festivales y plataformas), si transmite género y tono, coherencia con el público objetivo y la estrategia, y qué conviene ajustar (laureles tras las selecciones, bloque de créditos, versiones por territorio). Ten en cuenta el cartel también en el resto del análisis cuando sea relevante. Si no hay cartel, devuelve una cadena vacía.`;
 
 interface RequestBody {
   filmData: unknown;
   candidates: { name: string }[];
+  platformCandidates?: { name: string }[];
   targetFestivalCount: number;
 }
 
@@ -56,6 +83,20 @@ function json(status: number, body: unknown): Response {
     status,
     headers: { 'Content-Type': 'application/json' },
   });
+}
+
+// Las partidas deben sumar exactamente el total declarado; los porcentajes se derivan de los importes
+function normalizeBudget(items: { category: string; amount: number }[], total: number) {
+  const valid = items.filter(i => i.category.trim() && Number.isFinite(i.amount) && i.amount > 0);
+  const sum = valid.reduce((acc, i) => acc + i.amount, 0);
+  if (total <= 0 || sum <= 0) return [];
+  const scaled = valid.map(i => ({ category: i.category, recommended: Math.round((i.amount * total) / sum) }));
+  const drift = total - scaled.reduce((acc, i) => acc + i.recommended, 0);
+  if (drift !== 0) {
+    const largest = scaled.reduce((a, b) => (b.recommended > a.recommended ? b : a));
+    largest.recommended += drift;
+  }
+  return scaled.map(i => ({ ...i, percentage: Math.round((i.recommended / total) * 100) }));
 }
 
 // El cartel se descarga con el token del usuario: las políticas del bucket impiden leer carteles ajenos
@@ -126,7 +167,7 @@ export async function POST(request: Request): Promise<Response> {
   try {
     const response = await client.messages.parse({
       model: MODEL,
-      max_tokens: 16000,
+      max_tokens: 20000,
       output_config: {
         effort: 'medium',
         format: zodOutputFormat(AdvisorSchema),
@@ -145,7 +186,8 @@ export async function POST(request: Request): Promise<Response> {
               `Número de festivales objetivo: ${targetCount}\n` +
               `Cartel adjunto: ${poster ? 'sí (imagen anterior)' : 'no'}\n\n` +
               `<datos_pelicula>\n${JSON.stringify(body.filmData, null, 2)}\n</datos_pelicula>\n\n` +
-              `<festivales_candidatos>\n${JSON.stringify(body.candidates, null, 2)}\n</festivales_candidatos>`,
+              `<festivales_candidatos>\n${JSON.stringify(body.candidates, null, 2)}\n</festivales_candidatos>\n\n` +
+              `<plataformas_candidatas>\n${JSON.stringify(body.platformCandidates ?? [], null, 2)}\n</plataformas_candidatas>`,
           },
         ],
       }],
@@ -162,10 +204,18 @@ export async function POST(request: Request): Promise<Response> {
       .slice(0, targetCount);
     advice.overallScore = Math.min(Math.max(advice.overallScore, 0), 100);
 
+    const platformNames = new Set((body.platformCandidates ?? []).map(p => p.name));
+    advice.platforms = advice.platforms.filter(p => platformNames.has(p.name));
+
+    const totalBudget = Number(
+      (body.filmData as { budgetResources?: { totalDistributionBudget?: unknown } })?.budgetResources?.totalDistributionBudget,
+    ) || 0;
+    const budgetBreakdown = normalizeBudget(advice.budgetBreakdown, totalBudget);
+
     const { error: logError } = await supabase.from('ai_usage').insert({ user_id: user.id });
     if (logError) console.error('ai_usage insert failed:', logError.message);
 
-    return json(200, advice);
+    return json(200, { ...advice, budgetBreakdown });
   } catch (error) {
     if (error instanceof Anthropic.RateLimitError) {
       return json(429, { error: 'Demasiadas peticiones, inténtalo en un minuto' });

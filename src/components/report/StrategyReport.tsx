@@ -285,7 +285,18 @@ export function StrategyReportView({ report, onBack, onExport, isExporting = fal
             <div key={i} className="border border-cinema-border rounded-lg p-3">
               <div className="flex items-center justify-between mb-1">
                 <span className="font-semibold text-sm text-cinema-text">{p.name}</span>
-                <span className="text-xs bg-cinema-dark border border-cinema-border px-2 py-0.5 rounded-full text-cinema-gold">{p.probability}</span>
+                <span
+                  className={clsx(
+                    'text-xs bg-cinema-dark border px-2 py-0.5 rounded-full',
+                    p.probability.toLowerCase().startsWith('alta')
+                      ? 'text-green-400 border-green-800'
+                      : p.probability.toLowerCase().startsWith('baja')
+                        ? 'text-red-400 border-red-800'
+                        : 'text-cinema-gold border-cinema-border',
+                  )}
+                >
+                  Probabilidad: {p.probability}
+                </span>
               </div>
               <div className="text-xs text-cinema-text-dim mb-1">{p.territory}</div>
               <p className="text-xs text-cinema-text-dim italic">{p.notes}</p>

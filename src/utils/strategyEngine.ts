@@ -456,6 +456,15 @@ function buildNextSteps(data: FilmData, festivals: RecommendedFestival[]): strin
   return steps.slice(0, 8);
 }
 
+export function platformCandidates(data: FilmData) {
+  const dur = data.basicInfo.duration ?? 0;
+  return PLATFORMS_DATABASE.filter(p => {
+    const minDur = p.minimumDuration ?? 0;
+    const maxDur = p.maximumDuration ?? 999;
+    return !(dur > 0 && (dur < minDur || dur > maxDur));
+  });
+}
+
 export function generateStrategy(data: FilmData, festivalsDb?: RecommendedFestival[]): StrategyReport {
   const festivals = recommendFestivals(data, festivalsDb);
   const strengths = getStrengths(data);
@@ -463,14 +472,7 @@ export function generateStrategy(data: FilmData, festivalsDb?: RecommendedFestiv
   const opportunities = getOpportunities(data);
   const risks = getRisks(data);
 
-  const recommendedPlatforms = PLATFORMS_DATABASE
-    .filter(p => {
-      const minDur = p.minimumDuration ?? 0;
-      const maxDur = p.maximumDuration ?? 999;
-      const dur = data.basicInfo.duration ?? 0;
-      if (dur > 0 && (dur < minDur || dur > maxDur)) return false;
-      return true;
-    })
+  const recommendedPlatforms = platformCandidates(data)
     .slice(0, 10)
     .map(p => ({
       name: p.name,
