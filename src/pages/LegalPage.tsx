@@ -6,8 +6,7 @@ const TITULAR = {
   razonSocial: 'LUR Atlantik Films S.L.',
   nif: 'B22922751',
   domicilio: 'Calle Bailén 1, 3.º 6.ª, 48003 Bilbao (Bizkaia), España',
-  // Falta añadir tomo, folio y hoja (BI-…) de la escritura o de una nota simple
-  registro: 'Inscrita en el Registro Mercantil de Bizkaia',
+  registro: 'Inscrita en el Registro Mercantil de Bizkaia, hoja BI-85847, inscripción 1.ª (folio electrónico), de 10 de septiembre de 2025',
   email: 'info@luratlantik.com',
   regionSupabase: '[PENDIENTE: región del proyecto Supabase, p. ej. UE (Fráncfort)]',
 };
