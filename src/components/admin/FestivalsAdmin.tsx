@@ -5,6 +5,7 @@ import {
   type FestivalRow, type FestivalInput,
 } from '../../lib/festivalsDb';
 import { FestivalFormModal } from './FestivalFormModal';
+import { SuggestionsAdmin } from './SuggestionsAdmin';
 
 const TIER_LABELS: Record<string, string> = {
   tier_a: 'Tier A', tier_b: 'Tier B', tier_c: 'Tier C', nacional: 'Nacional', regional: 'Regional',
@@ -29,6 +30,8 @@ export function FestivalsAdmin({ onBack }: Props) {
   const [editingFestival, setEditingFestival] = useState<FestivalRow | undefined>(undefined);
   const [showForm, setShowForm] = useState(false);
   const [deletingId, setDeletingId] = useState<string | null>(null);
+  const [tab, setTab] = useState<'festivals' | 'suggestions'>('festivals');
+  const [pendingSuggestions, setPendingSuggestions] = useState<number | null>(null);
 
   useEffect(() => { load(); }, []);
 
@@ -90,7 +93,7 @@ export function FestivalsAdmin({ onBack }: Props) {
             {festivals.length} festivales · {festivals.filter(f => f.active).length} activos
           </p>
         </div>
-        <div className="flex gap-2">
+        <div className={`flex gap-2 ${tab === 'festivals' ? '' : 'invisible'}`}>
           <button onClick={load} title="Recargar"
             className="p-2.5 rounded-lg border border-cinema-border text-cinema-text-dim hover:text-cinema-gold hover:border-cinema-gold/40 transition-all">
             <RefreshCw size={15} />
@@ -104,6 +107,29 @@ export function FestivalsAdmin({ onBack }: Props) {
         </div>
       </div>
 
+      {/* Pestañas */}
+      <div className="flex gap-1 border-b border-cinema-border mb-5">
+        {([['festivals', 'Base de datos'], ['suggestions', 'Sugerencias de la IA']] as const).map(([key, label]) => (
+          <button key={key} onClick={() => setTab(key)}
+            className={`px-4 py-2 text-sm -mb-px border-b-2 transition-colors ${
+              tab === key ? 'border-cinema-gold text-cinema-gold font-semibold' : 'border-transparent text-cinema-text-dim hover:text-cinema-text'
+            }`}>
+            {label}
+            {key === 'suggestions' && pendingSuggestions !== null && pendingSuggestions > 0 && (
+              <span className="ml-2 text-[10px] font-bold bg-cinema-gold text-cinema-black rounded-full px-1.5 py-0.5">{pendingSuggestions}</span>
+            )}
+          </button>
+        ))}
+      </div>
+
+      <div className={tab === 'suggestions' ? '' : 'hidden'}>
+        <SuggestionsAdmin
+          onFestivalCreated={created => setFestivals(prev => [created, ...prev])}
+          onPendingCount={setPendingSuggestions}
+        />
+      </div>
+
+      <div className={tab === 'festivals' ? '' : 'hidden'}>
       {/* Buscador */}
       <div className="relative mb-5">
         <Search size={15} className="absolute left-3 top-1/2 -translate-y-1/2 text-cinema-text-dim" />
@@ -199,6 +225,7 @@ export function FestivalsAdmin({ onBack }: Props) {
           </table>
         </div>
       )}
+      </div>
 
       {/* Modal */}
       {showForm && (

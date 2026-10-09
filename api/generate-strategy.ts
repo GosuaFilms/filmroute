@@ -124,6 +124,41 @@ function hostOf(url: string): string {
   }
 }
 
+type ExternalFestivalOut = z.infer<typeof AnalysisSchema>['externalFestivals'][number];
+type ExternalPlatformOut = z.infer<typeof AnalysisSchema>['externalPlatforms'][number];
+
+// Las oportunidades externas se guardan para que un admin las revise y amplíe la base de datos.
+// Un fallo aquí no debe impedir devolver la estrategia.
+async function recordSuggestions(
+  supabase: SupabaseClient,
+  filmData: unknown,
+  festivals: ExternalFestivalOut[],
+  platforms: ExternalPlatformOut[],
+): Promise<void> {
+  const info = (filmData as { basicInfo?: { filmType?: unknown; genre?: unknown } })?.basicInfo;
+  const filmType = typeof info?.filmType === 'string' ? info.filmType : '';
+  const filmGenre = typeof info?.genre === 'string' ? info.genre : '';
+  const calls = [
+    ...festivals.map(f => ({
+      p_kind: 'festival', p_name: f.name, p_country: f.country, p_city: f.city, p_dates: f.dates,
+      p_deadline: f.deadline, p_submission_fee: f.submissionFee, p_platform_type: '', p_territory: '',
+      p_notes: f.reason, p_url: f.url,
+    })),
+    ...platforms.map(p => ({
+      p_kind: 'platform', p_name: p.name, p_country: '', p_city: '', p_dates: '',
+      p_deadline: '', p_submission_fee: '', p_platform_type: p.type, p_territory: p.territory,
+      p_notes: p.notes, p_url: p.url,
+    })),
+  ];
+  const results = await Promise.allSettled(
+    calls.map(args => supabase.rpc('record_external_suggestion', { ...args, p_film_type: filmType, p_film_genre: filmGenre })),
+  );
+  for (const r of results) {
+    const error = r.status === 'rejected' ? r.reason : r.value.error;
+    if (error) console.error('[generate-strategy] no se pudo guardar la sugerencia:', error.message ?? error);
+  }
+}
+
 // Las partidas deben sumar exactamente el total declarado; los porcentajes se derivan de los importes
 function normalizeBudget(items: { category: string; amount: number }[], total: number) {
   const valid = items.filter(i => i.category.trim() && Number.isFinite(i.amount) && i.amount > 0);
@@ -245,7 +280,10 @@ export async function POST(request: Request): Promise<Response> {
     const externalFestivals = sourcedOnly(advice.externalFestivals, researchNotes, researchSources).slice(0, 8);
     const externalPlatforms = sourcedOnly(advice.externalPlatforms, researchNotes, researchSources).slice(0, 4);
 
-    await logUsage(auth);
+    await Promise.all([
+      logUsage(auth),
+      recordSuggestions(supabase, body.filmData, externalFestivals, externalPlatforms),
+    ]);
     return json(200, { ...advice, budgetBreakdown, externalFestivals, externalPlatforms });
   } catch (error) {
     return anthropicErrorResponse(error, 'generate-strategy');

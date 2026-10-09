@@ -19,28 +19,31 @@ const ALL_TYPES = ['cortometraje','mediometraje','largometraje','documental'];
 
 interface Props {
   festival?: FestivalRow;
+  // Valores con los que se rellena un festival nuevo (por ejemplo, desde una sugerencia de la IA)
+  initial?: Partial<FestivalInput>;
   onSave: (input: FestivalInput) => Promise<void>;
   onClose: () => void;
 }
 
-export function FestivalFormModal({ festival, onSave, onClose }: Props) {
+export function FestivalFormModal({ festival, initial, onSave, onClose }: Props) {
   const isEdit = !!festival;
+  const source = festival ?? initial;
 
   const [form, setForm] = useState<FestivalInput>({
-    name: festival?.name ?? '',
-    country: festival?.country ?? '',
-    city: festival?.city ?? '',
-    tier: festival?.tier ?? 'tier_b',
-    month: festival?.month ?? '',
-    deadline: festival?.deadline ?? '',
-    submission_fee: festival?.submission_fee ?? '',
-    platform: festival?.platform ?? 'FilmFreeway',
-    url: festival?.url ?? '',
-    genres: festival?.genres ?? [],
-    accepts_types: festival?.accepts_types ?? [],
-    prestige: festival?.prestige ?? 70,
-    reason: festival?.reason ?? '',
-    active: festival?.active ?? true,
+    name: source?.name ?? '',
+    country: source?.country ?? '',
+    city: source?.city ?? '',
+    tier: source?.tier ?? 'tier_b',
+    month: source?.month ?? '',
+    deadline: source?.deadline ?? '',
+    submission_fee: source?.submission_fee ?? '',
+    platform: source?.platform ?? 'FilmFreeway',
+    url: source?.url ?? '',
+    genres: source?.genres ?? [],
+    accepts_types: source?.accepts_types ?? [],
+    prestige: source?.prestige ?? 70,
+    reason: source?.reason ?? '',
+    active: source?.active ?? true,
   });
 
   const [saving, setSaving] = useState(false);
