@@ -1,5 +1,8 @@
+import { useState } from 'react';
+import { createPortal } from 'react-dom';
 import { Film, LogOut, User, Settings } from 'lucide-react';
 import { useAuth } from '../../contexts/AuthContext';
+import { AccountModal } from './AccountModal';
 
 interface HeaderProps {
   onLogoClick?: () => void;
@@ -8,6 +11,7 @@ interface HeaderProps {
 
 export function Header({ onLogoClick, onAdminClick }: HeaderProps = {}) {
   const { user, signOut } = useAuth();
+  const [showAccount, setShowAccount] = useState(false);
 
   const displayName = user?.user_metadata?.full_name
     ?? user?.email?.split('@')[0]
@@ -31,10 +35,14 @@ export function Header({ onLogoClick, onAdminClick }: HeaderProps = {}) {
         {/* User info + logout */}
         {user && (
           <div className="ml-auto flex items-center gap-3">
-            <div className="hidden sm:flex items-center gap-2 bg-cinema-card border border-cinema-border rounded-full px-3 py-1.5">
+            <button
+              onClick={() => setShowAccount(true)}
+              title="Mi cuenta"
+              className="flex items-center gap-2 bg-cinema-card border border-cinema-border rounded-full px-3 py-1.5 hover:border-cinema-gold/40 transition-colors"
+            >
               <User size={13} className="text-cinema-gold" />
-              <span className="text-xs text-cinema-text-dim max-w-[140px] truncate">{displayName}</span>
-            </div>
+              <span className="hidden sm:inline text-xs text-cinema-text-dim max-w-[140px] truncate">{displayName}</span>
+            </button>
             {onAdminClick && (
               <button
                 onClick={onAdminClick}
@@ -56,6 +64,8 @@ export function Header({ onLogoClick, onAdminClick }: HeaderProps = {}) {
           </div>
         )}
       </div>
+      {/* Portal: el backdrop-blur de la cabecera atraparía un modal con position: fixed */}
+      {showAccount && user && createPortal(<AccountModal user={user} onClose={() => setShowAccount(false)} />, document.body)}
     </header>
   );
 }

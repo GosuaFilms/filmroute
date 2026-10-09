@@ -136,7 +136,9 @@ function Privacidad() {
 
       <H2>6. Cuánto tiempo conservamos los datos</H2>
       <P>
-        Mientras mantengas tu cuenta. Si la eliminas, borraremos tus datos en un plazo máximo de 30 días, salvo los
+        Mientras mantengas tu cuenta. Si la eliminas desde «Mi cuenta», tus datos se borran en ese momento y
+        desaparecen de las copias de seguridad en un plazo máximo de 30 días. Si nos pides la supresión por email, la
+        haremos en ese mismo plazo. En ambos casos, salvo los
         que debamos conservar bloqueados por obligación legal durante los plazos de prescripción aplicables. Los
         registros técnicos se conservan durante periodos cortos según la configuración de cada proveedor.
       </P>
@@ -144,7 +146,9 @@ function Privacidad() {
       <H2>7. Tus derechos</H2>
       <P>
         Puedes ejercer tus derechos de acceso, rectificación, supresión, oposición, limitación del tratamiento y
-        portabilidad escribiendo a {TITULAR.email}, indicando el email de tu cuenta. Si consideras que no hemos
+        portabilidad escribiendo a {TITULAR.email}, indicando el email de tu cuenta. También puedes descargar tus
+        datos o eliminar tu cuenta tú mismo en cualquier momento desde «Mi cuenta» (pulsando tu nombre en la parte
+        superior de la app). Si consideras que no hemos
         atendido correctamente tu solicitud, puedes reclamar ante la Agencia Española de Protección de Datos
         (www.aepd.es).
       </P>
