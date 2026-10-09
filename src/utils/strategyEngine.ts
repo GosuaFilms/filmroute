@@ -51,9 +51,36 @@ function tierMatches(festival: RecommendedFestival, tier: string): boolean {
   return false;
 }
 
+// Nombre corto para buscar el festival en textos libres: «Zinebi — Bilbao» → «zinebi»
+function festivalCoreName(name: string): string {
+  return name.split(/\s+[—–-]\s+|\s*\(/)[0].trim().toLowerCase();
+}
+
+// Festivales que el cineasta nombra en el formulario (prioritarios, pases previos, premios, notas)
+function mentionedInFilmData(festival: RecommendedFestival, data: FilmData): boolean {
+  const core = festivalCoreName(festival.name);
+  if (core.length < 4) return false;
+  const texts = [
+    ...(data.festivalStrategy.priorityFestivals ?? []),
+    data.festivalStrategy.currentPremiereStatus,
+    data.creativeDetails.previousScreenings,
+    data.creativeDetails.awards,
+    data.budgetResources.additionalNotes,
+  ];
+  return texts.some(t => typeof t === 'string' && t.toLowerCase().includes(core));
+}
+
+function isAvoided(festival: RecommendedFestival, data: FilmData): boolean {
+  const core = festivalCoreName(festival.name);
+  const avoided = (data.festivalStrategy.avoidedFestivals ?? '').toLowerCase();
+  return core.length >= 4 && avoided.includes(core);
+}
+
 function scoreFestivalMatch(festival: RecommendedFestival, data: FilmData): number {
   let score = 0;
   const { basicInfo, festivalStrategy, creativeDetails } = data;
+
+  if (mentionedInFilmData(festival, data)) score += 40;
 
   if (basicInfo.filmType && festival.acceptsTypes.includes(basicInfo.filmType)) score += 30;
   if (basicInfo.genre && festival.genres.includes(basicInfo.genre)) score += 25;
@@ -184,6 +211,7 @@ export function rankFestivalCandidates(data: FilmData, festivalsDb: RecommendedF
   const source = (festivalsDb && festivalsDb.length > 0) ? festivalsDb : FESTIVALS_DATABASE;
   return source
     .filter(f => !data.basicInfo.filmType || f.acceptsTypes.includes(data.basicInfo.filmType))
+    .filter(f => !isAvoided(f, data))
     .map(f => ({ festival: f, score: scoreFestivalMatch(f, data) }))
     .sort((a, b) => b.score - a.score || b.festival.prestige - a.festival.prestige)
     .slice(0, limit)
@@ -195,6 +223,7 @@ function recommendFestivals(data: FilmData, festivalsDb?: RecommendedFestival[])
   const filmType = data.basicInfo.filmType;
   const scored = source
     .filter(f => !filmType || f.acceptsTypes.includes(filmType))
+    .filter(f => !isAvoided(f, data))
     .map(f => ({
       festival: f,
       score: scoreFestivalMatch(f, data),

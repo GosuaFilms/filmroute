@@ -4,7 +4,7 @@ import { FESTIVALS_DATABASE } from '../data/festivals';
 import { PLATFORMS_DATABASE } from '../data/platforms';
 import type { DistributionWindow, ExternalFestival, ExternalPlatform, FilmData, RecommendedFestival, StrategyPhase, StrategyReport } from '../types/film';
 
-const CANDIDATE_POOL = 50;
+const CANDIDATE_POOL = 70;
 
 interface AdvisorResponse {
   overallScore: number;
