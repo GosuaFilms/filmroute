@@ -14,7 +14,8 @@ const PhaseSchema = z.object({
   kpis: z.array(z.string()),
 });
 
-const AdvisorSchema = z.object({
+// La respuesta se reparte en dos esquemas: uno solo supera el tamaño de gramática que admite la API
+const AnalysisSchema = z.object({
   overallScore: z.number().int(),
   scoreRationale: z.string(),
   executiveSummary: z.string(),
@@ -23,25 +24,8 @@ const AdvisorSchema = z.object({
   opportunities: z.array(z.string()),
   risks: z.array(z.string()),
   festivals: z.array(z.object({ name: z.string(), reason: z.string() })),
-  marketingPhases: z.array(PhaseSchema),
   nextSteps: z.array(z.string()),
   posterAnalysis: z.string(),
-  platforms: z.array(z.object({
-    name: z.string(),
-    probability: z.enum(['Alta', 'Media', 'Baja']),
-    notes: z.string(),
-  })),
-  distributionWindows: z.array(z.object({
-    window: z.string(),
-    platform: z.string(),
-    timing: z.string(),
-    revenue: z.string(),
-    notes: z.string(),
-  })),
-  budgetBreakdown: z.array(z.object({
-    category: z.string(),
-    amount: z.number(),
-  })),
   externalFestivals: z.array(z.object({
     name: z.string(),
     country: z.string(),
@@ -59,6 +43,26 @@ const AdvisorSchema = z.object({
     notes: z.string(),
     url: z.string(),
   })),
+});
+
+const PlanSchema = z.object({
+  marketingPhases: z.array(PhaseSchema),
+  platforms: z.array(z.object({
+    name: z.string(),
+    probability: z.enum(['Alta', 'Media', 'Baja']),
+    notes: z.string(),
+  })),
+  distributionWindows: z.array(z.object({
+    window: z.string(),
+    platform: z.string(),
+    timing: z.string(),
+    revenue: z.string(),
+    notes: z.string(),
+  })),
+  budgetBreakdown: z.array(z.object({
+    category: z.string(),
+    amount: z.number(),
+  })),
   deliverableChecklist: z.array(z.object({
     item: z.string(),
     status: z.enum(['listo', 'en_proceso', 'no_disponible']),
@@ -66,6 +70,11 @@ const AdvisorSchema = z.object({
     deadline: z.string(),
   })),
 });
+
+const PART_INSTRUCTIONS = {
+  analysis: 'En esta petición elaboras la parte de ANÁLISIS (índice, resumen, DAFO, festivales, cartel, oportunidades externas y próximos pasos). Otro paso elabora en paralelo el plan operativo (fases, plataformas, ventanas, presupuesto y entregables) con los mismos datos.',
+  plan: 'En esta petición elaboras la parte del PLAN OPERATIVO (fases de marketing, plataformas, ventanas, presupuesto y entregables). Otro paso elabora en paralelo el análisis y la selección de festivales con los mismos datos: para que ambos encajen, apóyate en los festivales candidatos más adecuados por orden de prioridad y en las oportunidades de la investigación web, si la hay.',
+};
 
 const SYSTEM_PROMPT = `Eres el asesor de distribución de FilmRoute: un consultor senior de distribución de cine independiente con experiencia en festivales internacionales, agentes de ventas, plataformas (SVOD, AVOD, TVOD), televisión y distribución educativa, especialmente en el mercado español y europeo.
 
@@ -166,40 +175,55 @@ export async function POST(request: Request): Promise<Response> {
 
   const client = new Anthropic();
   try {
-    const response = await client.messages.parse({
-      model: MODEL,
-      max_tokens: 20000,
-      output_config: {
-        effort: 'medium',
-        format: zodOutputFormat(AdvisorSchema),
-      },
-      system: SYSTEM_PROMPT,
-      messages: [{
-        role: 'user',
-        content: [
-          ...(poster
-            ? [{ type: 'image' as const, source: { type: 'base64' as const, media_type: 'image/jpeg' as const, data: poster } }]
-            : []),
-          {
-            type: 'text' as const,
-            text:
-              `Fecha de hoy: ${new Date().toISOString().slice(0, 10)}\n` +
-              `Número de festivales objetivo: ${targetCount}\n` +
-              `Cartel adjunto: ${poster ? 'sí (imagen anterior)' : 'no'}\n\n` +
-              `<datos_pelicula>\n${JSON.stringify(body.filmData, null, 2)}\n</datos_pelicula>\n\n` +
-              `<festivales_candidatos>\n${JSON.stringify(body.candidates, null, 2)}\n</festivales_candidatos>\n\n` +
-              `<plataformas_candidatas>\n${JSON.stringify(body.platformCandidates ?? [], null, 2)}\n</plataformas_candidatas>` +
-              (researchNotes ? `\n\n<investigacion_web>\n${researchNotes}\n</investigacion_web>` : ''),
-          },
-        ],
-      }],
-    });
+    const contextText =
+      `Fecha de hoy: ${new Date().toISOString().slice(0, 10)}\n` +
+      `Número de festivales objetivo: ${targetCount}\n` +
+      `Cartel adjunto: ${poster ? 'sí (imagen anterior)' : 'no'}\n\n` +
+      `<datos_pelicula>\n${JSON.stringify(body.filmData, null, 2)}\n</datos_pelicula>\n\n` +
+      `<festivales_candidatos>\n${JSON.stringify(body.candidates, null, 2)}\n</festivales_candidatos>\n\n` +
+      `<plataformas_candidatas>\n${JSON.stringify(body.platformCandidates ?? [], null, 2)}\n</plataformas_candidatas>` +
+      (researchNotes ? `\n\n<investigacion_web>\n${researchNotes}\n</investigacion_web>` : '');
+    const posterBlock = poster
+      ? [{ type: 'image' as const, source: { type: 'base64' as const, media_type: 'image/jpeg' as const, data: poster } }]
+      : [];
+    const userContent = (part: keyof typeof PART_INSTRUCTIONS) => [
+      ...posterBlock,
+      { type: 'text' as const, text: `${PART_INSTRUCTIONS[part]}\n\n${contextText}` },
+    ];
 
-    if (response.stop_reason === 'refusal' || !response.parsed_output) {
+    const [analysisResult, planResult] = await Promise.allSettled([
+      client.messages.parse({
+        model: MODEL,
+        max_tokens: 16000,
+        output_config: { effort: 'medium', format: zodOutputFormat(AnalysisSchema) },
+        system: SYSTEM_PROMPT,
+        messages: [{ role: 'user', content: userContent('analysis') }],
+      }),
+      client.messages.parse({
+        model: MODEL,
+        max_tokens: 16000,
+        output_config: { effort: 'medium', format: zodOutputFormat(PlanSchema) },
+        system: SYSTEM_PROMPT,
+        messages: [{ role: 'user', content: userContent('plan') }],
+      }),
+    ]);
+
+    if (analysisResult.status === 'rejected') throw analysisResult.reason;
+    const analysisRes = analysisResult.value;
+    if (planResult.status === 'rejected') {
+      const reason = planResult.reason;
+      console.error('[generate-strategy] plan falló:', reason instanceof Error ? reason.message : reason);
+    }
+    const planRes = planResult.status === 'fulfilled' ? planResult.value : null;
+
+    if (analysisRes.stop_reason === 'refusal' || !analysisRes.parsed_output) {
       return json(502, { error: 'El asesor IA no pudo generar la estrategia' });
     }
-
-    const advice = response.parsed_output;
+    // Si el plan falla, el cliente usa las secciones del motor de reglas como respaldo
+    const plan = planRes && planRes.stop_reason !== 'refusal' && planRes.parsed_output
+      ? planRes.parsed_output
+      : { marketingPhases: [], platforms: [], distributionWindows: [], budgetBreakdown: [], deliverableChecklist: [] };
+    const advice = { ...analysisRes.parsed_output, ...plan };
     const candidateNames = new Set(body.candidates.map(c => c.name));
     advice.festivals = advice.festivals
       .filter(f => candidateNames.has(f.name))
