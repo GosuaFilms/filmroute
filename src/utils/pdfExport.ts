@@ -569,29 +569,38 @@ export async function exportReportToPDF(report: StrategyReport, filmData?: FilmD
     for (const item of extItems) {
       sans(8.5);
       const lines = wrap(item.text, CW - 6);
-      ensure(Math.min(26 + lines.length * lh(8.5), 60));
+      serif(12);
+      const nameLines = wrap(item.name, CW - 6).slice(0, 3);
+      sans(7.6);
+      const metaLines = item.meta ? wrap(item.meta, CW - 6) : [];
+      sansBold(7.2);
+      const factLines = item.facts ? wrap(item.facts, CW - 6) : [];
+      const headH = (nameLines.length - 1) * lh(12, 1.2) + 9.5
+        + metaLines.length * lh(7.6, 1.3) + factLines.length * lh(7.2, 1.3);
+      ensure(Math.min(headH + 8 + lines.length * lh(8.5), 70));
       fill(C.gold);
       doc.rect(ML, y - 4, 0.8, 8, 'F');
       serif(12);
       color(C.text);
-      doc.text(wrap(item.name, CW - 6)[0], ML + 5, y);
+      doc.text(nameLines, ML + 5, y, { lineHeightFactor: 1.2 });
+      const by = y + (nameLines.length - 1) * lh(12, 1.2);
       sansBold(5.8);
       color(C.gold);
-      spaced(item.badge, ML + 5, y + 4.8, 0.7);
-      sans(7.6);
-      color(C.muted);
-      let iy = y + 9.5;
-      if (item.meta) {
-        doc.text(wrap(item.meta, CW - 6)[0], ML + 5, iy);
-        iy += 4.2;
+      spaced(item.badge, ML + 5, by + 4.8, 0.7);
+      let iy = by + 9.5;
+      if (metaLines.length > 0) {
+        sans(7.6);
+        color(C.muted);
+        doc.text(metaLines, ML + 5, iy, { lineHeightFactor: 1.3 });
+        iy += metaLines.length * lh(7.6, 1.3) + 0.8;
       }
-      if (item.facts) {
+      if (factLines.length > 0) {
         sansBold(7.2);
         color(C.gold);
-        doc.text(wrap(item.facts, CW - 6)[0], ML + 5, iy);
-        iy += 4.2;
+        doc.text(factLines, ML + 5, iy, { lineHeightFactor: 1.3 });
+        iy += factLines.length * lh(7.2, 1.3) + 0.8;
       }
-      y = iy + 1.5;
+      y = iy + 0.7;
       writeLines(lines, ML + 5, 8.5, () => sans(8.5), C.text);
       if (/^https?:\/\//i.test(item.url.trim())) {
         ensure(5);
@@ -655,7 +664,8 @@ export async function exportReportToPDF(report: StrategyReport, filmData?: FilmD
       const my = y + nameH;
       sansBold(5.8);
       color(C.muted);
-      spaced(wrap(`${p.type.toUpperCase()}  ·  ${p.territory.toUpperCase()}`, 44)[0], ML, my + 4.5, 0.5);
+      const tagLines = wrap(`${p.type.toUpperCase()}  ·  ${p.territory.toUpperCase()}`, 42);
+      spaced(tagLines.length > 1 ? `${tagLines[0].replace(/[\s,(·]+$/, '')}…` : tagLines[0], ML, my + 4.5, 0.5);
       const pc = probColor(p.probability);
       fill(pc);
       doc.circle(ML + 1, my + 8.8, 0.9, 'F');
@@ -688,7 +698,7 @@ export async function exportReportToPDF(report: StrategyReport, filmData?: FilmD
     sans(7.6);
     const platformLines = wrap(w.platform, LW).slice(0, 3);
     serif(11);
-    const nameLines = wrap(w.window, LW).slice(0, 3);
+    const nameLines = wrap(w.window, LW);
     const leftH = nameLines.length * lh(11, 1.2) + 2 + timingLines.length * lh(7.2, 1.3) + 1.5 + platformLines.length * lh(7.6, 1.3);
     const rightH = revenueLines.length * lh(7.6, 1.3) + 1.5 + notes.length * lh(8);
     const rowH = Math.max(leftH, rightH) + 3;
