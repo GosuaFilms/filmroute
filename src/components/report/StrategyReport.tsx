@@ -195,9 +195,13 @@ export function StrategyReportView({ report, onBack, onExport, isExporting = fal
         <div className="space-y-4">
           {report.marketingPhases.map((phase, i) => (
             <div key={i} className="border border-cinema-border rounded-xl overflow-hidden">
-              <div className="bg-cinema-dark px-4 py-3 flex items-center justify-between">
+              <div className="bg-cinema-dark px-4 py-3">
                 <h4 className="font-semibold text-cinema-gold text-sm">{phase.phase}</h4>
-                <span className="text-xs text-cinema-text-dim bg-cinema-card px-2 py-1 rounded-full border border-cinema-border">{phase.budget}</span>
+                <p className="text-xs text-cinema-text-dim mt-1">
+                  <span className="text-cinema-text">Duración:</span> {phase.duration}
+                  <span className="mx-2 text-cinema-border">|</span>
+                  <span className="text-cinema-text">Presupuesto:</span> {phase.budget}
+                </p>
               </div>
               <div className="p-4 grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>

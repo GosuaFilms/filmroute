@@ -37,6 +37,11 @@ async function registerUnicodeFonts(doc: InstanceType<Awaited<typeof import('jsp
   }
 }
 
+// La IA a veces numera las fases ("Fase 2: …", "2. …"); el PDF ya pone su propio "FASE N:"
+function stripPhaseNumber(name: string): string {
+  return name.replace(/^(fase\s*)?\d+\s*[:.\-–—)]\s*/i, '');
+}
+
 export async function exportReportToPDF(report: StrategyReport): Promise<void> {
   const { jsPDF } = await import('jspdf');
   const autoTable = (await import('jspdf-autotable')).default;
@@ -280,18 +285,24 @@ export async function exportReportToPDF(report: StrategyReport): Promise<void> {
     report.marketingPhases.forEach((phase, i) => {
       checkSpace(30);
 
-      // Cabecera de fase
-      doc.setFillColor(...DARK);
-      doc.rect(margin, y - 3, contentW, 8, 'F');
-      doc.setTextColor(...GOLD);
+      // Cabecera de fase: título en la barra oscura, duración y presupuesto debajo (la IA puede escribirlos largos)
       doc.setFontSize(8.5);
       setBold();
-      doc.text(`FASE ${i + 1}: ${phase.phase.replace(/^fase\s*\d+\s*[:.\-–—]\s*/i, '').toUpperCase()}`, margin + 3, y + 2);
-      doc.setTextColor(156, 163, 175);
+      const phaseTitle = `FASE ${i + 1}: ${stripPhaseNumber(phase.phase).toUpperCase()}`;
+      const titleLines = doc.splitTextToSize(phaseTitle, contentW - 6);
+      const barH = 4 + titleLines.length * 4.2;
+      doc.setFillColor(...DARK);
+      doc.rect(margin, y - 3, contentW, barH, 'F');
+      doc.setTextColor(...GOLD);
+      doc.text(titleLines, margin + 3, y + 2);
+      y += barH + 2;
+
+      doc.setTextColor(...GREY);
       setNormal();
       doc.setFontSize(7.5);
-      doc.text(`Duración: ${phase.duration}  |  Presupuesto: ${phase.budget}`, pageW - margin - 3, y + 2, { align: 'right' });
-      y += 10;
+      const metaLines = doc.splitTextToSize(`Duración: ${phase.duration}  |  Presupuesto: ${phase.budget}`, contentW - 4);
+      doc.text(metaLines, margin + 2, y);
+      y += metaLines.length * 4 + 3;
 
       // Acciones
       doc.setTextColor(...BLACK);
